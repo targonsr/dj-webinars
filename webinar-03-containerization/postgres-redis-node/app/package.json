@@ -1,8 +1,7 @@
 {
-    "name": "products-api",
-    "version": "1.0.0",
-    "description": "Products API with PostgreSQL and Redis",
-    "main": "index.js",
+  "name": "postgres-redis-node",
+  "author": "Developer Jutra",
+  "private": true,
     "scripts": {
       "start": "node index.js"
     },
