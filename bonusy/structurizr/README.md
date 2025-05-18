@@ -1,6 +1,6 @@
 (optional) Edit `run.sh` to uncomment/choose the dsl you want to run
 
-Run `run.sh`. 
+Run `run.sh`, open http://localhost:8080/.
 
 Examples based on https://github.com/structurizr/examples.
 
