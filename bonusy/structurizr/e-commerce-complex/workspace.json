@@ -5,29 +5,29 @@
   "description" : "Large-scale distributed system handling online retail operations",
   "documentation" : {
     "decisions" : [ {
-      "content" : "# ADR-001: Adopt Microservices Architecture\n\n## Context\nThe system requires horizontal scalability and independent deployability of components.\n\n## Decision\nImplement core functionality as Spring Boot microservices with Docker containers.\n\n## Consequences\n- ✅ Improved fault isolation\n- ✅ Technology heterogeneity\n- ❌ Increased operational complexity\n",
-      "date" : "2025-05-19T10:27:15Z",
+      "content" : "# ADR-001: Adopt Microservices Architecture (dummy ADR)\n\n## Context\nThe system requires horizontal scalability and independent deployability of components.\n\n## Decision\nImplement core functionality as Spring Boot microservices with Docker containers.\n\n## Consequences\n- ✅ Improved fault isolation\n- ✅ Technology heterogeneity\n- ❌ Increased operational complexity\n",
+      "date" : "2025-05-19T10:31:12Z",
       "format" : "Markdown",
       "id" : "1",
       "status" : "Proposed",
-      "title" : " ADR-001: Adopt Microservices Architecture"
+      "title" : " ADR-001: Adopt Microservices Architecture (dummy ADR)"
     }, {
-      "content" : "# ADR-002: Event Sourcing Implementation\n\n## Context\nNeed real-time inventory updates across distributed systems.\n\n## Decision\nUse Apache Kafka for event streaming between services.\n\n## Consequences\n- ✅ Decoupled service communication\n- ✅ Audit trail of system state changes\n- ❌ Added latency in read operations\n",
-      "date" : "2025-05-19T10:27:15Z",
+      "content" : "# ADR-002: Event Sourcing Implementation (dummy ADR)\n\n## Context\nNeed real-time inventory updates across distributed systems.\n\n## Decision\nUse Apache Kafka for event streaming between services.\n\n## Consequences\n- ✅ Decoupled service communication\n- ✅ Audit trail of system state changes\n- ❌ Added latency in read operations\n",
+      "date" : "2025-05-19T10:31:12Z",
       "format" : "Markdown",
       "id" : "2",
       "status" : "Proposed",
-      "title" : " ADR-002: Event Sourcing Implementation"
+      "title" : " ADR-002: Event Sourcing Implementation (dummy ADR)"
     } ],
     "sections" : [ {
-      "content" : "# E-Commerce Platform Architecture Overview\n\n## Key Characteristics\n\n- **Scalability**: Auto-scaling EC2 instances with RDS read replicas\n- **Resilience**: Circuit breakers in API gateway\n- **Performance**: Redis cache layer for product catalog\n\n## Main Actors\n\n- Online Shopper (Customer)\n- Third-Party Seller\n- System Administrator\n\n## Main Use Cases\n\n- Browse/search products, checkout, order tracking, reviews, returns\n- Seller inventory/product management\n- Admin configuration, monitoring, support\n\n## System Landscape\n\n- Frontend: Web/mobile apps, CDN for static content\n- Backend: Microservices for catalog, orders, payments, search, recommendations, notifications\n- Data: RDS for structured data, Redis for caching, S3 for static assets\n\n## Integration\n\n- Payment gateway (Stripe)\n- CDN (Cloudflare)\n- Notification (Email/SMS providers)\n- Shipping/logistics partners\n",
+      "content" : "# E-Commerce Platform Architecture Overview (dummy docs)\n\n## Key Characteristics\n\n- **Scalability**: Auto-scaling EC2 instances with RDS read replicas\n- **Resilience**: Circuit breakers in API gateway\n- **Performance**: Redis cache layer for product catalog\n\n## Main Actors\n\n- Online Shopper (Customer)\n- Third-Party Seller\n- System Administrator\n\n## Main Use Cases\n\n- Browse/search products, checkout, order tracking, reviews, returns\n- Seller inventory/product management\n- Admin configuration, monitoring, support\n\n## System Landscape\n\n- Frontend: Web/mobile apps, CDN for static content\n- Backend: Microservices for catalog, orders, payments, search, recommendations, notifications\n- Data: RDS for structured data, Redis for caching, S3 for static assets\n\n## Integration\n\n- Payment gateway (Stripe)\n- CDN (Cloudflare)\n- Notification (Email/SMS providers)\n- Shipping/logistics partners\n",
       "format" : "Markdown",
       "order" : 1,
       "title" : ""
     } ]
   },
   "id" : 1,
-  "lastModifiedDate" : "2025-05-19T10:27:15Z",
+  "lastModifiedDate" : "2025-05-19T10:31:12Z",
   "model" : {
     "deploymentNodes" : [ {
       "children" : [ {
@@ -38,7 +38,7 @@
           "id" : "40",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "95dfc6e8-08f1-467a-950d-1a82a8d76918"
+            "structurizr.dsl.identifier" : "721f8a16-afa4-4c21-8cd0-b3d4185c84b1"
           },
           "relationships" : [ {
             "description" : "API requests",
@@ -55,7 +55,7 @@
           "id" : "41",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "0f33cc16-e70b-4bbd-8f42-b18e164094c9"
+            "structurizr.dsl.identifier" : "020f0ec7-2df9-4097-b8d7-6d437839a0a8"
           },
           "relationships" : [ {
             "description" : "Authenticates users",
@@ -120,7 +120,7 @@
           "id" : "43",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "ba4838ba-f119-483d-880e-6a7831837a54"
+            "structurizr.dsl.identifier" : "2a2083e7-1fb4-46ab-9a2e-c9d122e196bd"
           },
           "tags" : "Container Instance"
         }, {
@@ -130,7 +130,7 @@
           "id" : "45",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "cafa5857-e63f-40cd-8f88-cfd343df009a"
+            "structurizr.dsl.identifier" : "2864a64c-9d27-4bfc-9954-fa42451537d9"
           },
           "tags" : "Container Instance"
         }, {
@@ -140,7 +140,7 @@
           "id" : "47",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "447e6ea4-9bda-45c7-936f-51d07b7d1a42"
+            "structurizr.dsl.identifier" : "07095944-82ba-41f2-b258-eb33bf254e38"
           },
           "tags" : "Container Instance"
         }, {
@@ -150,7 +150,7 @@
           "id" : "49",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "7fb2e60c-5588-4417-b2f4-34012265f46a"
+            "structurizr.dsl.identifier" : "c0d23daf-be21-4438-a234-68397a7bd5e5"
           },
           "tags" : "Container Instance"
         }, {
@@ -160,7 +160,7 @@
           "id" : "51",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "35413a73-926a-463b-9013-9092af71e763"
+            "structurizr.dsl.identifier" : "d6934cf9-21ad-489a-9753-45cb0d58b0e0"
           },
           "tags" : "Container Instance"
         }, {
@@ -170,7 +170,7 @@
           "id" : "53",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "fb683e96-8ac4-414c-92b8-7cebe5c0f52e"
+            "structurizr.dsl.identifier" : "4cc86e6b-3f65-4df5-835b-14e917187b19"
           },
           "tags" : "Container Instance"
         }, {
@@ -180,7 +180,7 @@
           "id" : "55",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "5e0cf4f1-b9e3-4dba-8b81-23414164ad5e"
+            "structurizr.dsl.identifier" : "b6920eaf-4573-497a-be6e-1103a88ca971"
           },
           "tags" : "Container Instance"
         }, {
@@ -190,7 +190,7 @@
           "id" : "57",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "5992c365-5235-4718-a83a-5e9aee028cd0"
+            "structurizr.dsl.identifier" : "01e0c66b-6f08-4ef7-b9c9-05d12b161d42"
           },
           "tags" : "Container Instance"
         }, {
@@ -200,7 +200,7 @@
           "id" : "59",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "384e9796-156a-4500-8c33-ee78c2a14a3a"
+            "structurizr.dsl.identifier" : "57d714f1-06b8-403a-89fb-76b5e1b09fc3"
           },
           "tags" : "Container Instance"
         }, {
@@ -210,7 +210,7 @@
           "id" : "61",
           "instanceId" : 1,
           "properties" : {
-            "structurizr.dsl.identifier" : "3ab8fd21-a3ea-461a-919a-2de5a73e0571"
+            "structurizr.dsl.identifier" : "39ed05ac-ef09-4954-8407-14627c30bc2b"
           },
           "tags" : "Container Instance"
         } ],
@@ -219,7 +219,7 @@
         "instances" : "1",
         "name" : "EC2 Auto Scaling Group",
         "properties" : {
-          "structurizr.dsl.identifier" : "cd5a072d-ef1d-4ef0-b8ac-35c075ba5eb8"
+          "structurizr.dsl.identifier" : "e70d7d08-42e4-4f8c-8390-28e48e543543"
         },
         "tags" : "Element,Deployment Node"
       }, {
@@ -231,7 +231,7 @@
           "id" : "63",
           "name" : "User Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "1d993297-7541-4e28-9e07-c9b3f8b92df0"
+            "structurizr.dsl.identifier" : "bd5dcb5f-ff67-480d-a0d3-625a51d0d452"
           },
           "tags" : "Element,Infrastructure Node"
         }, {
@@ -240,7 +240,7 @@
           "id" : "64",
           "name" : "Order Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "640b7cfc-7f7b-4813-9507-dca981c80b48"
+            "structurizr.dsl.identifier" : "b3bd1bb4-7431-47e2-8511-22e930682469"
           },
           "tags" : "Element,Infrastructure Node"
         }, {
@@ -249,14 +249,14 @@
           "id" : "65",
           "name" : "Product Database",
           "properties" : {
-            "structurizr.dsl.identifier" : "e9c75771-0856-444f-aa41-375c84e23a55"
+            "structurizr.dsl.identifier" : "78fed817-db93-45c9-9ad2-ad4fb28b3a34"
           },
           "tags" : "Element,Infrastructure Node"
         } ],
         "instances" : "1",
         "name" : "RDS Cluster",
         "properties" : {
-          "structurizr.dsl.identifier" : "a8bcddd2-4f9e-416c-8ca3-4de8c655ff3e"
+          "structurizr.dsl.identifier" : "b4d76eff-f6df-451b-8739-69a16a040ebf"
         },
         "tags" : "Element,Deployment Node"
       }, {
@@ -268,14 +268,14 @@
           "id" : "67",
           "name" : "Redis Cache",
           "properties" : {
-            "structurizr.dsl.identifier" : "61e829df-0757-4d5c-8f7e-5c8ed61b3e70"
+            "structurizr.dsl.identifier" : "951eb7fe-83b2-427f-a3a7-32c0c56a825c"
           },
           "tags" : "Element,Infrastructure Node"
         } ],
         "instances" : "1",
         "name" : "Elasticache",
         "properties" : {
-          "structurizr.dsl.identifier" : "bcd79b66-9954-4946-8a1d-3a4fcd2f5f44"
+          "structurizr.dsl.identifier" : "968a7ad2-2bf5-49ca-97e8-8bf049ea2ddd"
         },
         "tags" : "Element,Deployment Node"
       }, {
@@ -287,14 +287,14 @@
           "id" : "69",
           "name" : "Static Content Storage",
           "properties" : {
-            "structurizr.dsl.identifier" : "cfb13a49-490e-4999-8f74-3f7aeb20ccc4"
+            "structurizr.dsl.identifier" : "9e699302-10fd-4d5c-ad77-7a59fb5fea49"
           },
           "tags" : "Element,Infrastructure Node"
         } ],
         "instances" : "1",
         "name" : "S3 Bucket",
         "properties" : {
-          "structurizr.dsl.identifier" : "09b0cec4-3c5f-452f-8a4c-412044479a01"
+          "structurizr.dsl.identifier" : "c7b7d7f4-b8b3-42c0-ab7e-1830b98f0be4"
         },
         "tags" : "Element,Deployment Node"
       } ],
@@ -303,7 +303,7 @@
       "instances" : "1",
       "name" : "AWS Cloud",
       "properties" : {
-        "structurizr.dsl.identifier" : "6744f6fe-a5e7-4daf-bc5c-0acfc0117aad"
+        "structurizr.dsl.identifier" : "7b91a8ba-5a08-4cd5-a19f-709c35f6cb47"
       },
       "tags" : "Element,Deployment Node"
     } ],
@@ -568,22 +568,22 @@
       "description" : "Handles all e-commerce operations",
       "documentation" : {
         "decisions" : [ {
-          "content" : "# ADR-001: Adopt Microservices Architecture\n\n## Context\nThe system requires horizontal scalability and independent deployability of components.\n\n## Decision\nImplement core functionality as Spring Boot microservices with Docker containers.\n\n## Consequences\n- ✅ Improved fault isolation\n- ✅ Technology heterogeneity\n- ❌ Increased operational complexity\n",
-          "date" : "2025-05-19T10:27:15Z",
+          "content" : "# ADR-001: Adopt Microservices Architecture (dummy ADR)\n\n## Context\nThe system requires horizontal scalability and independent deployability of components.\n\n## Decision\nImplement core functionality as Spring Boot microservices with Docker containers.\n\n## Consequences\n- ✅ Improved fault isolation\n- ✅ Technology heterogeneity\n- ❌ Increased operational complexity\n",
+          "date" : "2025-05-19T10:31:12Z",
           "format" : "Markdown",
           "id" : "1",
           "status" : "Proposed",
-          "title" : " ADR-001: Adopt Microservices Architecture"
+          "title" : " ADR-001: Adopt Microservices Architecture (dummy ADR)"
         }, {
-          "content" : "# ADR-002: Event Sourcing Implementation\n\n## Context\nNeed real-time inventory updates across distributed systems.\n\n## Decision\nUse Apache Kafka for event streaming between services.\n\n## Consequences\n- ✅ Decoupled service communication\n- ✅ Audit trail of system state changes\n- ❌ Added latency in read operations\n",
-          "date" : "2025-05-19T10:27:15Z",
+          "content" : "# ADR-002: Event Sourcing Implementation (dummy ADR)\n\n## Context\nNeed real-time inventory updates across distributed systems.\n\n## Decision\nUse Apache Kafka for event streaming between services.\n\n## Consequences\n- ✅ Decoupled service communication\n- ✅ Audit trail of system state changes\n- ❌ Added latency in read operations\n",
+          "date" : "2025-05-19T10:31:12Z",
           "format" : "Markdown",
           "id" : "2",
           "status" : "Proposed",
-          "title" : " ADR-002: Event Sourcing Implementation"
+          "title" : " ADR-002: Event Sourcing Implementation (dummy ADR)"
         } ],
         "sections" : [ {
-          "content" : "# E-Commerce Platform Architecture Overview\n\n## Key Characteristics\n\n- **Scalability**: Auto-scaling EC2 instances with RDS read replicas\n- **Resilience**: Circuit breakers in API gateway\n- **Performance**: Redis cache layer for product catalog\n\n## Main Actors\n\n- Online Shopper (Customer)\n- Third-Party Seller\n- System Administrator\n\n## Main Use Cases\n\n- Browse/search products, checkout, order tracking, reviews, returns\n- Seller inventory/product management\n- Admin configuration, monitoring, support\n\n## System Landscape\n\n- Frontend: Web/mobile apps, CDN for static content\n- Backend: Microservices for catalog, orders, payments, search, recommendations, notifications\n- Data: RDS for structured data, Redis for caching, S3 for static assets\n\n## Integration\n\n- Payment gateway (Stripe)\n- CDN (Cloudflare)\n- Notification (Email/SMS providers)\n- Shipping/logistics partners\n",
+          "content" : "# E-Commerce Platform Architecture Overview (dummy docs)\n\n## Key Characteristics\n\n- **Scalability**: Auto-scaling EC2 instances with RDS read replicas\n- **Resilience**: Circuit breakers in API gateway\n- **Performance**: Redis cache layer for product catalog\n\n## Main Actors\n\n- Online Shopper (Customer)\n- Third-Party Seller\n- System Administrator\n\n## Main Use Cases\n\n- Browse/search products, checkout, order tracking, reviews, returns\n- Seller inventory/product management\n- Admin configuration, monitoring, support\n\n## System Landscape\n\n- Frontend: Web/mobile apps, CDN for static content\n- Backend: Microservices for catalog, orders, payments, search, recommendations, notifications\n- Data: RDS for structured data, Redis for caching, S3 for static assets\n\n## Integration\n\n- Payment gateway (Stripe)\n- CDN (Cloudflare)\n- Notification (Email/SMS providers)\n- Shipping/logistics partners\n",
           "format" : "Markdown",
           "order" : 1,
           "title" : ""
