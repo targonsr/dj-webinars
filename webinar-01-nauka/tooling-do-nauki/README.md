@@ -103,11 +103,11 @@
 
 TL;DR; _**mindmapa jest dla mnie punktem wyjścia do dalszej drogi, nie "produktem"**_
 
-- _**każdy ma inny układ neuronalny**_ 😉 i dla każdego optymalne może być coś innego. To co mi odpowiada Tobie może - ale nie musi 😉
+- DISCLAIMER: _**każdy ma inny układ neuronalny**_ 😉 i dla każdego optymalne może być coś innego. To co mi odpowiada Tobie może - ale nie musi 😉
 - używam mindmap do **porządkowania i strukturalizowania wiedzy**, zwłaszcza jeśli koncept jest dla mnie nowy/mało znany
   - mindmapy świetnie pomagają mi wyjść z obszaru _unknown unknowns_ i przejść do _known unknowns_ (wyżej też by się nadawały - kwestia preferencji)
   - jeśli koncept jest znany i wchodzę w szczegóły/niuanse/detale (_known knowns_), to albo kod, albo rysowanie (papier, excalidraw)
-- największą **wartością mindmapy** jest Twoja praca włożona w jej **usystematyzowanie**, bo to wymaga pracy Twojego mózgu. To Ty sobie w głowie układasz, jak temat X łączy się z Y. Mindmapa jako "artefakt" ma dla mnie pomniejsze znaczenie (choć dla Ciebie może być inaczej).
+- największą **wartością mindmapy** jest Twoja praca włożona w jej **usystematyzowanie**, bo to wymaga pracy Twojego mózgu ([myślenie dywergentne, emergentne, konwergentne](https://www.charlesleon.uk/blog/3-thinking-modes-of-creative-thinking-divergent-emergent-and-convergent-thinking24112019) itp 😉). To Ty sobie w głowie układasz, jak temat X łączy się z Y. Mindmapa jako "artefakt" ma dla mnie pomniejsze znaczenie (choć dla Ciebie może być inaczej).
 - ja wręcz zajeżdżam czy to perplexity/gemini (ogólniej: **modele klasy deep research**) masową ilością szybkich/krótkich pytań, które potem nierzadko usuwam.
   - Większość moich promptów zawiera dopiski typu "_odpowiedz mi krótko, w max 1-2 zdaniach_" (także bullet point listy/podsumowania mają takie dopiski), bo **czas mojego/Twojego czytania też ma znaczenie** 😉 LLMy lubią lać wodę - a ja chcę konkret i chcę go szybko. Czytanie historii snutych od początku świata wraz z całym kontekstem (to co LLM lubi robić) jest bardzo czasochłonne.
   - Interesuje mnie konkretna odpowiedź na konkretne pytanie - ale SPECYFICZNE - i często "deep research" nawet nie jest potrzebny. Zwłaszcza jeśli chodzi o koncept, a nie o konkretny kod do narzędzi w konkretnych wersjach itp (tam lepiej deep research).
