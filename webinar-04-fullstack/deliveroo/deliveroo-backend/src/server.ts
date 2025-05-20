@@ -4,8 +4,7 @@ import { invokeMemoryLeak } from './memory-leak';
 import { assertEnvVars } from './env';
 import pool from './database';
 import redisClient from './redis';
-import { getAllVehicles, getAllEmployees, getAllVehiclesWithDriver } from './queries';
-import logger from './logger';
+import { getAllEmployees, getAllVehiclesWithDriver } from './queries';
 import { mapVehicleRowsToDTOs } from './vehicle.model';
 
 const app = express();
@@ -45,7 +44,7 @@ app.get('/vehicles', async (req: Request, res: Response): Promise<void> => {
     // Try to get vehicles from Redis cache
     const cachedVehicles = await redisClient.get('vehicles');
     if (cachedVehicles) {
-      logger.info('Returning vehicles from cache');
+      console.info('Returning vehicles from cache');
       // Assume cached vehicles are already in VehicleDTO structure
       res.json(JSON.parse(cachedVehicles));
       return;
@@ -58,7 +57,7 @@ app.get('/vehicles', async (req: Request, res: Response): Promise<void> => {
     await redisClient.set('vehicles', JSON.stringify(vehicles), { EX: 60 });
     res.json(vehicles);
   } catch (err) {
-    logger.error('Error fetching vehicles:', { err });
+    console.error('Error fetching vehicles:', { err });
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -70,7 +69,7 @@ app.get('/employees', async (req: Request, res: Response): Promise<void> => {
     // Try to get employees from Redis cache
     const cachedEmployees = await redisClient.get('employees');
     if (cachedEmployees) {
-      logger.info('Returning employees from cache');
+      console.info('Returning employees from cache');
       res.json(JSON.parse(cachedEmployees));
       return;
     }
@@ -80,7 +79,7 @@ app.get('/employees', async (req: Request, res: Response): Promise<void> => {
     await redisClient.set('employees', JSON.stringify(employees), { EX: 60 });
     res.json(employees);
   } catch (err) {
-    logger.error('Error fetching employees:', { err });
+    console.error('Error fetching employees:', { err });
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -97,5 +96,5 @@ process.on('SIGINT', async () => {
 });
 
 app.listen(port, () => {
-  logger.info(`Backend listening at http://localhost:${port}`);
+  console.info(`Backend listening at http://localhost:${port}`);
 }); 

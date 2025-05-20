@@ -1,5 +1,4 @@
 import pool from './database';
-import logger from './logger';
 
 /**
  * Returns a list of all vehicles.

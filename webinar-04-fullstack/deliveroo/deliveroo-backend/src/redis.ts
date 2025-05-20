@@ -1,6 +1,5 @@
 import fs from 'fs';
 import { createClient, RedisClientType } from 'redis';
-import logger from './logger';
 
 const passwordFilePath = process.env.REDIS_PASSWORD_FILE!;
 if (!fs.existsSync(passwordFilePath)) {
@@ -18,7 +17,7 @@ const redisClient: RedisClientType = createClient({
 
 (async () => {
   await redisClient.connect();
-  logger.info('Connected to Redis');
-})().catch(err => logger.error('Redis connection error:', { err }));
+  console.info('Connected to Redis');
+})().catch(err => console.error('Redis connection error:', { err }));
 
 export default redisClient;
