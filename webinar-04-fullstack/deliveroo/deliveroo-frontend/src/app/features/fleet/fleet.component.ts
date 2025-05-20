@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FleetStore } from './fleet-store.service';
 
 @Component({
   selector: 'app-fleet',
   standalone: true,
   imports: [CommonModule],
+  providers: [FleetStore],
   template: `
     <div class="container mx-auto px-4 py-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
@@ -125,6 +127,8 @@ import { CommonModule } from '@angular/common';
   `
 })
 export class FleetComponent {
+  store = inject(FleetStore);
+
   vehicles = [
     {
       id: 'V-001',
@@ -183,6 +187,11 @@ export class FleetComponent {
       lastMaintenance: '2025-01-02'
     }
   ];
+
+  ngOnInit() {
+    // Access state: this.store.vehicles(), this.store.filters(), etc.
+    // Update state: this.store.setVehicles([...]), this.store.setFilters({...}), etc.
+  }
 
   getStatusClass(status: string): string {
     const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';

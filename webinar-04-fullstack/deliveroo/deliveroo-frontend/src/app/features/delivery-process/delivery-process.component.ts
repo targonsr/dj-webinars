@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { DeliveryFormStepOneComponent } from './components/delivery-form-step-one.component';
-import { DeliveryFormStepTwoComponent } from './components/delivery-form-step-two.component';
-import { DeliveryFormStepThreeComponent } from './components/delivery-form-step-three.component';
-import { DeliveryFormStepFourComponent } from './components/delivery-form-step-four.component';
+import { DeliveryFormStep01PickupComponent } from './components/delivery-form-step-01-pickup.component';
+import { DeliveryFormStep02DeliveryComponent } from './components/delivery-form-step-02-delivery.component';
+import { DeliveryFormStep03PackageComponent } from './components/delivery-form-step-03-package.component';
+import { DeliveryFormStep04ReviewComponent } from './components/delivery-form-step-04-review.component';
+import { DeliveryProgressTrackerComponent } from './components/delivery-progress-tracker.component';
 
 @Component({
   selector: 'app-delivery-process',
@@ -14,10 +15,11 @@ import { DeliveryFormStepFourComponent } from './components/delivery-form-step-f
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    DeliveryFormStepOneComponent,
-    DeliveryFormStepTwoComponent,
-    DeliveryFormStepThreeComponent,
-    DeliveryFormStepFourComponent
+    DeliveryFormStep01PickupComponent,
+    DeliveryFormStep02DeliveryComponent,
+    DeliveryFormStep03PackageComponent,
+    DeliveryFormStep04ReviewComponent,
+    DeliveryProgressTrackerComponent
   ],
   template: `
     <div class="container mx-auto px-4 py-12">
@@ -26,29 +28,12 @@ import { DeliveryFormStepFourComponent } from './components/delivery-form-step-f
 
         <!-- Progress Tracker -->
         <div class="mb-10">
-          <div class="flex items-center justify-between">
-            @for (step of steps; track step.id; let i = $index) {
-              <div class="flex flex-col items-center">
-                <div 
-                  class="w-10 h-10 rounded-full flex items-center justify-center text-sm" 
-                  [class]="getStepIndicatorClass(i)">
-                  @if (currentStep > i) {
-                    <span class="material-icons text-lg">check</span>
-                  } @else {
-                    {{ i + 1 }}
-                  }
-                </div>
-                <div class="text-xs mt-2 text-center">{{ step.label }}</div>
-              </div>
-
-              @if (i < steps.length - 1) {
-                <div 
-                  class="flex-1 h-1 mx-2"
-                  [class]="currentStep > i ? 'bg-primary-500' : 'bg-neutral-200'">
-                </div>
-              }
-            }
-          </div>
+          <app-delivery-progress-tracker
+            [steps]="steps"
+            [currentStep]="currentStep"
+            [visitedSteps]="visitedSteps"
+            (stepClicked)="goToStep($event)">
+          </app-delivery-progress-tracker>
         </div>
 
         <!-- Form Container -->
@@ -56,31 +41,31 @@ import { DeliveryFormStepFourComponent } from './components/delivery-form-step-f
           <!-- Dynamic Step Content -->
           @switch (currentStep) {
             @case (0) {
-              <app-delivery-form-step-one
+              <app-delivery-form-step-01-pickup
                 [formGroup]="deliveryForm"
                 (goToNext)="nextStep()">
-              </app-delivery-form-step-one>
+              </app-delivery-form-step-01-pickup>
             }
             @case (1) {
-              <app-delivery-form-step-two
+              <app-delivery-form-step-02-delivery
                 [formGroup]="deliveryForm"
                 (goToNext)="nextStep()"
                 (goBack)="prevStep()">
-              </app-delivery-form-step-two>
+              </app-delivery-form-step-02-delivery>
             }
             @case (2) {
-              <app-delivery-form-step-three
+              <app-delivery-form-step-03-package
                 [formGroup]="deliveryForm"
                 (goToNext)="nextStep()"
                 (goBack)="prevStep()">
-              </app-delivery-form-step-three>
+              </app-delivery-form-step-03-package>
             }
             @case (3) {
-              <app-delivery-form-step-four
+              <app-delivery-form-step-04-review
                 [formGroup]="deliveryForm"
                 (submitForm)="submitDelivery()"
                 (goBack)="prevStep()">
-              </app-delivery-form-step-four>
+              </app-delivery-form-step-04-review>
             }
           }
         </div>
@@ -112,6 +97,7 @@ export class DeliveryProcessComponent {
 
   currentStep = 0;
   formSubmitted = false;
+  visitedSteps = new Set<number>([0]);
 
   // Create a form group with all the fields needed across all steps
   deliveryForm: FormGroup = this.fb.group({
@@ -157,6 +143,7 @@ export class DeliveryProcessComponent {
   nextStep() {
     if (this.currentStep < this.steps.length - 1) {
       this.currentStep++;
+      this.visitedSteps.add(this.currentStep);
       this.scrollToTop();
     }
   }
@@ -164,6 +151,13 @@ export class DeliveryProcessComponent {
   prevStep() {
     if (this.currentStep > 0) {
       this.currentStep--;
+      this.scrollToTop();
+    }
+  }
+
+  goToStep(stepIndex: number) {
+    if (this.visitedSteps.has(stepIndex) || stepIndex === this.currentStep) {
+      this.currentStep = stepIndex;
       this.scrollToTop();
     }
   }

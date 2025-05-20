@@ -6,6 +6,7 @@ import pool from './database';
 import redisClient from './redis';
 import { getAllEmployees, getAllVehiclesWithDriver } from './queries';
 import { mapVehicleRowsToDTOs } from './vehicle.model';
+import logger from './logger';
 
 const app = express();
 const port = process.env.NODE_APP_PORT;
@@ -44,7 +45,7 @@ app.get('/vehicles', async (req: Request, res: Response): Promise<void> => {
     // Try to get vehicles from Redis cache
     const cachedVehicles = await redisClient.get('vehicles');
     if (cachedVehicles) {
-      console.info('Returning vehicles from cache');
+      logger.info('Returning vehicles from cache');
       // Assume cached vehicles are already in VehicleDTO structure
       res.json(JSON.parse(cachedVehicles));
       return;
@@ -57,7 +58,7 @@ app.get('/vehicles', async (req: Request, res: Response): Promise<void> => {
     await redisClient.set('vehicles', JSON.stringify(vehicles), { EX: 60 });
     res.json(vehicles);
   } catch (err) {
-    console.error('Error fetching vehicles:', { err });
+    logger.error('Error fetching vehicles:', { err });
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -69,7 +70,7 @@ app.get('/employees', async (req: Request, res: Response): Promise<void> => {
     // Try to get employees from Redis cache
     const cachedEmployees = await redisClient.get('employees');
     if (cachedEmployees) {
-      console.info('Returning employees from cache');
+      logger.info('Returning employees from cache');
       res.json(JSON.parse(cachedEmployees));
       return;
     }
@@ -79,7 +80,7 @@ app.get('/employees', async (req: Request, res: Response): Promise<void> => {
     await redisClient.set('employees', JSON.stringify(employees), { EX: 60 });
     res.json(employees);
   } catch (err) {
-    console.error('Error fetching employees:', { err });
+    logger.error('Error fetching employees:', { err });
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -96,5 +97,5 @@ process.on('SIGINT', async () => {
 });
 
 app.listen(port, () => {
-  console.info(`Backend listening at http://localhost:${port}`);
+  logger.info(`Backend listening at http://localhost:${port}`);
 }); 
