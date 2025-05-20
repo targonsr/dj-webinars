@@ -1,54 +1,91 @@
 import express, { Request, Response } from 'express';
-const redis = require('redis');
-
-const { invokeMemoryLeak } = require('./memory-leak');
-const { assertEnvVars } = require('./env');
-const pool = require('./database');
-const redisClient = require('./redis');
+import cors from 'cors';
+import { invokeMemoryLeak } from './memory-leak';
+import { assertEnvVars } from './env';
+import pool from './database';
+import redisClient from './redis';
+import { getAllVehicles, getAllEmployees, getAllVehiclesWithDriver } from './queries';
+import logger from './logger';
+import { mapVehicleRowsToDTOs } from './vehicle.model';
 
 const app = express();
 const port = process.env.NODE_APP_PORT;
 
 assertEnvVars(
   'NODE_APP_PORT',
+  'NODE_ENV',
+  'SERVICE_NAME',
+  'LOKI_HOST',
+  'SIMULATE_MEMORY_LEAK',
+  'FRONTEND_URL',
+  'DB_HOST',
+  'DB_PORT',
+  'DB_USER',
+  'DB_PASSWORD_FILE',
+  'DB_NAME',
+  'REDIS_HOST',
+  'REDIS_PORT',
+  'REDIS_PASSWORD_FILE'
 );
 
-// GET /products endpoint
-app.get('/products', async (req, res) => {
-  invokeMemoryLeak();
+// CORS configuration based on environment
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL
+    : 'http://localhost:4200',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 
+// GET /vehicles endpoint
+app.get('/vehicles', async (req: Request, res: Response): Promise<void> => {
+  invokeMemoryLeak();
   try {
-    // Try to get products from Redis cache
-    const cachedProducts = await redisClient.get('products');
-    
-    if (cachedProducts) {
-      console.log('Returning products from cache');
-      return res.json(JSON.parse(cachedProducts));
+    // Try to get vehicles from Redis cache
+    const cachedVehicles = await redisClient.get('vehicles');
+    if (cachedVehicles) {
+      logger.info('Returning vehicles from cache');
+      // Assume cached vehicles are already in VehicleDTO structure
+      res.json(JSON.parse(cachedVehicles));
+      return;
     }
-    
     // If not in cache, get from PostgreSQL
-    console.log('Fetching products from database');
-    const result = await pool.query(`
-      SELECT p.*, c.name as category_name 
-      FROM products p 
-      JOIN categories c ON p.category_id = c.id
-    `);
-    
-    const products = result.rows;
-    
-    // Store in Redis cache with expiration of 60 seconds
-    await redisClient.set('products', JSON.stringify(products), {
-      EX: 60
-    });
-    
-    res.json(products);
+    const vehiclesRaw = await getAllVehiclesWithDriver();
+    // Map DB fields to VehicleDTO using the model function
+    const vehicles = mapVehicleRowsToDTOs(vehiclesRaw);
+    // Store mapped VehicleDTOs in Redis cache with expiration of 60 seconds
+    await redisClient.set('vehicles', JSON.stringify(vehicles), { EX: 60 });
+    res.json(vehicles);
   } catch (err) {
-    console.error('Error fetching products:', err);
+    logger.error('Error fetching vehicles:', { err });
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-app.get('/', (req, res) => {
+// GET /employees endpoint
+app.get('/employees', async (req: Request, res: Response): Promise<void> => {
+  invokeMemoryLeak();
+  try {
+    // Try to get employees from Redis cache
+    const cachedEmployees = await redisClient.get('employees');
+    if (cachedEmployees) {
+      logger.info('Returning employees from cache');
+      res.json(JSON.parse(cachedEmployees));
+      return;
+    }
+    // If not in cache, get from PostgreSQL
+    const employees = await getAllEmployees();
+    // Store in Redis cache with expiration of 60 seconds
+    await redisClient.set('employees', JSON.stringify(employees), { EX: 60 });
+    res.json(employees);
+  } catch (err) {
+    logger.error('Error fetching employees:', { err });
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/', (req: Request, res: Response): void => {
   res.json({ status: 'Deliveroo backend is running!', timestamp: new Date() });
 });
 
@@ -60,5 +97,5 @@ process.on('SIGINT', async () => {
 });
 
 app.listen(port, () => {
-  console.log(`Backend listening at http://localhost:${port}`);
+  logger.info(`Backend listening at http://localhost:${port}`);
 }); 

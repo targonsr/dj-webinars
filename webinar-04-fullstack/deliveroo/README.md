@@ -18,9 +18,11 @@ URLs:
   - after toggling servers: `strongpassword123`
 - [grafana](http://localhost:3001)
   - `admin` / `secret` (see .env and secret/grafana)
+- [redis insight (admin UI)](http://localhost:5540)
 
 ## production
 
     export NODE_ENV=production
     export FRONTEND_URL=https://yourdomain.com
     docker compose --profile prod up --build -d
+
