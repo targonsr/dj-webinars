@@ -1,0 +1,163 @@
+# Define secrets first
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  pgadmin_password: 
+    file: ./secrets/pgadmin_password.txt
+  redis_password:
+    file: ./secrets/redis_password.txt
+  grafana_password:
+    file: ./secrets/grafana_password.txt
+
+services:
+  deliveroo-backend:
+    build:
+      context: ./deliveroo-backend
+      dockerfile: Dockerfile
+      target: ${NODE_ENV:-development}
+    environment:
+      - NODE_APP_PORT=3000
+      - NODE_ENV=${NODE_ENV:-development}
+      - DB_HOST=postgres-app
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-appuser}
+      - DB_PASSWORD=${DB_PASSWORD:-apppass}
+      - DB_NAME=${DB_NAME:-deliveroo}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:4200}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./deliveroo-backend:/app
+      - /app/node_modules
+    depends_on:
+      - postgres-app
+    networks:
+      - app-network
+      - o11y-network
+    profiles:
+      - dev
+      - prod
+    command: >
+      sh -c "if [ '$${NODE_ENV}' = 'production' ];\
+             then node dist/server.js;\
+             else npm run dev;\
+             fi"
+
+  deliveroo-frontend:
+    build:
+      context: ./deliveroo-frontend
+      dockerfile: Dockerfile
+      target: ${NODE_ENV:-development}
+    environment:
+      - API_URL=${API_URL:-http://localhost:3000}
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./deliveroo-frontend:/app
+      - /app/node_modules
+    networks:
+      - app-network
+    profiles:
+      - dev
+      - prod
+    command: >
+      sh -c "if [ '$${NODE_ENV}' = 'production' ];\
+             then nginx -g 'daemon off;';\
+             else npm start -- --host 0.0.0.0;\
+             fi"
+
+  postgres-app:
+    image: postgres:17-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: deliveroo
+    volumes:
+      - postgres-app-data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+      - management
+      - o11y-network
+    secrets:
+      - postgres_password
+    restart: unless-stopped
+    profiles:
+      - dev
+      - prod
+
+  pgadmin:
+    image: dpage/pgadmin4:9
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pgadmin_password
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres-app
+    networks:
+      - management
+    secrets:
+      - pgadmin_password
+    restart: unless-stopped
+    profiles:
+      - dev
+      - prod
+
+  # Redis Cache Service
+  redis:
+    image: redis:8-alpine
+    container_name: redis
+    entrypoint: ["/redis-entrypoint.sh"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./redis/redis-entrypoint.sh:/redis-entrypoint.sh:ro
+    networks:
+      - app-network
+    secrets:
+      - redis_password
+    restart: unless-stopped
+    profiles:
+      - dev
+      - prod
+
+  grafana:
+    image: grafana/grafana:12.0.0
+    container_name: grafana-container
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_password
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    secrets:
+      - grafana_password
+    networks:
+      - o11y-network
+
+networks:
+  management:
+    driver: bridge
+  app-network:
+    driver: bridge
+  o11y-network:
+    driver: bridge
+
+volumes:
+  postgres-app-data:
+  redis-data:
+  pgadmin-data:
+  redisinsight-data:
+  grafana-data:
