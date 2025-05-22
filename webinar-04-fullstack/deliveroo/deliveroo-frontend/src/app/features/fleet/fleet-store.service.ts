@@ -1,9 +1,9 @@
 import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
-import { Vehicle, VehicleType, VehicleStatus } from './vehicle.model';
+import { VehicleDTO, VehicleType, VehicleStatus } from './vehicle.model';
 
 // State interface
 interface FleetStoreState {
-  vehicles: Vehicle[];
+  vehicles: VehicleDTO[];
   filters: {
     search: string;
     status: VehicleStatus | null;
@@ -32,7 +32,7 @@ const initialState: FleetStoreState = {
 export const FleetStore = signalStore(
   withState(initialState),
   withMethods((store) => ({
-    setVehicles(vehicles: Vehicle[]) {
+    setVehicles(vehicles: VehicleDTO[]) {
       patchState(store, { vehicles });
     },
     setFilters(filters: Partial<{ search: string; status: VehicleStatus | null; type: VehicleType | null }>) {
