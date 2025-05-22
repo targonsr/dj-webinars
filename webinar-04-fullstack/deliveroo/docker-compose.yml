@@ -84,6 +84,15 @@ services:
              then nginx -g 'daemon off;';\
              else npm start -- --host 0.0.0.0;\
              fi"
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./deliveroo-frontend
+          target: /deliveroo-frontend
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./deliveroo-frontend/package.json
 
   postgres-app:
     image: postgres:17-alpine
