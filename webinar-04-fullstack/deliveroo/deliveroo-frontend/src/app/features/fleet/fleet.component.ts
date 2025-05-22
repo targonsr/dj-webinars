@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FleetStore } from './fleet-store.service';
-import { FleetStateService } from './fleet-state.service';
 import { VehicleActionsComponent } from './vehicle-actions.component';
 import { FleetFiltersComponent } from './fleet-filters.component';
 import { FleetTableComponent } from './fleet-table.component';
@@ -11,7 +10,7 @@ import { FleetPaginationComponent } from './fleet-pagination.component';
   selector: 'app-fleet',
   standalone: true,
   imports: [CommonModule, VehicleActionsComponent, FleetFiltersComponent, FleetTableComponent, FleetPaginationComponent],
-  providers: [FleetStore, FleetStateService],
+  providers: [FleetStore],
   template: `
     <div class="container mx-auto px-4 py-8">
       <app-vehicle-actions></app-vehicle-actions>
@@ -21,19 +20,15 @@ import { FleetPaginationComponent } from './fleet-pagination.component';
     </div>
   `
 })
-export class FleetComponent { // UI
+// export class FleetComponent implements OnInit {
+export class FleetComponent {
   store = inject(FleetStore);
-  fleetStateService = inject(FleetStateService);
 
-  // state
- 
-  // effect (signal, computed, effect)
-  ngOnInit() { // ngOnDestroy
-    // Access state: this.store.vehicles(), this.store.filters(), etc.
-    // Update state: this.store.setVehicles([...]), this.store.setFilters({...}), etc.
-  }
+  // ngOnInit() {
+  //   this.store.loadVehicles();
+  // }
 
-  getStatusClass(status: string): string { // CSS classes for tailwind
+  getStatusClass(status: string): string {
     const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';
     switch(status) {
       case 'Available':

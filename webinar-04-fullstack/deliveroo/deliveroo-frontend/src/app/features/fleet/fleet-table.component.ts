@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FleetStateService } from './fleet-state.service';
+import { FleetStore } from './fleet-store.service';
 
 @Component({
   selector: 'app-fleet-table',
@@ -20,7 +20,7 @@ import { FleetStateService } from './fleet-state.service';
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-neutral-200">
-            @for (vehicle of fleetStateService.visibleVehicles(); track vehicle.id) {
+            @for (vehicle of fleetStore.visibleVehicles(); track vehicle.id) {
               <tr class="hover:bg-neutral-50 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">{{ vehicle.id }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">{{ vehicle.type }}</td>
@@ -50,7 +50,7 @@ import { FleetStateService } from './fleet-state.service';
   styles: []
 })
 export class FleetTableComponent {
-  fleetStateService = inject(FleetStateService);
+  fleetStore = inject(FleetStore);
 
   getStatusClass(status: string): string {
     const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';
