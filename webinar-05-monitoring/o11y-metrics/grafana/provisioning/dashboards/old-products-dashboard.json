@@ -1,0 +1,38 @@
+{
+  "title": "Products API Monitoring",
+  "editable": false,
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "value": "Prometheus"
+    }
+  ],
+  "panels": [
+    {
+      "title": "Request Rate",
+      "type": "graph",
+      "targets": [{
+        "expr": "rate(http_request_duration_seconds_count[1m])",
+        "legendFormat": "{{method}} {{route}}"
+      }]
+    },
+    {
+      "title": "Error Rate",
+      "type": "graph",
+      "targets": [{
+        "expr": "sum(rate(http_request_duration_seconds_count{code=~'5..'}[1m])) / sum(rate(http_request_duration_seconds_count[1m]))",
+        "format": "time_series"
+      }]
+    },
+    {
+      "title": "Database Queries",
+      "type": "stat",
+      "targets": [{
+        "expr": "pg_stat_activity_count{datname='products'}",
+        "format": "time_series"
+      }]
+    }
+  ]
+}

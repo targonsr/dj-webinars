@@ -1,0 +1,99 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  prometheus:
+    config:
+      scrape_configs:
+        # Scrape the app's Prometheus metrics
+        - job_name: 'products-api'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['app:3000']
+        # Scrape the postgres exporter
+        - job_name: 'postgres'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['postgres-exporter:9187']
+        # Scrape Prometheus itself
+        - job_name: 'prometheus'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['prometheus:9090']
+        # Scrape the OpenTelemetry Collector
+        - job_name: 'otel-collector'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['0.0.0.0:8889']
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  attributes:
+    actions:
+      - action: insert
+        key: loki.attribute.labels
+        value: service.name,http.status_code  # Log attributes to use as labels
+  resource:
+    attributes:
+      - action: insert
+        key: loki.resource.labels
+        value: service.instance.id,host.name  # Resource attributes as labels
+  resourcedetection:
+    detectors: [env, system]
+    system:
+      hostname_sources: [os]
+
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:8889
+  # otlp:
+  #   endpoint: jaeger:4317
+  #   tls:
+  #     insecure: true
+  # 🔥🔥🔥
+  # otlp/jaeger:
+  #   endpoint: jaeger:4317
+  #   tls:
+  #     insecure: true
+  # 🔥🔥🔥
+  # loki:
+  #   endpoint: http://loki:3100/loki/api/v1/push
+  #   http_client_settings:
+  #     timeout: 30s
+  otlphttp/loki:
+    endpoint: "http://loki:3100/otlp"
+    tls:
+      insecure: true  # Required for plain HTTP
+  otlp/tempo:
+    endpoint: "tempo:4317"
+    tls:
+      insecure: true
+
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [batch]
+      exporters: [prometheus]
+    traces:
+      # receivers: [otlp]
+      # processors: [batch]
+      # exporters: [otlp]
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/jaeger, otlp/tempo]
+    # logs:
+    #   receivers: [otlp]
+    #   processors: [resource, attributes, batch]
+    #   exporters: [loki]
+    logs:
+      receivers: [otlp]
+      processors: [resourcedetection, batch]
+      exporters: [otlphttp/loki]

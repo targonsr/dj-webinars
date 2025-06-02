@@ -1,0 +1,35 @@
+{
+    "title": "Tracing Dashboard",
+    "panels": [
+      {
+        "title": "Trace Explorer",
+        "type": "traces",
+        "datasource": "Tempo",
+        "options": {
+          "showSpanFilters": true
+        },
+        "targets": [
+          {
+            "queryType": "traceql",
+            "expr": "{ .service.name = \"example-app\" } | avg(duration) > 100ms",
+            "refId": "A"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "traceId",
+          "label": "Trace ID",
+          "type": "textbox",
+          "query": "",
+          "current": {
+            "value": "",
+            "text": ""
+          }
+        }
+      ]
+    }
+  }
+  
