@@ -46,6 +46,7 @@
   - użyteczne jeśli chcesz mieć tematyczne mind mapy
 - gdyby ktoś chciał, [można nawet zaembedować](https://www.npmjs.com/package/@excalidraw/excalidraw) we własnym frontendzie
 - [TUTORIAL: excalidraw mindmap](https://www.youtube.com/watch?v=JLZVnWwE-H8)
+- [biblioteki ikon do excalidraw](https://libraries.excalidraw.com/?theme=light&sort=default)
 
 ![Excalidraw](excalidraw.png)
 
