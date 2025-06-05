@@ -1,0 +1,6 @@
+flask
+jsonify
+grpcio
+requests
+sqlalchemy
+psycopg2-binary
