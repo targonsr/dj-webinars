@@ -1,50 +1,118 @@
-workspace "Deliveroo System" "A C4 model of a logistics system" {
+workspace "Deliveroo Logistics System" "A C4 model of a logistics system" {
 
     model {
-        customer = person "Customer" "A customer who wants to buy products online"
-        admin = person "Admin" "Staff member managing products and orders"
-        paymentProvider = softwareSystem "Payment Provider" "Handles payment processing"
+        customer = person "Customer" "A client who requests transport of goods from one location to another"
+        staff = person "Internal Staff" "Operational or Management staff member"
+        # dispatcher = person "Dispatcher" "Staff member responsible for planning routes and assigning resources"
+        # driver = person "Driver" "Employee who transports goods between locations"
+        # warehouse_staff = person "Warehouse Staff" "Person responsible for handling goods in the warehouse"
+        # logistics_specialist = person "Logistics Specialist" "Staff member overseeing logistics processes and resolving issues"
+        # fleet_manager = person "Fleet Manager" "Staff member managing vehicle availability and maintenance"
+        # recipient = person "Recipient" "Person or entity receiving the delivered goods"
+        external_partner = person "External Partner" "Third-party provider such as an external warehouse or subcontracted carrier"
 
-        deliveroo = softwareSystem "Logistics System" "Allows customers to browse and purchase products online" {
-            webApp = container "Web Application" "Provides e-commerce functionality to customers" "React SPA"
-            transportAPI = container "Transport API" "Provides transport via API" "Node.js" {
-                authComponent = component "Authentication Component" "Handles user authentication"
-                productComponent = component "Product Component" "Manages product catalog"
-                orderComponent = component "Order Component" "Manages customer orders"
-            }
-            warehousingAPI = container "WMS API" "Provides warehousing via API" "Python" {
-                WMSComponent = component "WMS Component" "Manages warehousing"
-            }
-            database = container "DatabaseTRANSPORT" "Stores product catalog, orders, etc." "PostgreSQL"
-            databaseWMS = container "DatabaseWMS" "Stores product catalog, orders, etc." "PostgreSQL"
-
-            webApp -> transportAPI "Makes API calls to" "JSON/HTTPS"
-            transportAPI -> database "Reads from and writes to"
-            transportAPI -> paymentProvider "Processes payments via"
-            transportAPI -> warehousingAPI "Reads warehousing"
-            warehousingAPI -> databaseWMS "Reads warehousing"
+        paymentProvider = softwareSystem "Payment Provider" "Handles payment processing" {
+            tag "external"
         }
 
-        # customer -> deliveroo.webApp "Browses and purchases products using"
-        customer -> deliveroo "Browses and purchases products using"
-        admin -> deliveroo "Manages products and orders"
+        invoicingSystem = softwareSystem "Invoicing System" "Handles invoicing" {
+            tag "external"
+        }
+
+        deliverooWMS = softwareSystem "Deliveroo Warehouse Management System" "Allows warehouse staff to manage inventory, cargo and warehouse availability" {
+            WMS-DB = container "WMS-DB" "Stores product catalog, orders, etc." "PostgreSQL" {
+                tag "database"
+            }
+
+            WMS-API = container "Warehouse Management System API" "Provides warehousing via API" "Python" {
+                WMSCapacity = component "WMS Capacity Component" "Determines the capacity of the warehouse"
+                WMSAvailability = component "WMS Availability Component" "Determines the availability of the warehouse"
+                WMSStorageManagement = component "WMS Storage Management Component" "Manages the storage of goods in the warehouse"
+
+                WMSCapacity -> WMS-DB "R/W"
+                WMSAvailability -> WMS-DB "R/W"
+                WMSStorageManagement -> WMS-DB "R/W"
+
+                WMSStorageManagement -> invoicingSystem "Processes invoicing via"
+                WMSStorageManagement -> paymentProvider "Processes payments via"
+            }
+
+            webWMSApp = container "Web Application" "Provides warehouse management to customers and staff" "Angular SPA" {
+                tag "webApp"
+                webWMSApp -> WMS-API "customer and staff operations"
+            }
+
+            mobileWMSApp = container "Mobile WMS Application" "Allows warehouse staff to manage inventory, cargo and warehouse availability" "React Native" {
+                tag "mobileApp"
+                mobileWMSApp -> WMS-API "staff operations"
+            }
+        }
+
+        deliverooTMS = softwareSystem "Deliveroo Transport Management System" "Allows customers to browse and purchase products online" {
+            webTMSApp = container "TMS Web Application" "Provides e-commerce functionality to customers" "React SPA" {
+                tag "webApp"
+            }
+            
+            TMS-DB = container "TMS-DB" "Stores product catalog, orders, etc." "PostgreSQL" {
+                tag "database"
+            }
+
+            TMS-API = container "Transport API" "Provides transport via API" "Node.js" {
+                transportComponent = component "Transport Component" "Manages transport operations"
+
+                transportComponent -> TMS-DB "R/W"
+                transportComponent -> invoicingSystem "Processes invoicing via"
+                transportComponent -> paymentProvider "Processes payments via"
+            }
+
+            webTMSApp -> TMS-API "Makes API calls to" "JSON/HTTPS"
+            TMS-API -> TMS-DB "Reads from and writes to"
+            TMS-API -> WMS-API "Reads warehousing"
+        }
+
+        customer -> deliverooTMS "Requests and tracks transport of goods using"
+        staff -> deliverooWMS "Manages warehousing operations"
+        staff -> deliverooTMS "Manages transport operations"
+        # dispatcher -> deliverooTMS "Plans routes, assigns drivers and vehicles using"
+        # driver -> mobileTMSApp "Views assigned transports, updates delivery status using"
+        # warehouse_staff -> deliverooWMS "Manages storage and handling of goods using"
+        # logistics_specialist -> deliverooTMS "Monitors logistics processes and resolves issues using"
+        # fleet_manager -> deliverooTMS "Oversees vehicle availability and maintenance using"
+        # recipient -> deliverooTMS "Receives notifications and confirms delivery using"
+        external_partner -> deliverooTMS "Receives transport assignments or warehouse requests using"
+        external_partner -> deliverooWMS "Receives transport assignments or warehouse requests using"
     }
 
     views {
-        systemContext deliveroo "SystemContext" {
+        systemContext deliverooWMS "WMS_Context" {
             include *
             autoLayout
         }
 
-        container deliveroo "Containers" {
+        container deliverooWMS "WMS_Containers" {
             include *
             autoLayout
         }
 
-        # component deliveroo.apiApplication "Components" {
-        #     include *
-        #     autoLayout
-        # }
+        component WMS-API "Components" {
+            include *
+            autoLayout
+        }
+
+        systemContext deliverooTMS "TMS_Context" {
+            include *
+            autoLayout
+        }
+
+        container deliverooTMS "TMS_Containers" {
+            include *
+            autoLayout
+        }
+
+        component TMS-API "TMS_API" {
+            include *
+            autoLayout
+        }
 
         styles {
             element "Person" {
@@ -52,18 +120,45 @@ workspace "Deliveroo System" "A C4 model of a logistics system" {
                 background #08427B
                 color #ffffff
             }
+
             element "Software System" {
                 background #1168BD
                 color #ffffff
             }
+
             element "Container" {
                 background #438DD5
                 color #ffffff
             }
+
             element "Component" {
                 background #85BBF0
                 color #000000
             }
+
+            element "external" {
+                background #6b6b6b
+            }
+
+            element "database" {
+                shape cylinder
+                background #982e68
+            }
+
+            element "webApp" {
+                shape WebBrowser
+                background #2e9875
+            }
+
+            element "mobileApp" {
+                shape MobileDevicePortrait
+                background #2e9875
+            }
+        }
+
+        branding {
+            logo "deliveroo-gold.png"
         }
     }
+
 }
