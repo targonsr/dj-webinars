@@ -20,6 +20,10 @@ workspace "Deliveroo Logistics System" "A C4 model of a logistics system" {
         }
 
         deliverooWMS = softwareSystem "Deliveroo Warehouse Management System" "Allows warehouse staff to manage inventory, cargo and warehouse availability" {
+
+            !adrs wms/adrs
+            !docs wms/docs/overview.md
+
             WMS-DB = container "WMS-DB" "Stores product catalog, orders, etc." "PostgreSQL" {
                 tag "database"
             }
@@ -49,6 +53,10 @@ workspace "Deliveroo Logistics System" "A C4 model of a logistics system" {
         }
 
         deliverooTMS = softwareSystem "Deliveroo Transport Management System" "Allows customers to browse and purchase products online" {
+
+            !adrs tms/adrs
+            !docs tms/docs/overview.md
+
             webTMSApp = container "TMS Web Application" "Provides e-commerce functionality to customers" "React SPA" {
                 tag "webApp"
             }
