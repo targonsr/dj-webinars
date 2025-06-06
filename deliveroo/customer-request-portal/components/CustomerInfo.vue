@@ -103,29 +103,29 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useStore } from '../store'
+import { useAppStore } from '~/store'
 
-const store = useStore()
+const store = useAppStore()
 
 // Form fields with initial values from store
 const companyName = computed({
-  get: () => store.state.formData.customer.companyName,
-  set: (value: string) => store.commit('updateCustomerData', { field: 'companyName', value })
+  get: () => store.formData.customer.companyName,
+  set: (value: string) => store.updateCustomerData('companyName', value)
 })
 
 const contactPerson = computed({
-  get: () => store.state.formData.customer.contactPerson,
-  set: (value: string) => store.commit('updateCustomerData', { field: 'contactPerson', value })
+  get: () => store.formData.customer.contactPerson,
+  set: (value: string) => store.updateCustomerData('contactPerson', value)
 })
 
 const email = computed({
-  get: () => store.state.formData.customer.email,
-  set: (value: string) => store.commit('updateCustomerData', { field: 'email', value })
+  get: () => store.formData.customer.email,
+  set: (value: string) => store.updateCustomerData('email', value)
 })
 
 const phone = computed({
-  get: () => store.state.formData.customer.phone,
-  set: (value: string) => store.commit('updateCustomerData', { field: 'phone', value })
+  get: () => store.formData.customer.phone,
+  set: (value: string) => store.updateCustomerData('phone', value)
 })
 
 // Form validation
@@ -178,12 +178,12 @@ function validateEmail(email: string) {
 
 function handleNext() {
   if (validateForm()) {
-    store.dispatch('nextStep')
+    store.nextStep()
   }
 }
 
 function handleBack() {
-  store.dispatch('prevStep')
+  store.prevStep()
 }
 </script>
 

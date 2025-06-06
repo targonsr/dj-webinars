@@ -30,28 +30,33 @@
         </div>
       </div>
     </div>
+    <div class="form-footer">
+      <img src="/deliveroo-transparent-dark-foreground.png" alt="Deliveroo Logo" class="logo" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useStore } from './store';
+import { useAppStore } from '~/store';
+import '~/assets/style.css';
 import CargoDetails from './components/CargoDetails.vue';
 import CustomerInfo from './components/CustomerInfo.vue';
 import ReviewConfirm from './components/ReviewConfirm.vue';
 import SubmissionComplete from './components/SubmissionComplete.vue';
 
-const store = useStore();
+const store = useAppStore();
 
 const stepNames = ['Cargo Details', 'Customer Info', 'Review & Submit'];
-const currentStep = computed(() => store.state.currentStep);
-const requestSubmitted = computed(() => store.state.requestSubmitted);
+const currentStep = computed(() => store.currentStep);
+const requestSubmitted = computed(() => store.requestSubmitted);
 
 function goToStep(step: number) {
-  // Only allow going to completed steps or the next step
-  if (step < currentStep.value || 
-     (step === currentStep.value + 1 && store.getters.isStepComplete(currentStep.value))) {
-    store.dispatch('goToStep', step);
+  if (
+    step < currentStep.value ||
+    (step === currentStep.value + 1 && store.isStepComplete(currentStep.value))
+  ) {
+    store.goToStep(step);
   }
 }
 </script>
@@ -136,5 +141,24 @@ function goToStep(step: number) {
   .stepper-step .step-name {
     font-size: 0.75rem;
   }
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 1.2rem;
+}
+.logo {
+  max-width: 180px;
+  margin-bottom: 0.3rem;
+  filter: drop-shadow(0 2px 8px rgba(44, 62, 80, 0.10));
+}
+.tagline {
+  color: #fbb040;
+  font-weight: 600;
+  margin-top: 0.1rem;
+  letter-spacing: 0.12em;
+  font-size: 1.1rem;
+  text-shadow: 0 1px 4px rgba(251, 176, 64, 0.08);
+  margin-bottom: 0.2rem;
 }
 </style>

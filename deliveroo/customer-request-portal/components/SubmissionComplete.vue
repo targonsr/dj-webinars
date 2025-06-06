@@ -55,13 +55,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useStore } from '../store'
+import { useAppStore } from '~/store'
 
-const store = useStore()
-const referenceNumber = computed(() => store.state.referenceNumber)
+const store = useAppStore()
+const referenceNumber = computed(() => store.referenceNumber)
 
 function startNew() {
-  store.commit('resetForm')
+  store.resetForm()
 }
 </script>
 

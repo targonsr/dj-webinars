@@ -94,14 +94,14 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useStore } from '../store';
+import { useAppStore } from '~/store';
 
-const store = useStore();
-const formData = computed(() => store.state.formData);
+const store = useAppStore();
+const formData = computed(() => store.formData);
 
 const termsAccepted = computed({
-  get: () => store.state.formData.termsAccepted,
-  set: (value: boolean) => store.commit('setTermsAccepted', value)
+  get: () => store.formData.termsAccepted,
+  set: (value: boolean) => store.setTermsAccepted(value)
 });
 
 const errors = ref({
@@ -122,16 +122,16 @@ function validateForm() {
 
 function handleSubmit() {
   if (validateForm()) {
-    store.dispatch('submitForm');
+    store.submitForm();
   }
 }
 
 function handleBack() {
-  store.dispatch('prevStep');
+  store.prevStep();
 }
 
 function editSection(step: number) {
-  store.dispatch('goToStep', step);
+  store.goToStep(step);
 }
 
 function showTerms() {

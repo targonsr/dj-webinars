@@ -70,24 +70,24 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useStore } from '../store'
+import { useAppStore } from '~/store'
 
-const store = useStore()
+const store = useAppStore()
 
 // Form fields with initial values from store
 const description = computed({
-  get: () => store.state.formData.cargo.description,
-  set: (value: string) => store.commit('updateCargoData', { field: 'description', value })
+  get: () => store.formData.cargo.description,
+  set: (value: string) => store.updateCargoData('description', value)
 })
 
 const duration = computed({
-  get: () => store.state.formData.cargo.duration,
-  set: (value: string) => store.commit('updateCargoData', { field: 'duration', value })
+  get: () => store.formData.cargo.duration,
+  set: (value: string) => store.updateCargoData('duration', value)
 })
 
 const warehouse = computed({
-  get: () => store.state.formData.cargo.warehouse,
-  set: (value: string) => store.commit('updateCargoData', { field: 'warehouse', value })
+  get: () => store.formData.cargo.warehouse,
+  set: (value: string) => store.updateCargoData('warehouse', value)
 })
 
 // Form validation
@@ -112,7 +112,7 @@ function validateForm() {
 
 function handleNext() {
   if (validateForm()) {
-    store.dispatch('nextStep')
+    store.nextStep()
   }
 }
 </script>
