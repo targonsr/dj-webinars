@@ -76,9 +76,14 @@ workspace "Deliveroo Logistics System" "A C4 model of a logistics system" {
             webTMSApp -> TMS-API "Makes API calls to" "JSON/HTTPS"
             TMS-API -> TMS-DB "Reads from and writes to"
             TMS-API -> WMS-API "Reads warehousing"
+
+            webCustomerRequestPortal = container "Customer Request Portal" "Provides a portal for customers to request transport of goods" "Nuxt app" {
+                tag "webApp"
+            }
+            webCustomerRequestPortal -> TMS-API "Makes API calls to" "JSON/HTTPS"
         }
 
-        customer -> deliverooTMS "Requests and tracks transport of goods using"
+        customer -> webCustomerRequestPortal "Requests and tracks transport of goods using"
         staff -> deliverooWMS "Manages warehousing operations"
         staff -> deliverooTMS "Manages transport operations"
         # dispatcher -> deliverooTMS "Plans routes, assigns drivers and vehicles using"
@@ -155,12 +160,12 @@ workspace "Deliveroo Logistics System" "A C4 model of a logistics system" {
 
             element "webApp" {
                 shape WebBrowser
-                background #2e9875
+                background #207241
             }
 
             element "mobileApp" {
                 shape MobileDevicePortrait
-                background #2e9875
+                background #207272
             }
         }
 
