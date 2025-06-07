@@ -20,10 +20,10 @@ import { Button } from '@/components/ui/button';
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: '📊' },
   { title: 'Transportation Orders', url: '/orders', icon: '📦' },
+  { title: 'Fleet Management', url: '/trucks', icon: '🚛' },
   { title: 'Urgent', url: '/urgent', icon: '🚨' },
   { title: 'Shipments', url: '/shipments', icon: '🚚' },
   { title: 'Drivers', url: '/drivers', icon: '👨‍💼' },
-  { title: 'Fleet Management', url: '/trucks', icon: '🚛' },
   { title: 'Payments', url: '/payments', icon: '💳' },
   { title: 'Vehicle Fleet', url: '/vehicle-fleet', icon: '🗺️' },
   { title: 'Transit Incidents', url: '/incidents', icon: '⚠️' },
