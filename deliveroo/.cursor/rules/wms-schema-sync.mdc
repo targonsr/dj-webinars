@@ -1,0 +1,28 @@
+---
+description: 
+globs: **/*.mmd
+alwaysApply: false
+---
+# Warehouse Schema Synchronization Rule
+
+The SQL schema defined in [create-wms-schema.sql](mdc:deliveroo/wms-data-generator/src/create-wms-schema.sql) **must always be kept in sync** with the ER diagram in [wms-er-diagram.mmd](mdc:deliveroo/wms-data-generator/src/wms-er-diagram.mmd)
+
+## What must be synchronized?
+- **Tables/entities**: Every entity in the ER diagram must have a corresponding table in the SQL schema, and vice versa.
+- **Columns/attributes**: All attributes (with correct types) must match between the ER diagram and the SQL schema.
+- **Primary keys**: Every primary key in the ER diagram must be present and correctly defined in the SQL schema.
+- **Foreign keys**: All relationships and foreign keys must be implemented in the SQL schema, matching the ER diagram's cardinality and constraints.
+- **Indexes**: Any indexes implied by relationships or performance needs in the ER diagram should be present in the SQL schema.
+- **Constraints**: All constraints (e.g., NOT NULL, UNIQUE, ON DELETE, etc.) must be reflected in both files.
+
+## When to update?
+- If you change the ER diagram (add/remove entities, attributes, relationships, keys, etc.), you **must** update the SQL schema to match.
+- If you change the SQL schema (add/remove tables, columns, keys, constraints, etc.), you **must** update the ER diagram to match.
+
+## How to check?
+- Review both files after any change to ensure:
+  - All tables/entities, columns/attributes, keys, and relationships are present and consistent.
+  - All constraints and indexes are implemented as described.
+
+## Example
+If you add a new table/entity or relationship in @warehouse-er.mmd, you must add the corresponding table, columns, keys, and constraints in [create-wms-schema.sql](mdc:deliveroo/wms-data-generator/src/create-wms-schema.sql), and vice versa.
