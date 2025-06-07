@@ -64,3 +64,66 @@ WHERE
 ORDER BY
     payment_date NULLS LAST, payment_id;
 ```
+
+# get pending payments by customer
+
+```sql
+-- List all payments with status 'pending' for a specific customer.
+SELECT
+    payment_id,
+    storage_record_id,
+    customer_id,
+    amount,
+    currency,
+    status,
+    payment_date,
+    external_reference
+FROM
+    payment
+WHERE
+    customer_id = $1 -- customer_id parameter
+    AND status = 'pending'
+ORDER BY
+    payment_date NULLS LAST,
+    payment_id;
+```
+
+# list pending storage requests
+
+```sql
+-- Show all storage requests still pending; add an index on status for faster filtering.
+-- Suggested index (run once):
+-- CREATE INDEX IF NOT EXISTS idx_storage_request_status ON storage_request(status);
+SELECT
+    request_id,
+    customer_id,
+    warehouse_id,
+    requested_entry_date,
+    requested_exit_date,
+    status
+FROM
+    storage_request
+WHERE
+    status = 'pending'
+ORDER BY
+    requested_entry_date;
+```
+
+# storage event history for storage record
+
+```sql
+-- Retrieve all event history rows for a storage record ordered chronologically.
+SELECT
+    event_id,
+    storage_record_id,
+    event_type_id,
+    event_time,
+    employee_id,
+    details
+FROM
+    storage_event_history
+WHERE
+    storage_record_id = $1 -- storage_record_id parameter
+ORDER BY
+    event_time;
+```

@@ -122,6 +122,7 @@ EMPLOYEE {
   string email
   string phone
   datetime hire_date
+  boolean is_deleted "default: false, INDEXED, soft delete"
 }
 
 ROLE {
@@ -134,7 +135,6 @@ EMPLOYEE_ROLE {
   int employee_id FK
   int role_id FK
   datetime assigned_date
-  PRIMARY KEY (employee_id, role_id)
 }
 
 EMPLOYEE_WAREHOUSE {
@@ -142,7 +142,6 @@ EMPLOYEE_WAREHOUSE {
   int warehouse_id FK
   datetime assigned_from
   datetime assigned_until
-  PRIMARY KEY (employee_id, warehouse_id, assigned_from)
 }
 
 CUSTOMER {
@@ -150,6 +149,7 @@ CUSTOMER {
   string name
   string email
   string phone
+  boolean is_deleted "default: false, INDEXED, soft delete"
 }
 
 WAREHOUSE ||--o{ ZONE : "contains"
@@ -175,3 +175,6 @@ CARGO_EVENT_TYPE ||--o{ CARGO_EVENT_HISTORY : "categorizes"
 EMPLOYEE ||--o{ CARGO_EVENT_HISTORY : "performed"
 STORAGE_RECORD ||--o{ PAYMENT : "billed"
 PAYMENT }o--|| CUSTOMER : "for"
+
+%% NOTE: When querying EMPLOYEE, always filter with is_deleted = false (soft delete)
+%% NOTE: When querying CUSTOMER, always filter with is_deleted = false (soft delete)

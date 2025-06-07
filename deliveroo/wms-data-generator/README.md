@@ -1,6 +1,6 @@
 # TL;DR;
 
-`cd data-generator && source ./.venv/bin/activate && python -m src.run`
+`cd wms-data-generator && source ./.venv/bin/activate && python -m src.run`
 
 # SQL Fake Data Generator
 
