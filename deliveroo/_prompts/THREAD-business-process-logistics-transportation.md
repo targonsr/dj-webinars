@@ -111,3 +111,72 @@ Absolutely, thank you for clarifying your expectations and providing a precise d
 - Identify areas for improvement.
 - Implement changes or corrective actions.
 - Communicate improvements to customers.
+
+-----
+
+## Actors/Roles in Transportation & Logistics System
+
+- **Client/Shipper**: Entity or individual requesting transportation of goods; initiates orders and receives deliveries[1][2].
+- **Head Office Manager**: Oversees overall logistics operations, performance, and profitability[1].
+- **Booking/Dispatch Manager**: Manages order processing, shipment scheduling, and client requests[1].
+- **Warehouse Manager**: Supervises warehouse operations, including storage, inventory, and dispatch planning[1][3].
+- **Driver**: Operates vehicles and is responsible for the safe and timely delivery of cargo[1][4].
+- **Fleet Manager**: Manages the company’s fleet, vehicle maintenance, compliance, and driver assignments[4].
+- **Freight Forwarder**: Organizes and coordinates transportation, especially for multimodal or cross-border shipments, and handles documentation[2][3].
+- **Customs Broker**: Handles customs clearance and ensures compliance with import/export regulations[2][3].
+- **Administrator/System Admin**: Manages system users, configurations, and access rights[1].
+- **Consignee/Recipient**: The party receiving the goods at the destination[2].
+
+---
+
+## 10 Key Business Processes in Road Transport & Logistics
+
+### 1. **Order Management & Quotation**
+- Client submits a transport request specifying cargo details and destination.
+- Booking Manager reviews requirements and generates a quotation.
+- Client reviews and confirms the order.
+
+### 2. **Transport Planning & Scheduling**
+- Dispatch Manager assigns vehicles and drivers based on cargo type and route.
+- Fleet Manager checks vehicle availability and compliance.
+- Transport plan is finalized and communicated to all stakeholders.
+
+### 3. **Cargo Pickup (First Mile)**
+- Driver receives loading instructions and collects cargo from the shipper, airport, dock, or rail terminal.
+- Cargo is checked, loaded, and relevant documentation (CMR, waybill) is issued.
+- Status is updated in the system for real-time tracking.
+
+### 4. **In-Transit Management**
+- Driver follows the planned route; GPS tracking is enabled for real-time monitoring.
+- Fleet Manager monitors vehicle status and handles exceptions (delays, incidents).
+- Client receives automated status updates.
+
+### 5. **Cross-Border & Customs Clearance**
+- Freight Forwarder and Customs Broker prepare necessary documents for international shipments (T1, CMR, customs declarations).
+- Customs Broker ensures compliance and facilitates clearance at borders.
+- Driver proceeds after clearance is confirmed.
+
+### 6. **Warehouse Handling (Temporary Storage)**
+- Cargo is unloaded and stored in the warehouse if interim storage is required.
+- Warehouse Manager oversees inventory, preservation, and security.
+- Outbound scheduling is coordinated for final delivery.
+
+### 7. **Last Mile Delivery**
+- Driver is assigned for final delivery from warehouse or direct transit.
+- Consignee is notified of estimated arrival.
+- Proof of delivery (POD) is captured upon successful handover.
+
+### 8. **Fleet & Asset Management**
+- Fleet Manager schedules regular maintenance and inspections for vehicles.
+- Vehicle usage, fuel consumption, and compliance records are tracked.
+- Incidents, breakdowns, and repairs are logged for audit and optimization.
+
+### 9. **Billing & Invoicing**
+- System generates invoices based on completed deliveries and agreed rates.
+- Client receives invoice; payment status is tracked by the Administrator.
+- Disputes or adjustments are processed as needed.
+
+### 10. **Claims & Incident Management**
+- If cargo is lost or damaged, Client submits a claim.
+- Claims are investigated by the Head Office Manager and Insurer.
+- Resolution (compensation, repair, replacement) is processed and documented.
