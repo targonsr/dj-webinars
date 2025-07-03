@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Vertical Slices Architecture (VSA)
+
+The application must follow the **vertical slices architecture** pattern. Each functional module should have its own directory inside the `features` directory (e.g., `features/transportation-requests-listing`).
+
+Within each module directory, place **all code related to that module**. This includes (but is not limited to):
+- Components
+- Composables
+- Stores
+- Models and interfaces. Reference implementation: [transportation-request.model.ts](mdc:features/transportation-requests-listing/transportation-request.model.ts)
+- Mocks...
+- API: Loading the data should be put in an `*-api.ts` file, which includes not only the HTTP async function that executes the request, but also uses the `@tanstack/vue-query` library (and always attach the documentation to a `@vue-query` to your prompts/context). Reference implementation: [transportation-requests-api.ts](mdc:features/transportation-requests-listing/transportation-requests-api.ts)
+- Utilities specific to the module
+
+Most code should live inside its respective module in `features`, even if this leads to some redundancy. Only highly reusable code (used by many modules) should be placed outside `features` (e.g., in `components/`, `composables/`, or `stores/`).
+
+This structure ensures that each module is self-contained and easy to reason about, test, and maintain.
