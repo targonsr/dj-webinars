@@ -3,7 +3,7 @@ import type { TransportationRequest } from '~/features/transportation/transporta
 import type { WarehousingRequest } from '~/features/warehousing/warehousing-request-details/warehousing-request-details.model'
 
 export class PDFGenerator {
-  private static LOGO_URL = 'https://raw.githubusercontent.com/developer-jutra/dj-webinars/refs/heads/main/deliveroo/assets/logo/deliveroo-transparent-dark-foreground.png'
+  private static LOGO_URL = '/deliveroo-pdf-logo.png'
   private static logoLoaded = false
   private static logoImage: string | null = null
 
