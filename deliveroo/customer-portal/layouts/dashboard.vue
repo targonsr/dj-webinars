@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-    <DashboardSidebar v-model:open="sidebarOpen" v-model:collapsed="sidebarCollapsed" />
+    <DashboardMenu v-model:open="sidebarOpen" v-model:collapsed="sidebarCollapsed" />
     
     <div :class="[
       'transition-all duration-300 ease-in-out',
@@ -36,7 +36,7 @@
             
             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200 dark:lg:bg-gray-700" aria-hidden="true" />
             
-            <DashboardUserMenu />
+            <DashboardHeader />
           </div>
         </div>
       </div>
@@ -51,6 +51,9 @@
 </template>
 
 <script setup lang="ts">
+import DashboardMenu from '~/components/layout/DashboardMenu.vue'
+import DashboardHeader from '~/components/layout/DashboardHeader.vue'
+import ThemeToggle from '~/components/ui-library/ThemeToggle.vue'
 import { Bars3Icon, ChevronLeftIcon } from '@heroicons/vue/24/outline'
 
 const sidebarOpen = ref(false)

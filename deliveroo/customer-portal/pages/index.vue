@@ -563,7 +563,6 @@ import {
   MapPinIcon,
   ArrowRightIcon
 } from '@heroicons/vue/24/outline'
-import { mockServices, mockFeatures, mockSuccessStories, mockStatistics } from '~/model/dashboard/dashboard.mocks'
 
 const contactLoading = ref(false)
 const statsSection = ref(null)
@@ -579,10 +578,137 @@ const contactForm = reactive({
   message: ''
 })
 
-const services = mockServices
-const features = mockFeatures
-const successStories = mockSuccessStories
-const stats = mockStatistics
+// Inlined mock data
+const services = [
+  {
+    name: 'Road Transportation',
+    description: 'Europe-wide freight delivery with real-time tracking and guaranteed delivery times.',
+    icon: 'TruckIcon',
+    features: [
+      'Full & partial loads',
+      'Express delivery',
+      'Temperature controlled',
+      'Hazardous materials'
+    ]
+  },
+  {
+    name: 'Warehousing Solutions',
+    description: 'Secure storage facilities with advanced inventory management systems.',
+    icon: 'BuildingStorefrontIcon',
+    features: [
+      'Climate controlled',
+      'Inventory management',
+      'Pick & pack services',
+      'Cross-docking'
+    ]
+  },
+  {
+    name: 'Customs Clearance',
+    description: 'Simplified cross-border procedures and documentation handling.',
+    icon: 'ShieldCheckIcon',
+    features: [
+      'EU compliance',
+      'Documentation support',
+      'Fast processing',
+      'Expert guidance'
+    ]
+  },
+  {
+    name: 'Technology Platform',
+    description: 'Advanced tracking and management systems for complete visibility.',
+    icon: 'CpuChipIcon',
+    features: [
+      'Real-time tracking',
+      'Digital documentation',
+      'API integration',
+      'Mobile access'
+    ]
+  }
+]
+
+const features = [
+  {
+    name: 'European Coverage',
+    description: 'Extensive network covering all major European routes with dedicated hubs in key locations.',
+    icon: 'GlobeEuropeAfricaIcon'
+  },
+  {
+    name: 'Reliability & Speed',
+    description: '99%+ on-time delivery rate with express options for urgent shipments.',
+    icon: 'ClockIcon'
+  },
+  {
+    name: 'Advanced Technology',
+    description: 'State-of-the-art tracking systems and digital platforms for complete transparency.',
+    icon: 'CpuChipIcon'
+  },
+  {
+    name: 'Trusted Partner',
+    description: 'Years of experience with industry-leading safety standards and compliance.',
+    icon: 'ShieldCheckIcon'
+  }
+]
+
+const successStories = [
+  {
+    id: 1,
+    company: 'TechCorp Manufacturing',
+    industry: 'Electronics Manufacturing',
+    logo: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+    testimonial: 'Deliveroo transformed our supply chain efficiency. Their real-time tracking and reliable delivery schedules helped us reduce inventory costs by 30% while improving customer satisfaction.',
+    metrics: {
+      improvement: '30%',
+      delivery: '99.2%'
+    },
+    contact: {
+      name: 'Anna Kowalski',
+      position: 'Supply Chain Director',
+      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
+    },
+    caseStudyLink: '/case-studies/techcorp'
+  },
+  {
+    id: 2,
+    company: 'AutoParts Europe',
+    industry: 'Automotive Parts',
+    logo: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+    testimonial: 'The cross-border logistics expertise of Deliveroo enabled us to expand into 5 new European markets. Their customs clearance service is exceptional.',
+    metrics: {
+      improvement: '25%',
+      delivery: '98.8%'
+    },
+    contact: {
+      name: 'Marcus Weber',
+      position: 'Logistics Manager',
+      avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
+    },
+    caseStudyLink: '/case-studies/autoparts'
+  },
+  {
+    id: 3,
+    company: 'FreshFood Distribution',
+    industry: 'Food & Beverage',
+    logo: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+    testimonial: 'Temperature-controlled transportation and warehousing solutions from Deliveroo helped us maintain product quality while expanding our distribution network across Central Europe.',
+    metrics: {
+      improvement: '40%',
+      delivery: '99.5%'
+    },
+    contact: {
+      name: 'Sofia Novak',
+      position: 'Operations Director',
+      avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
+    },
+    caseStudyLink: '/case-studies/freshfood'
+  }
+]
+
+const stats = [
+  { name: 'Countries Served', value: 25, suffix: '+' },
+  { name: 'Deliveries Completed', value: 100000, suffix: '+' },
+  { name: 'Satisfied Customers', value: 1000, suffix: '+' },
+  { name: 'Warehouse Capacity', value: 50000, suffix: ' m²' }
+]
 
 // Helper function to get icon component from string name
 const getIconComponent = (iconName: string) => {

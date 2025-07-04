@@ -7,3 +7,9 @@
     <AppFooter />
   </div>
 </template>
+
+<script setup lang="ts">
+// Explicit imports to ensure components are resolved
+import AppHeaderGuest from '~/components/layout/AppHeaderGuest.vue'
+import AppFooter from '~/components/layout/AppFooter.vue'
+</script>

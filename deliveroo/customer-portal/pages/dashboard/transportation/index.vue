@@ -1,12 +1,9 @@
 <template>
-  <TransportationRequestsListing />
+  <ShipmentListing />
 </template>
 
 <script setup lang="ts">
-import TransportationRequestsListing from '~/features/transportation-requests-listing/TransportationRequestsListing.vue'
+import ShipmentListing from "~/features/transportation/shipment-listing/ShipmentListing.vue";
 
-definePageMeta({
-  layout: 'dashboard',
-  middleware: 'auth'
-})
+definePageMeta({ layout: "dashboard", middleware: "auth" })
 </script>

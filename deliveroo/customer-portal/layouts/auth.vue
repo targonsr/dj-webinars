@@ -19,3 +19,9 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+// Explicit imports for components
+import AppLogo from '~/components/layout/AppLogo.vue'
+import ThemeToggle from '~/components/ui-library/ThemeToggle.vue'
+</script>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { userApi } from '~/api/user.api'
-import type { User, Company } from '~/model'
+import { login } from '~/features/auth/signin/signin-api'
+import { register } from '~/features/auth/register/register-api'
+import type { User, Company } from '~/features/auth/signin/signin.model'
 
 interface AuthState {
   user: User | null
@@ -30,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
     async login(credentials: { email: string; password: string }) {
       this.loading = true
       try {
-        const { user, company } = await userApi.login(credentials)
+        const { user, company } = await login(credentials)
         
         this.user = user
         this.company = company
@@ -52,25 +53,10 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async logout() {
-      this.user = null
-      this.company = null
-      this.isAuthenticated = false
-      
-      // Clear localStorage only on client side
-      if (process.client) {
-        localStorage.removeItem('auth_user')
-        localStorage.removeItem('auth_company')
-        localStorage.removeItem('auth_isAuthenticated')
-      }
-      
-      await navigateTo('/')
-    },
-
     async register(data: any) {
       this.loading = true
       try {
-        const { user, company } = await userApi.register(data)
+        const { user, company } = await register(data)
         
         this.user = user
         this.company = company
@@ -89,25 +75,32 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Initialize auth state from localStorage (client-side only)
-    initializeAuth() {
+    async logout() {
+      this.user = null
+      this.company = null
+      this.isAuthenticated = false
+      
+      // Clear localStorage only on client side
       if (process.client) {
-        try {
-          const storedUser = localStorage.getItem('auth_user')
-          const storedCompany = localStorage.getItem('auth_company')
-          const storedAuth = localStorage.getItem('auth_isAuthenticated')
-          
-          if (storedUser && storedCompany && storedAuth === 'true') {
-            this.user = JSON.parse(storedUser)
-            this.company = JSON.parse(storedCompany)
-            this.isAuthenticated = true
-          }
-        } catch (error) {
-          console.error('Error loading auth from localStorage:', error)
-          // Clear corrupted data
-          localStorage.removeItem('auth_user')
-          localStorage.removeItem('auth_company')
-          localStorage.removeItem('auth_isAuthenticated')
+        localStorage.removeItem('auth_user')
+        localStorage.removeItem('auth_company')
+        localStorage.removeItem('auth_isAuthenticated')
+      }
+      
+      await navigateTo('/login')
+    },
+
+    async initializeAuth() {
+      // Restore auth state from localStorage on client side
+      if (process.client) {
+        const user = localStorage.getItem('auth_user')
+        const company = localStorage.getItem('auth_company')
+        const isAuthenticated = localStorage.getItem('auth_isAuthenticated')
+        
+        if (user && company && isAuthenticated === 'true') {
+          this.user = JSON.parse(user)
+          this.company = JSON.parse(company)
+          this.isAuthenticated = true
         }
       }
     }

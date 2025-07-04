@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
-import type { TransportationRequest } from '~/model/transportation'
-import type { WarehousingRequest } from '~/model/warehousing'
+import type { TransportationRequest } from '~/features/transportation/transportation-request-details/transportation-request-details.model'
+import type { WarehousingRequest } from '~/features/warehousing/warehousing-request-details/warehousing-request-details.model'
 
 export class PDFGenerator {
   private static LOGO_URL = 'https://raw.githubusercontent.com/developer-jutra/dj-webinars/refs/heads/main/deliveroo/assets/logo/deliveroo-transparent-dark-foreground.png'

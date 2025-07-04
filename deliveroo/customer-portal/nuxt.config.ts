@@ -5,6 +5,22 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: ['@pinia/nuxt', '@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/storybook'],
+  
+  // Component auto-import configuration
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: true,
+    },
+    {
+      path: '~/components/layout',
+      pathPrefix: true,
+    },
+    {
+      path: '~/components/ui-library',
+      pathPrefix: true,
+    }
+  ],
   // Top-level transpile configuration for Nuxt 3
   build: {
     transpile: ['@jridgewell/sourcemap-codec', 'magic-string']
