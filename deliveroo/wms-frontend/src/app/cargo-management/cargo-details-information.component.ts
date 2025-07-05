@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { InventoryItem } from '../inventory/inventory.model';
 import { LucideAngularModule, Package, MapPin, Calendar, DollarSign, Weight, Ruler, User } from 'lucide-angular';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-cargo-details-information',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading3Component],
   template: `
     <!-- Main Information Card -->
     @if (cargoItem()) {
       <div class="card p-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6">Cargo Information</h3>
+        <ui-heading3 class="mb-6">Cargo Information</ui-heading3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div class="space-y-4">

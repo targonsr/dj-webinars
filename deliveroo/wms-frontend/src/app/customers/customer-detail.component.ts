@@ -6,6 +6,7 @@ import { Customer } from './customers.model';
 import { CustomerDetailsActionsComponent } from './customer-details-actions.component';
 import { CustomerDetailsCardsComponent } from './customer-details-cards.component';
 import { LucideAngularModule, ArrowLeft, User } from 'lucide-angular';
+import { Heading1Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-customer-detail',
@@ -15,7 +16,9 @@ import { LucideAngularModule, ArrowLeft, User } from 'lucide-angular';
     RouterLink, 
     LucideAngularModule,
     CustomerDetailsActionsComponent,
-    CustomerDetailsCardsComponent
+    CustomerDetailsCardsComponent,
+    Heading1Component,
+    Heading4Component
   ],
   template: `
     @if (customer) {
@@ -27,7 +30,7 @@ import { LucideAngularModule, ArrowLeft, User } from 'lucide-angular';
               <lucide-icon [img]="ArrowLeftIcon" size="20"></lucide-icon>
             </button>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ customer.companyName }}</h1>
+              <ui-heading1>{{ customer.companyName }}</ui-heading1>
               <p class="text-gray-600 dark:text-gray-400">Customer Details</p>
             </div>
             <span [class]="getStatusClass(customer.status)" 
@@ -47,7 +50,7 @@ import { LucideAngularModule, ArrowLeft, User } from 'lucide-angular';
       <div class="flex items-center justify-center h-64">
         <div class="text-center">
           <lucide-icon [img]="UserIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Customer not found</h3>
+          <ui-heading4 class="mt-2">Customer not found</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">The requested customer could not be found.</p>
         </div>
       </div>

@@ -3,21 +3,23 @@ import { Component, input, output, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../notifications/notification.service';
 import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Save } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-reservations-form-new-reservation',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LucideAngularModule],
+  imports: [FormsModule, ReactiveFormsModule, LucideAngularModule, DropdownComponent, Heading4Component, Heading3Component],
   template: `
     <!-- New Reservation Modal -->
     @if (showModal()) {
       <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-dark-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
           <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-700">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white flex items-center">
-              <lucide-icon [img]="CalendarIcon" size="20" class="mr-2"></lucide-icon>
-              New Reservation
-            </h3>
+                    <ui-heading3>
+          <lucide-icon [img]="CalendarIcon" size="20"></lucide-icon>
+          New Reservation
+        </ui-heading3>
             <button (click)="onCancel()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <lucide-icon [img]="XIcon" size="24"></lucide-icon>
             </button>
@@ -27,10 +29,10 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
             <div class="space-y-8">
               <!-- Customer Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                <ui-heading4 class="mb-4">
                   <lucide-icon [img]="UserIcon" size="18" class="mr-2"></lucide-icon>
                   Customer Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="customerName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -79,23 +81,27 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
 
               <!-- Location Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                <ui-heading4 class="mb-4">
                   <lucide-icon [img]="MapPinIcon" size="18" class="mr-2"></lucide-icon>
                   Storage Location
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
                     <label for="zone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Zone *
                     </label>
-                    <select id="zone" formControlName="zone" class="input">
-                      <option value="">Select zone</option>
-                      <option value="Zone A">Zone A - Standard</option>
-                      <option value="Zone B">Zone B - Refrigerated</option>
-                      <option value="Zone C">Zone C - Frozen</option>
-                      <option value="Zone D">Zone D - Hazardous</option>
-                      <option value="Zone E">Zone E - Secure</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select zone"
+                      [options]="[
+                        { value: 'Zone A', label: 'Zone A - Standard' },
+                        { value: 'Zone B', label: 'Zone B - Refrigerated' },
+                        { value: 'Zone C', label: 'Zone C - Frozen' },
+                        { value: 'Zone D', label: 'Zone D - Hazardous' },
+                        { value: 'Zone E', label: 'Zone E - Secure' }
+                      ]"
+                      [value]="reservationForm.get('zone')?.value"
+                      (valueChange)="reservationForm.get('zone')?.setValue($event); reservationForm.get('zone')?.markAsTouched()"
+                    />
                     @if (reservationForm.get('zone')?.invalid && reservationForm.get('zone')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Zone selection is required
@@ -106,14 +112,18 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                     <label for="aisle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Aisle *
                     </label>
-                    <select id="aisle" formControlName="aisle" class="input">
-                      <option value="">Select aisle</option>
-                      <option value="Aisle 1">Aisle 1</option>
-                      <option value="Aisle 2">Aisle 2</option>
-                      <option value="Aisle 3">Aisle 3</option>
-                      <option value="Aisle 4">Aisle 4</option>
-                      <option value="Aisle 5">Aisle 5</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select aisle"
+                      [options]="[
+                        { value: 'Aisle 1', label: 'Aisle 1' },
+                        { value: 'Aisle 2', label: 'Aisle 2' },
+                        { value: 'Aisle 3', label: 'Aisle 3' },
+                        { value: 'Aisle 4', label: 'Aisle 4' },
+                        { value: 'Aisle 5', label: 'Aisle 5' }
+                      ]"
+                      [value]="reservationForm.get('aisle')?.value"
+                      (valueChange)="reservationForm.get('aisle')?.setValue($event); reservationForm.get('aisle')?.markAsTouched()"
+                    />
                     @if (reservationForm.get('aisle')?.invalid && reservationForm.get('aisle')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Aisle selection is required
@@ -124,13 +134,17 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                     <label for="rack" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Rack *
                     </label>
-                    <select id="rack" formControlName="rack" class="input">
-                      <option value="">Select rack</option>
-                      <option value="Rack 1">Rack 1</option>
-                      <option value="Rack 2">Rack 2</option>
-                      <option value="Rack 3">Rack 3</option>
-                      <option value="Rack 4">Rack 4</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select rack"
+                      [options]="[
+                        { value: 'Rack 1', label: 'Rack 1' },
+                        { value: 'Rack 2', label: 'Rack 2' },
+                        { value: 'Rack 3', label: 'Rack 3' },
+                        { value: 'Rack 4', label: 'Rack 4' }
+                      ]"
+                      [value]="reservationForm.get('rack')?.value"
+                      (valueChange)="reservationForm.get('rack')?.setValue($event); reservationForm.get('rack')?.markAsTouched()"
+                    />
                     @if (reservationForm.get('rack')?.invalid && reservationForm.get('rack')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Rack selection is required
@@ -141,13 +155,17 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                     <label for="shelf" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Shelf *
                     </label>
-                    <select id="shelf" formControlName="shelf" class="input">
-                      <option value="">Select shelf</option>
-                      <option value="Shelf 1">Shelf 1</option>
-                      <option value="Shelf 2">Shelf 2</option>
-                      <option value="Shelf 3">Shelf 3</option>
-                      <option value="Shelf 4">Shelf 4</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select shelf"
+                      [options]="[
+                        { value: 'Shelf 1', label: 'Shelf 1' },
+                        { value: 'Shelf 2', label: 'Shelf 2' },
+                        { value: 'Shelf 3', label: 'Shelf 3' },
+                        { value: 'Shelf 4', label: 'Shelf 4' }
+                      ]"
+                      [value]="reservationForm.get('shelf')?.value"
+                      (valueChange)="reservationForm.get('shelf')?.setValue($event); reservationForm.get('shelf')?.markAsTouched()"
+                    />
                     @if (reservationForm.get('shelf')?.invalid && reservationForm.get('shelf')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Shelf selection is required
@@ -159,10 +177,10 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
 
               <!-- Reservation Period -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                <ui-heading4 class="mb-4">
                   <lucide-icon [img]="CalendarIcon" size="18" class="mr-2"></lucide-icon>
                   Reservation Period
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="reservedFrom" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -202,10 +220,10 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
 
               <!-- Space Requirements -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                <ui-heading4 class="mb-4">
                   <lucide-icon [img]="PackageIcon" size="18" class="mr-2"></lucide-icon>
                   Space Requirements
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="reservedWeight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -246,10 +264,10 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
 
               <!-- Payment Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                <ui-heading4 class="mb-4">
                   <lucide-icon [img]="DollarSignIcon" size="18" class="mr-2"></lucide-icon>
                   Payment Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label for="paymentAmount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -269,15 +287,17 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                     }
                   </div>
                   <div>
-                    <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Currency
-                    </label>
-                    <select id="currency" formControlName="currency" class="input">
-                      <option value="USD">USD</option>
-                      <option value="EUR">EUR</option>
-                      <option value="GBP">GBP</option>
-                      <option value="CAD">CAD</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select currency"
+                      [options]="[
+                        { value: 'USD', label: 'USD' },
+                        { value: 'EUR', label: 'EUR' },
+                        { value: 'GBP', label: 'GBP' },
+                        { value: 'CAD', label: 'CAD' }
+                      ]"
+                      [value]="reservationForm.get('currency')?.value"
+                      (valueChange)="reservationForm.get('currency')?.setValue($event); reservationForm.get('currency')?.markAsTouched()"
+                    />
                   </div>
                   <div>
                     <label for="paymentDueDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -299,45 +319,60 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                   <label for="paymentStatus" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Payment Status
                   </label>
-                  <select id="paymentStatus" formControlName="paymentStatus" class="input">
-                    <option value="pending">Pending</option>
-                    <option value="paid">Paid</option>
-                    <option value="overdue">Overdue</option>
-                  </select>
+                  <ui-dropdown
+                    label="Select status"
+                    [options]="[
+                      { value: 'pending', label: 'Pending' },
+                      { value: 'paid', label: 'Paid' },
+                      { value: 'overdue', label: 'Overdue' }
+                    ]"
+                    [value]="reservationForm.get('paymentStatus')?.value"
+                    (valueChange)="reservationForm.get('paymentStatus')?.setValue($event); reservationForm.get('paymentStatus')?.markAsTouched()"
+                  />
                 </div>
               </div>
 
               <!-- Reservation Status -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Reservation Status</h4>
+                <ui-heading4 class="mb-4">Reservation Status</ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Status
                     </label>
-                    <select id="status" formControlName="status" class="input">
-                      <option value="pending">Pending</option>
-                      <option value="active">Active</option>
-                      <option value="expired">Expired</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select status"
+                      [options]="[
+                        { value: 'pending', label: 'Pending' },
+                        { value: 'active', label: 'Active' },
+                        { value: 'expired', label: 'Expired' },
+                        { value: 'cancelled', label: 'Cancelled' }
+                      ]"
+                      [value]="reservationForm.get('status')?.value"
+                      (valueChange)="reservationForm.get('status')?.setValue($event); reservationForm.get('status')?.markAsTouched()"
+                    />
                   </div>
                   <div>
                     <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Priority Level
                     </label>
-                    <select id="priority" formControlName="priority" class="input">
-                      <option value="normal">Normal</option>
-                      <option value="high">High</option>
-                      <option value="urgent">Urgent</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select priority"
+                      [options]="[
+                        { value: 'normal', label: 'Normal' },
+                        { value: 'high', label: 'High' },
+                        { value: 'urgent', label: 'Urgent' }
+                      ]"
+                      [value]="reservationForm.get('priority')?.value"
+                      (valueChange)="reservationForm.get('priority')?.setValue($event); reservationForm.get('priority')?.markAsTouched()"
+                    />
                   </div>
                 </div>
               </div>
 
               <!-- Special Requirements -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Special Requirements</h4>
+                <ui-heading4 class="mb-4">Special Requirements</ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="space-y-3">
                     <label class="flex items-center">
@@ -371,13 +406,17 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                         <label for="temperatureRange" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Temperature Range
                         </label>
-                        <select id="temperatureRange" formControlName="temperatureRange" class="input">
-                          <option value="">Select temperature range</option>
-                          <option value="2-8">2°C to 8°C (Refrigerated)</option>
-                          <option value="-18">-18°C or below (Frozen)</option>
-                          <option value="15-25">15°C to 25°C (Room Temperature)</option>
-                          <option value="custom">Custom Range</option>
-                        </select>
+                        <ui-dropdown
+                          label="Select temperature range"
+                          [options]="[
+                            { value: '2-8', label: '2°C to 8°C (Refrigerated)' },
+                            { value: '-18', label: '-18°C or below (Frozen)' },
+                            { value: '15-25', label: '15°C to 25°C (Room Temperature)' },
+                            { value: 'custom', label: 'Custom Range' }
+                          ]"
+                          [value]="reservationForm.get('temperatureRange')?.value"
+                          (valueChange)="reservationForm.get('temperatureRange')?.setValue($event); reservationForm.get('temperatureRange')?.markAsTouched()"
+                        />
                       </div>
                     }
                     @if (reservationForm.get('requiresSecurityAccess')?.value) {
@@ -385,12 +424,16 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
                         <label for="securityLevel" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Security Level
                         </label>
-                        <select id="securityLevel" formControlName="securityLevel" class="input">
-                          <option value="">Select security level</option>
-                          <option value="standard">Standard Security</option>
-                          <option value="high">High Security</option>
-                          <option value="maximum">Maximum Security</option>
-                        </select>
+                        <ui-dropdown
+                          label="Select security level"
+                          [options]="[
+                            { value: 'standard', label: 'Standard Security' },
+                            { value: 'high', label: 'High Security' },
+                            { value: 'maximum', label: 'Maximum Security' }
+                          ]"
+                          [value]="reservationForm.get('securityLevel')?.value"
+                          (valueChange)="reservationForm.get('securityLevel')?.setValue($event); reservationForm.get('securityLevel')?.markAsTouched()"
+                        />
                       </div>
                     }
                   </div>
@@ -399,7 +442,7 @@ import { LucideAngularModule, X, Calendar, MapPin, User, Package, DollarSign, Sa
 
               <!-- Additional Notes -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Additional Notes</h4>
+                <ui-heading4 class="mb-4">Additional Notes</ui-heading4>
                 <textarea id="notes"
                           formControlName="notes"
                           rows="3"

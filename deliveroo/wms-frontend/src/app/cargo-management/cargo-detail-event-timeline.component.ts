@@ -4,14 +4,15 @@ import { InventoryItem } from '../inventory/inventory.model';
 import { LucideAngularModule, Package, Clock, MapPin } from 'lucide-angular';
 import { CargoEvent } from './cargo.model';
 import { MOCK_CARGO_EVENTS } from '../mock/cargo-events.mock';
+import { Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-cargo-detail-event-timeline',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, Heading4Component],
   template: `
     <div class="p-6">
-      <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Event Timeline</h4>
+      <ui-heading4 class="mb-4">Event Timeline</ui-heading4>
       <div class="space-y-6">
         @for (event of mockEvents; track event.title) {
           <div class="flex">

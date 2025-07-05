@@ -6,25 +6,26 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UserProfile } from '../user-management/user.model';
 import { NotificationService } from '../notifications/notification.service';
 import { LucideAngularModule, User, Mail, Phone, Shield, Save, Eye, EyeOff } from 'lucide-angular';
+import { Heading1Component, SubtitleComponent, Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, Heading1Component, SubtitleComponent, Heading3Component, Heading4Component],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
-        <p class="text-gray-600 dark:text-gray-400">Manage your account settings and preferences</p>
+        <ui-heading1>Settings</ui-heading1>
+        <ui-subtitle>Manage your account settings and preferences</ui-subtitle>
       </div>
 
       <!-- Profile Settings -->
       <div class="card p-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6 flex items-center">
-          <lucide-icon [img]="UserIcon" size="20" class="mr-2"></lucide-icon>
+        <ui-heading3 class="mb-6">
+          <lucide-icon [img]="UserIcon" size="20"></lucide-icon>
           Profile Information
-        </h3>
+        </ui-heading3>
 
         <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -36,7 +37,7 @@ import { LucideAngularModule, User, Mail, Phone, Shield, Save, Eye, EyeOff } fro
                 </div>
               </div>
               <div>
-                <h4 class="text-lg font-medium text-gray-900 dark:text-white">Profile Picture</h4>
+                <ui-heading4>Profile Picture</ui-heading4>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Update your profile picture</p>
                 <button type="button" class="mt-2 btn btn-secondary">
                   Change Avatar
@@ -119,10 +120,10 @@ import { LucideAngularModule, User, Mail, Phone, Shield, Save, Eye, EyeOff } fro
 
       <!-- Security Settings -->
       <div class="card p-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6 flex items-center">
-          <lucide-icon [img]="ShieldIcon" size="20" class="mr-2"></lucide-icon>
+        <ui-heading3 class="mb-6">
+          <lucide-icon [img]="ShieldIcon" size="20"></lucide-icon>
           Security Settings
-        </h3>
+        </ui-heading3>
 
         <form (ngSubmit)="changePassword()" #passwordForm="ngForm">
           <div class="space-y-6">
@@ -209,7 +210,7 @@ import { LucideAngularModule, User, Mail, Phone, Shield, Save, Eye, EyeOff } fro
 
       <!-- Account Information -->
       <div class="card p-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6">Account Information</h3>
+        <ui-heading3 class="mb-6">Account Information</ui-heading3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>

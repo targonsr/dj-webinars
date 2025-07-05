@@ -6,18 +6,21 @@ import { BillingService } from './billing.service';
 import { BillingPaymentsFiltersService } from './billing-payments-filters.service';
 import { BillingOverview, Invoice } from './billing.model';
 import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Search, Download, Eye, Plus } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { StatsComponent } from '../ui-library/Stats.component';
+import { Heading1Component, Heading3Component, Heading4Component, SubtitleComponent } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-billing-payments',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule, DropdownComponent, StatsComponent, Heading1Component, Heading3Component, SubtitleComponent, Heading4Component],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Billing & Payments</h1>
-          <p class="text-gray-600 dark:text-gray-400">Manage invoices, payments, and financial reports</p>
+          <ui-heading1>Billing & Payments</ui-heading1>
+          <ui-subtitle>Manage invoices, payments, and financial reports</ui-subtitle>
         </div>
         <button class="btn btn-primary">
           <lucide-icon [img]="PlusIcon" size="18" class="mr-2"></lucide-icon>
@@ -25,56 +28,8 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
         </button>
       </div>
 
-      <!-- Overview Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="card p-6">
-          <div class="flex items-center">
-            <div class="p-2 bg-success-100 rounded-lg">
-              <lucide-icon [img]="DollarSignIcon" size="24" class="text-success-600"></lucide-icon>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</p>
-              <p class="text-2xl font-semibold text-gray-900 dark:text-white">\${{ formatCurrency(overview?.totalRevenue) }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-6">
-          <div class="flex items-center">
-            <div class="p-2 bg-primary-100 rounded-lg">
-              <lucide-icon [img]="FileTextIcon" size="24" class="text-primary-600"></lucide-icon>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Invoices</p>
-              <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ overview?.totalInvoices || 0 }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-6">
-          <div class="flex items-center">
-            <div class="p-2 bg-success-100 rounded-lg">
-              <lucide-icon [img]="CheckCircleIcon" size="24" class="text-success-600"></lucide-icon>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Paid Invoices</p>
-              <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ overview?.paidInvoices || 0 }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-6">
-          <div class="flex items-center">
-            <div class="p-2 bg-error-100 rounded-lg">
-              <lucide-icon [img]="AlertCircleIcon" size="24" class="text-error-600"></lucide-icon>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Overdue Invoices</p>
-              <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ overview?.overdueInvoices || 0 }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Stats Section -->
+      <ui-stats [tiles]="statsTiles" />
 
       <!-- Sub-tabs -->
       <div class="card">
@@ -95,7 +50,7 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
         @if (activeTab === 'invoices') {
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Invoice Management</h3>
+              <ui-heading3>Invoice Management</ui-heading3>
             </div>
   
             <!-- Filters -->
@@ -112,16 +67,7 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                <select [value]="filtersService.status()" 
-                        (change)="filtersService.setStatus($any($event.target).value)" 
-                        class="input">
-                  <option value="">All Status</option>
-                  <option value="paid">Paid</option>
-                  <option value="sent">Sent</option>
-                  <option value="overdue">Overdue</option>
-                  <option value="draft">Draft</option>
-                </select>
+                <ui-dropdown label="Status" [options]="statusOptions" [value]="filtersService.status()" (valueChange)="filtersService.setStatus($event)" />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
@@ -229,7 +175,7 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
           <div class="p-6">
             <div class="text-center py-12">
               <lucide-icon [img]="DollarSignIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-              <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Payment Processing</h3>
+              <ui-heading4 class="mt-2">Payment Processing</ui-heading4>
               <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">This feature is not implemented yet.</p>
             </div>
           </div>
@@ -237,14 +183,14 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
           <div class="p-6">
             <div class="text-center py-12">
               <lucide-icon [img]="FileTextIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-              <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Billing History</h3>
+              <ui-heading4 class="mt-2">Billing History</ui-heading4>
               <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">This feature is not implemented yet.</p>
             </div>
           </div>
         } @else if (activeTab === 'reports') {
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Financial Reports</h3>
+              <ui-heading3>Financial Reports</ui-heading3>
               <div class="flex space-x-3">
                 <button class="btn btn-secondary">
                   <lucide-icon [img]="DownloadIcon" size="18" class="mr-2"></lucide-icon>
@@ -260,7 +206,7 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
             <!-- Revenue Summary -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Revenue Summary</h4>
+                <ui-heading4 class="mb-4">Revenue Summary</ui-heading4>
                 <div class="space-y-3">
                   <div class="flex justify-between">
                     <span class="text-sm text-gray-600 dark:text-gray-400">Total Revenue</span>
@@ -282,7 +228,7 @@ import { LucideAngularModule, DollarSign, FileText, CheckCircle, AlertCircle, Se
               </div>
   
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Performance Metrics</h4>
+                <ui-heading4 class="mb-4">Performance Metrics</ui-heading4>
                 <div class="space-y-3">
                   <div class="flex justify-between">
                     <span class="text-sm text-gray-600 dark:text-gray-400">Average Payment Time</span>
@@ -330,6 +276,14 @@ export class BillingPaymentsComponent implements OnInit {
 
   private billingService = inject(BillingService);
   public filtersService = inject(BillingPaymentsFiltersService);
+
+  statusOptions = [
+    { value: '', label: 'All Status' },
+    { value: 'paid', label: 'Paid' },
+    { value: 'sent', label: 'Sent' },
+    { value: 'overdue', label: 'Overdue' },
+    { value: 'draft', label: 'Draft' }
+  ];
 
   constructor() {
     effect(() => {
@@ -414,5 +368,34 @@ export class BillingPaymentsComponent implements OnInit {
   formatCurrency(value: number | undefined): string {
     if (!value) return '0';
     return new Intl.NumberFormat('en-US').format(value);
+  }
+
+  get statsTiles() {
+    return [
+      {
+        label: 'Total Revenue',
+        value: this.formatCurrency(this.overview?.totalRevenue),
+        icon: this.DollarSignIcon,
+        iconColor: 'text-success-600'
+      },
+      {
+        label: 'Total Invoices',
+        value: (this.overview?.totalInvoices || 0).toString(),
+        icon: this.FileTextIcon,
+        iconColor: 'text-primary-600'
+      },
+      {
+        label: 'Paid Invoices',
+        value: (this.overview?.paidInvoices || 0).toString(),
+        icon: this.CheckCircleIcon,
+        iconColor: 'text-success-600'
+      },
+      {
+        label: 'Overdue Invoices',
+        value: (this.overview?.overdueInvoices || 0).toString(),
+        icon: this.AlertCircleIcon,
+        iconColor: 'text-error-600'
+      }
+    ];
   }
 }

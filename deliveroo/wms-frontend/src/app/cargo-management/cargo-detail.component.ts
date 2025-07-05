@@ -8,6 +8,7 @@ import { CargoDetailLocationHistoryComponent } from './cargo-detail-location-his
 import { CargoDetailDocumentationComponent } from './cargo-detail-documentation.component';
 import { LucideAngularModule, ArrowLeft, Clock, MapPin, FileText, Package } from 'lucide-angular';
 import { CargoService } from './cargo.service';
+import { Heading1Component, Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-cargo-detail',
@@ -19,7 +20,9 @@ import { CargoService } from './cargo.service';
     CargoDetailsInformationComponent,
     CargoDetailEventTimelineComponent,
     CargoDetailLocationHistoryComponent,
-    CargoDetailDocumentationComponent
+    CargoDetailDocumentationComponent,
+    Heading1Component,
+    Heading3Component
   ],
   template: `
     @if (cargoItem) {
@@ -31,7 +34,7 @@ import { CargoService } from './cargo.service';
               <lucide-icon [img]="ArrowLeftIcon" size="20"></lucide-icon>
             </button>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ cargoItem.name }}</h1>
+              <ui-heading1>{{ cargoItem.name }}</ui-heading1>
               <p class="text-gray-600 dark:text-gray-400">SKU: {{ cargoItem.sku }}</p>
             </div>
             <span [class]="getStatusClass(cargoItem.status)" 
@@ -83,7 +86,7 @@ import { CargoService } from './cargo.service';
       <div class="flex items-center justify-center h-64">
         <div class="text-center">
           <lucide-icon [img]="PackageIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Cargo item not found</h3>
+          <ui-heading3>Cargo item not found</ui-heading3>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">The requested cargo item could not be found.</p>
         </div>
       </div>

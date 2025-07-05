@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, MapPin, Thermometer, Shield, Package, Settings, Plus, Edit, Eye } from 'lucide-angular';
+import { Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 interface Zone {
   id: number;
@@ -19,11 +20,11 @@ interface Zone {
 @Component({
   selector: 'app-warehouse-operations-zone-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, Heading4Component, Heading3Component],
   template: `
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Zone Management</h3>
+        <ui-heading3>Zone Management</ui-heading3>
         <button class="btn btn-primary">
           <lucide-icon [img]="PlusIcon" size="18" class="mr-2"></lucide-icon>
           Add Zone
@@ -91,7 +92,7 @@ interface Zone {
                   <lucide-icon [img]="getZoneIcon(zone.type)" size="20"></lucide-icon>
                 </div>
                 <div>
-                  <h4 class="text-lg font-medium text-gray-900 dark:text-white">{{ zone.name }}</h4>
+                  <ui-heading4>{{ zone.name }}</ui-heading4>
                   <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">{{ zone.type }}</p>
                 </div>
               </div>

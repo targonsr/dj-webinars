@@ -7,6 +7,7 @@ import { DockStatsComponent } from './dock-stats.component';
 import { DockListingComponent } from './dock-listing.component';
 import { DockFormScheduleAppointmentComponent } from './dock-form-schedule-appointment.component';
 import { DockService } from './dock.service';
+import { Heading1Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-dock-management',
@@ -15,14 +16,15 @@ import { DockService } from './dock.service';
     LucideAngularModule,
     DockStatsComponent,
     DockListingComponent,
-    DockFormScheduleAppointmentComponent
+    DockFormScheduleAppointmentComponent,
+    Heading1Component
 ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dock Management</h1>
+          <ui-heading1>Dock Management</ui-heading1>
           <p class="text-gray-600 dark:text-gray-400">Schedule and manage dock operations</p>
         </div>
         <button (click)="showScheduleModal = true" class="btn btn-primary">

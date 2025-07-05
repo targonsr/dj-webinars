@@ -7,28 +7,33 @@ import { ReservationsListingFiltersService } from './reservations-listing-filter
 import { WarehouseMapService } from '../warehouse-map/warehouse-map.service';
 import { Reservation } from './reservations.model';
 import { Warehouse } from '../warehouse/warehouse.model';
-import { ReservationsStatsComponent } from './reservations-stats.component';
+import { StatsComponent } from '../ui-library/Stats.component';
 import { ReservationsListingFiltersComponent } from './reservations-listing-filters.component';
 import { ReservationsListingComponent } from './reservations-listing.component';
 import { ReservationsFormNewReservationComponent } from './reservations-form-new-reservation.component';
+import { SectionComponent } from '../ui-library/Section.component';
+import { Heading1Component, SubtitleComponent } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-reservations',
   standalone: true,
   imports: [
     LucideAngularModule,
-    ReservationsStatsComponent,
+    StatsComponent,
     ReservationsListingFiltersComponent,
     ReservationsListingComponent,
-    ReservationsFormNewReservationComponent
-],
+    ReservationsFormNewReservationComponent,
+    SectionComponent,
+    Heading1Component,
+    SubtitleComponent
+  ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Reservations</h1>
-          <p class="text-gray-600 dark:text-gray-400">Manage warehouse space reservations</p>
+          <ui-heading1>Reservations</ui-heading1>
+          <ui-subtitle>Manage warehouse space reservations</ui-subtitle>
         </div>
         <button (click)="showNewReservationModal = true" class="btn btn-primary">
           <lucide-icon [img]="CalendarIcon" size="18" class="mr-2"></lucide-icon>
@@ -37,15 +42,19 @@ import { ReservationsFormNewReservationComponent } from './reservations-form-new
       </div>
 
       <!-- Stats Component -->
-      <app-reservations-stats [reservations]="reservations" />
+      <ui-stats [tiles]="statsTiles" />
 
       <!-- Filters Component -->
-      <app-reservations-listing-filters [warehouses]="warehouses" />
+      <ui-section>
+        <app-reservations-listing-filters [warehouses]="warehouses" />
+      </ui-section>
 
       <!-- Listing Component -->
-      <app-reservations-listing 
-        [reservations]="filteredReservations"
-        (paymentClick)="navigateToPaymentDetails($event)" />
+      <ui-section>
+        <app-reservations-listing 
+          [reservations]="filteredReservations"
+          (paymentClick)="navigateToPaymentDetails($event)" />
+      </ui-section>
 
       <!-- New Reservation Modal -->
       <app-reservations-form-new-reservation
@@ -162,5 +171,15 @@ export class ReservationsComponent implements OnInit {
     // Add the new reservation to the list
     this.reservations.unshift(reservationData);
     this.applyFilters();
+  }
+
+  get statsTiles() {
+    // You can customize these stats as needed
+    return [
+      { label: 'Total Reservations', value: this.reservations.length.toString(), icon: this.CalendarIcon, iconColor: 'text-primary-500' },
+      { label: 'Active', value: this.reservations.filter(r => r.status === 'active').length.toString(), icon: this.CalendarIcon, iconColor: 'text-success-500' },
+      { label: 'Pending', value: this.reservations.filter(r => r.status === 'pending').length.toString(), icon: this.CalendarIcon, iconColor: 'text-warning-500' },
+      { label: 'Expired', value: this.reservations.filter(r => r.status === 'expired').length.toString(), icon: this.CalendarIcon, iconColor: 'text-error-500' },
+    ];
   }
 }

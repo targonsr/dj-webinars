@@ -4,15 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Users, User, Clock, CheckCircle, AlertCircle, Plus, Eye, Edit } from 'lucide-angular';
 import { Task } from './warehouse-operations.model';
 import { WarehouseOperationsService } from './warehouse-operations.service';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-warehouse-operations-task-assignment',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, DropdownComponent, Heading3Component],
   template: `
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Task Assignment</h3>
+        <ui-heading3>Task Assignment</ui-heading3>
         <button class="btn btn-primary">
           <lucide-icon [img]="PlusIcon" size="18" class="mr-2"></lucide-icon>
           Create Task
@@ -75,42 +77,62 @@ import { WarehouseOperationsService } from './warehouse-operations.service';
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-            <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" class="input">
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-            </select>
+            <ui-dropdown
+              label="All Status"
+              [options]="[
+                { value: '', label: 'All Status' },
+                { value: 'pending', label: 'Pending' },
+                { value: 'in_progress', label: 'In Progress' },
+                { value: 'completed', label: 'Completed' }
+              ]"
+              [value]="statusFilter()"
+              (valueChange)="statusFilter.set($event)"
+            />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
-            <select [ngModel]="priorityFilter()" (ngModelChange)="priorityFilter.set($event)" class="input">
-              <option value="">All Priorities</option>
-              <option value="urgent">Urgent</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
+            <ui-dropdown
+              label="All Priorities"
+              [options]="[
+                { value: '', label: 'All Priorities' },
+                { value: 'urgent', label: 'Urgent' },
+                { value: 'high', label: 'High' },
+                { value: 'medium', label: 'Medium' },
+                { value: 'low', label: 'Low' }
+              ]"
+              [value]="priorityFilter()"
+              (valueChange)="priorityFilter.set($event)"
+            />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-            <select [ngModel]="categoryFilter()" (ngModelChange)="categoryFilter.set($event)" class="input">
-              <option value="">All Categories</option>
-              <option value="receiving">Receiving</option>
-              <option value="shipping">Shipping</option>
-              <option value="inventory">Inventory</option>
-              <option value="maintenance">Maintenance</option>
-              <option value="quality">Quality</option>
-            </select>
+            <ui-dropdown
+              label="All Categories"
+              [options]="[
+                { value: '', label: 'All Categories' },
+                { value: 'receiving', label: 'Receiving' },
+                { value: 'shipping', label: 'Shipping' },
+                { value: 'inventory', label: 'Inventory' },
+                { value: 'maintenance', label: 'Maintenance' },
+                { value: 'quality', label: 'Quality' }
+              ]"
+              [value]="categoryFilter()"
+              (valueChange)="categoryFilter.set($event)"
+            />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assigned To</label>
-            <select [ngModel]="assigneeFilter()" (ngModelChange)="assigneeFilter.set($event)" class="input">
-              <option value="">All Workers</option>
-              <option value="Mike Worker">Mike Worker</option>
-              <option value="Sarah Coordinator">Sarah Coordinator</option>
-              <option value="John Operator">John Operator</option>
-            </select>
+            <ui-dropdown
+              label="All Workers"
+              [options]="[
+                { value: '', label: 'All Workers' },
+                { value: 'Mike Worker', label: 'Mike Worker' },
+                { value: 'Sarah Coordinator', label: 'Sarah Coordinator' },
+                { value: 'John Operator', label: 'John Operator' }
+              ]"
+              [value]="assigneeFilter()"
+              (valueChange)="assigneeFilter.set($event)"
+            />
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { ReservationsListingFiltersService } from './reservations-listing-filters.service';
 import { LucideAngularModule, Search } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
 
 interface Warehouse {
   id: number;
@@ -12,10 +13,10 @@ interface Warehouse {
 @Component({
   selector: 'app-reservations-listing-filters',
   standalone: true,
-  imports: [FormsModule, LucideAngularModule],
+  imports: [FormsModule, LucideAngularModule, DropdownComponent],
   template: `
     <!-- Filters -->
-    <div class="card p-4">
+    <div>
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search</label>
@@ -29,49 +30,16 @@ interface Warehouse {
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-          <select [value]="filtersService.status()" 
-                  (change)="filtersService.setStatus($any($event.target).value)" 
-                  class="input">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="expired">Expired</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+          <ui-dropdown label="Status" [options]="statusOptions" [value]="filtersService.status()" (valueChange)="filtersService.setStatus($event)" />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Warehouse</label>
-          <select [value]="filtersService.warehouse()" 
-                  (change)="filtersService.setWarehouse($any($event.target).value)" 
-                  class="input">
-            <option value="">All Warehouses</option>
-            @for (warehouse of warehouses(); track warehouse.id) {
-              <option [value]="warehouse.id">{{ warehouse.name }}</option>
-            }
-          </select>
+          <ui-dropdown label="Warehouse" [options]="warehouseOptions()" [value]="filtersService.warehouse()" (valueChange)="filtersService.setWarehouse($event)" />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Zone</label>
-          <select [value]="filtersService.zone()" 
-                  (change)="filtersService.setZone($any($event.target).value)" 
-                  class="input">
-            <option value="">All Zones</option>
-            <option value="Zone A">Zone A</option>
-            <option value="Zone B">Zone B</option>
-            <option value="Zone C">Zone C</option>
-          </select>
+          <ui-dropdown label="Zone" [options]="zoneOptions" [value]="filtersService.zone()" (valueChange)="filtersService.setZone($event)" />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Period</label>
-          <select [value]="filtersService.period()" 
-                  (change)="filtersService.setPeriod($any($event.target).value)" 
-                  class="input">
-            <option value="">All Periods</option>
-            <option value="current">Current Month</option>
-            <option value="next">Next Month</option>
-            <option value="upcoming">Upcoming</option>
-          </select>
+          <ui-dropdown label="Period" [options]="periodOptions" [value]="filtersService.period()" (valueChange)="filtersService.setPeriod($event)" />
         </div>
       </div>
       
@@ -97,4 +65,28 @@ export class ReservationsListingFiltersComponent {
   SearchIcon = Search;
 
   public filtersService = inject(ReservationsListingFiltersService);
+
+  statusOptions = [
+    { value: '', label: 'All Status' },
+    { value: 'active', label: 'Active' },
+    { value: 'pending', label: 'Pending' },
+    { value: 'expired', label: 'Expired' },
+    { value: 'cancelled', label: 'Cancelled' }
+  ];
+  warehouseOptions = () => [
+    { value: '', label: 'All Warehouses' },
+    ...this.warehouses().map(w => ({ value: w.id.toString(), label: w.name }))
+  ];
+  zoneOptions = [
+    { value: '', label: 'All Zones' },
+    { value: 'Zone A', label: 'Zone A' },
+    { value: 'Zone B', label: 'Zone B' },
+    { value: 'Zone C', label: 'Zone C' }
+  ];
+  periodOptions = [
+    { value: '', label: 'All Periods' },
+    { value: 'current', label: 'Current Month' },
+    { value: 'next', label: 'Next Month' },
+    { value: 'upcoming', label: 'Upcoming' }
+  ];
 }

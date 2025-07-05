@@ -2,14 +2,15 @@ import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuditLog } from '../employees/employees.interfaces';
 import { LucideAngularModule, Shield } from 'lucide-angular';
+import { Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-role-management-tab-audit-log',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, Heading4Component, Heading3Component],
   template: `
     <div class="p-6">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6">Role Assignment Audit Log</h3>
+              <ui-heading3 class="mb-6">Role Assignment Audit Log</ui-heading3>
       
       <div class="space-y-4">
         @for (log of auditLogs(); track log.id) {
@@ -33,7 +34,7 @@ import { LucideAngularModule, Shield } from 'lucide-angular';
         } @empty {
           <div class="text-center py-12">
             <lucide-icon [img]="ShieldIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No audit logs</h3>
+            <ui-heading4 class="mt-2">No audit logs</ui-heading4>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Role assignment activities will appear here.</p>
           </div>
         }

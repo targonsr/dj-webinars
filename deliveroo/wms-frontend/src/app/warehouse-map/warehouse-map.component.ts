@@ -1,17 +1,23 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef, AfterViewInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { WarehouseMapService } from './warehouse-map.service';
 import { Warehouse, Zone } from '../warehouse/warehouse.model';
+import { renderWarehouse } from './warehouse-visualization';
+import { warehouseStructureGenerator } from './warehouse-structure-generator';
+import { WarehouseStructure } from './warehouse.types';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading1Component, SubtitleComponent, Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-warehouse-map',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DropdownComponent, Heading1Component, Heading4Component, Heading3Component],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Warehouse Map</h1>
+        <ui-heading1>Warehouse Map</ui-heading1>
         <p class="text-gray-600 dark:text-gray-400">Visual layout and capacity overview</p>
       </div>
 
@@ -19,24 +25,66 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
       <div class="card p-4">
         <div class="flex items-center space-x-4">
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Warehouse:</label>
-          <select (change)="selectWarehouse($event)" 
-                  class="input w-64">
-            @for (warehouse of warehouses; track warehouse.id) {
-              <option [value]="warehouse.id">
-                {{ warehouse.name }}
-              </option>
-            }
-          </select>
+          <ui-dropdown label="Warehouse" [options]="warehouseOptions()" [value]="selectedWarehouseId()" (valueChange)="selectWarehouseId($event)" />
         </div>
       </div>
 
-      <!-- Warehouse Overview -->
+      <!-- Strategy Selection -->
+      <div class="card p-4">
+        <div class="flex items-center space-x-4">
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Visualization Strategy:</label>
+          <ui-dropdown label="Strategy" [options]="strategyOptions" [value]="selectedStrategy()" (valueChange)="selectStrategyValue($event)" />
+        </div>
+      </div>
+
+      <!-- Legend: Zone Types -->
+      <div class="card p-4">
+        <ui-heading4 class="text-gray-700 dark:text-gray-300 mb-3">Zone Types</ui-heading4>
+        <div class="flex flex-wrap gap-4">
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-gray-200 border border-gray-300 rounded mr-2"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Standard</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-blue-200 border border-blue-300 rounded mr-2"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Refrigerated</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-cyan-200 border border-cyan-300 rounded mr-2"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Frozen</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-red-200 border border-red-300 rounded mr-2"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Hazardous</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-yellow-200 border border-yellow-300 rounded mr-2"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Secure</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warehouse Visualization -->
+      <div class="card p-6">
+        <div class="mb-4">
+          <ui-heading3 class="mb-2">Warehouse Layout</ui-heading3>
+          <p class="text-gray-600 dark:text-gray-400">Interactive grid visualization with real-time capacity monitoring</p>
+        </div>
+        
+        <div 
+          #visualizationContainer
+          class="w-full overflow-x-auto border-2 border-gray-200 rounded-lg bg-white"
+          style="min-height: 500px;">
+        </div>
+      </div>
+
+      <!-- Main Warehouse Content -->
       @if (selectedWarehouse) {
         <div class="card p-6">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Warehouse Info -->
             <div class="lg:col-span-1">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">{{ selectedWarehouse.name }}</h3>
+              <ui-heading3 class="mb-4">{{ selectedWarehouse.name }}</ui-heading3>
               <div class="space-y-3">
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Location</p>
@@ -68,7 +116,7 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
 
             <!-- Warehouse Layout -->
             <div class="lg:col-span-2">
-              <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Layout</h4>
+              <ui-heading4 class="mb-4">Layout</ui-heading4>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @for (zone of selectedWarehouse.zones; track zone.id) {
                   <div class="relative p-4 border-2 rounded-lg transition-all hover:shadow-md cursor-pointer"
@@ -125,13 +173,12 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
           </div>
         </div>
       }
-      </div>
 
       <!-- Zone Details -->
       @if (selectedZone) {
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ selectedZone.name }} Details</h3>
+            <ui-heading3>{{ selectedZone.name }} Details</ui-heading3>
             <button (click)="selectedZone = null" 
                     class="text-gray-400 hover:text-gray-500">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,7 +189,7 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Zone Information</h4>
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Zone Information</p>
               <div class="space-y-2">
                 <div>
                   <span class="text-sm text-gray-600 dark:text-gray-400">Type:</span>
@@ -164,7 +211,7 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
             </div>
 
             <div>
-              <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Capacity</h4>
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Capacity</p>
               <div class="space-y-2">
                 <div>
                   <span class="text-sm text-gray-600 dark:text-gray-400">Total:</span>
@@ -188,7 +235,7 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
             </div>
 
             <div>
-              <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Utilization</h4>
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Utilization</p>
               <div class="flex items-center space-x-3">
                 <div class="flex-1">
                   <div class="w-full bg-gray-200 dark:bg-dark-700 rounded-full h-3">
@@ -205,44 +252,60 @@ import { Warehouse, Zone } from '../warehouse/warehouse.model';
           </div>
         </div>
       }
-
-      <!-- Legend -->
-      <div class="card p-4">
-        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Zone Types</h3>
-        <div class="flex flex-wrap gap-4">
-          <div class="flex items-center">
-            <div class="w-4 h-4 bg-gray-200 border border-gray-300 rounded mr-2"></div>
-            <span class="text-sm text-gray-600 dark:text-gray-400">Standard</span>
-          </div>
-          <div class="flex items-center">
-            <div class="w-4 h-4 bg-blue-200 border border-blue-300 rounded mr-2"></div>
-            <span class="text-sm text-gray-600 dark:text-gray-400">Refrigerated</span>
-          </div>
-          <div class="flex items-center">
-            <div class="w-4 h-4 bg-cyan-200 border border-cyan-300 rounded mr-2"></div>
-            <span class="text-sm text-gray-600 dark:text-gray-400">Frozen</span>
-          </div>
-          <div class="flex items-center">
-            <div class="w-4 h-4 bg-red-200 border border-red-300 rounded mr-2"></div>
-            <span class="text-sm text-gray-600 dark:text-gray-400">Hazardous</span>
-          </div>
-          <div class="flex items-center">
-            <div class="w-4 h-4 bg-yellow-200 border border-yellow-300 rounded mr-2"></div>
-            <span class="text-sm text-gray-600 dark:text-gray-400">Secure</span>
-          </div>
-        </div>
-      </div>
+    </div>
   `
 })
-export class WarehouseMapComponent implements OnInit {
+export class WarehouseMapComponent implements OnInit, AfterViewInit {
+  @ViewChild('visualizationContainer', { static: false }) visualizationContainer!: ElementRef<HTMLDivElement>;
+  
   warehouses: Warehouse[] = [];
   selectedWarehouse: Warehouse | null = null;
   selectedZone: Zone | null = null;
+  
+  // Signals for warehouse visualization
+  selectedStrategy = signal<string>('strategy2');
+  warehouseStructure!: WarehouseStructure;
+  
+  // Strategy options
+  strategyOptions = [
+    { value: 'strategy1', label: 'Fades and Shades' },
+    { value: 'strategy2', label: 'Bars' },
+    { value: 'strategy3', label: 'Grids' },
+    { value: 'none', label: 'No Strategy' },
+  ];
+
+  selectedWarehouseId = signal('');
+  warehouseOptions = () => [
+    ...this.warehouses.map(w => ({ value: w.id.toString(), label: w.name }))
+  ];
 
   private warehouseMapService = inject(WarehouseMapService);
 
   ngOnInit(): void {
     this.loadWarehouses();
+    // Generate warehouse structure
+    this.warehouseStructure = warehouseStructureGenerator.getWarehouseStructure();
+  }
+
+  ngAfterViewInit(): void {
+    // Initialize the warehouse visualization after the view is ready
+    this.renderWarehouseVisualization();
+  }
+
+  private renderWarehouseVisualization(): void {
+    if (this.visualizationContainer?.nativeElement && this.warehouseStructure) {
+      console.log('Rendering warehouse visualization with strategy:', this.selectedStrategy());
+      renderWarehouse(
+        this.visualizationContainer.nativeElement,
+        this.warehouseStructure,
+        this.selectedStrategy()
+      );
+    }
+  }
+
+  selectStrategyValue(val: string) {
+    this.selectedStrategy.set(val);
+    this.renderWarehouseVisualization();
   }
 
   loadWarehouses(): void {
@@ -254,9 +317,9 @@ export class WarehouseMapComponent implements OnInit {
     });
   }
 
-  selectWarehouse(event: any): void {
-    const warehouseId = parseInt(event.target.value);
-    this.selectedWarehouse = this.warehouses.find(w => w.id === warehouseId) || null;
+  selectWarehouseId(val: string) {
+    this.selectedWarehouseId.set(val);
+    this.selectedWarehouse = this.warehouses.find(w => w.id.toString() === val) || null;
     this.selectedZone = null;
   }
 

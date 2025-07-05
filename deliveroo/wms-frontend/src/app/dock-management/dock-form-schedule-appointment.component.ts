@@ -4,21 +4,23 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { Dock } from './dock.model';
 import { NotificationService } from '../notifications/notification.service';
 import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-dock-form-schedule-appointment',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LucideAngularModule, DropdownComponent, Heading3Component, Heading4Component],
   template: `
     <!-- Schedule Appointment Modal -->
     @if (showModal()) {
       <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-dark-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
           <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-700">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white flex items-center">
-              <lucide-icon [img]="CalendarIcon" size="20" class="mr-2"></lucide-icon>
-              Schedule Dock Appointment
-            </h3>
+                    <ui-heading3>
+          <lucide-icon [img]="CalendarIcon" size="20"></lucide-icon>
+          Schedule Dock Appointment
+        </ui-heading3>
             <button (click)="onCancel()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <lucide-icon [img]="XIcon" size="24"></lucide-icon>
             </button>
@@ -28,23 +30,21 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
             <div class="space-y-8">
               <!-- Dock Selection -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="PackageIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="PackageIcon" size="18"></lucide-icon>
                   Dock Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="dockId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Select Dock *
                     </label>
-                    <select id="dockId" formControlName="dockId" class="input">
-                      <option value="">Choose a dock</option>
-                      @for (dock of availableDocks(); track dock.id) {
-                        <option [value]="dock.id">
-                          {{ dock.name }} ({{ dock.type | titlecase }})
-                        </option>
-                      }
-                    </select>
+                    <ui-dropdown
+                      label="Choose a dock"
+                      [options]="dockOptions"
+                      [value]="appointmentForm.get('dockId')?.value"
+                      (valueChange)="appointmentForm.get('dockId')?.setValue($event); appointmentForm.get('dockId')?.markAsTouched()"
+                    />
                     @if (appointmentForm.get('dockId')?.invalid && appointmentForm.get('dockId')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Please select a dock
@@ -55,11 +55,15 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
                     <label for="appointmentType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Appointment Type *
                     </label>
-                    <select id="appointmentType" formControlName="appointmentType" class="input">
-                      <option value="">Select type</option>
-                      <option value="receiving">Receiving</option>
-                      <option value="shipping">Shipping</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select type"
+                      [options]="[
+                        { value: 'receiving', label: 'Receiving' },
+                        { value: 'shipping', label: 'Shipping' }
+                      ]"
+                      [value]="appointmentForm.get('appointmentType')?.value"
+                      (valueChange)="appointmentForm.get('appointmentType')?.setValue($event); appointmentForm.get('appointmentType')?.markAsTouched()"
+                    />
                     @if (appointmentForm.get('appointmentType')?.invalid && appointmentForm.get('appointmentType')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Please select appointment type
@@ -71,10 +75,10 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
 
               <!-- Schedule Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="ClockIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="ClockIcon" size="18"></lucide-icon>
                   Schedule Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="scheduledDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -95,15 +99,19 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
                     <label for="estimatedDuration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Estimated Duration (hours) *
                     </label>
-                    <select id="estimatedDuration" formControlName="estimatedDuration" class="input">
-                      <option value="">Select duration</option>
-                      <option value="1">1 hour</option>
-                      <option value="2">2 hours</option>
-                      <option value="3">3 hours</option>
-                      <option value="4">4 hours</option>
-                      <option value="6">6 hours</option>
-                      <option value="8">8 hours</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select duration"
+                      [options]="[
+                        { value: '1', label: '1 hour' },
+                        { value: '2', label: '2 hours' },
+                        { value: '3', label: '3 hours' },
+                        { value: '4', label: '4 hours' },
+                        { value: '6', label: '6 hours' },
+                        { value: '8', label: '8 hours' }
+                      ]"
+                      [value]="appointmentForm.get('estimatedDuration')?.value"
+                      (valueChange)="appointmentForm.get('estimatedDuration')?.setValue($event); appointmentForm.get('estimatedDuration')?.markAsTouched()"
+                    />
                     @if (appointmentForm.get('estimatedDuration')?.invalid && appointmentForm.get('estimatedDuration')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Please select duration
@@ -114,21 +122,25 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
                     <label for="scheduledStartTime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Start Time *
                     </label>
-                    <select id="scheduledStartTime" formControlName="scheduledStartTime" class="input">
-                      <option value="">Select time</option>
-                      <option value="06:00">06:00 AM</option>
-                      <option value="07:00">07:00 AM</option>
-                      <option value="08:00">08:00 AM</option>
-                      <option value="09:00">09:00 AM</option>
-                      <option value="10:00">10:00 AM</option>
-                      <option value="11:00">11:00 AM</option>
-                      <option value="12:00">12:00 PM</option>
-                      <option value="13:00">01:00 PM</option>
-                      <option value="14:00">02:00 PM</option>
-                      <option value="15:00">03:00 PM</option>
-                      <option value="16:00">04:00 PM</option>
-                      <option value="17:00">05:00 PM</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select time"
+                      [options]="[
+                        { value: '06:00', label: '06:00 AM' },
+                        { value: '07:00', label: '07:00 AM' },
+                        { value: '08:00', label: '08:00 AM' },
+                        { value: '09:00', label: '09:00 AM' },
+                        { value: '10:00', label: '10:00 AM' },
+                        { value: '11:00', label: '11:00 AM' },
+                        { value: '12:00', label: '12:00 PM' },
+                        { value: '13:00', label: '01:00 PM' },
+                        { value: '14:00', label: '02:00 PM' },
+                        { value: '15:00', label: '03:00 PM' },
+                        { value: '16:00', label: '04:00 PM' },
+                        { value: '17:00', label: '05:00 PM' }
+                      ]"
+                      [value]="appointmentForm.get('scheduledStartTime')?.value"
+                      (valueChange)="appointmentForm.get('scheduledStartTime')?.setValue($event); appointmentForm.get('scheduledStartTime')?.markAsTouched()"
+                    />
                     @if (appointmentForm.get('scheduledStartTime')?.invalid && appointmentForm.get('scheduledStartTime')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Please select start time
@@ -139,21 +151,26 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
                     <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Priority Level
                     </label>
-                    <select id="priority" formControlName="priority" class="input">
-                      <option value="normal">Normal</option>
-                      <option value="high">High</option>
-                      <option value="urgent">Urgent</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select priority"
+                      [options]="[
+                        { value: 'normal', label: 'Normal' },
+                        { value: 'high', label: 'High' },
+                        { value: 'urgent', label: 'Urgent' }
+                      ]"
+                      [value]="appointmentForm.get('priority')?.value"
+                      (valueChange)="appointmentForm.get('priority')?.setValue($event); appointmentForm.get('priority')?.markAsTouched()"
+                    />
                   </div>
                 </div>
               </div>
 
               <!-- Carrier & Truck Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="TruckIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="TruckIcon" size="18"></lucide-icon>
                   Carrier & Truck Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="carrierName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -205,15 +222,19 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
                     <label for="truckType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Truck Type *
                     </label>
-                    <select id="truckType" formControlName="truckType" class="input">
-                      <option value="">Select truck type</option>
-                      <option value="semi-trailer">Semi-trailer</option>
-                      <option value="box-truck">Box Truck</option>
-                      <option value="flatbed">Flatbed</option>
-                      <option value="refrigerated">Refrigerated Truck</option>
-                      <option value="tanker">Tanker</option>
-                      <option value="van">Delivery Van</option>
-                    </select>
+                    <ui-dropdown
+                      label="Select truck type"
+                      [options]="[
+                        { value: 'semi-trailer', label: 'Semi-trailer' },
+                        { value: 'box-truck', label: 'Box Truck' },
+                        { value: 'flatbed', label: 'Flatbed' },
+                        { value: 'refrigerated', label: 'Refrigerated Truck' },
+                        { value: 'tanker', label: 'Tanker' },
+                        { value: 'van', label: 'Delivery Van' }
+                      ]"
+                      [value]="appointmentForm.get('truckType')?.value"
+                      (valueChange)="appointmentForm.get('truckType')?.setValue($event); appointmentForm.get('truckType')?.markAsTouched()"
+                    />
                     @if (appointmentForm.get('truckType')?.invalid && appointmentForm.get('truckType')?.touched) {
                       <div class="mt-1 text-sm text-error-600">
                         Please select truck type
@@ -237,10 +258,10 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
 
               <!-- Driver Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="UserIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="UserIcon" size="18"></lucide-icon>
                   Driver Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="driverName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -287,7 +308,7 @@ import { LucideAngularModule, X, Calendar, Truck, User, Package, Clock, Save } f
 
               <!-- Cargo Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Cargo Information</h4>
+                <ui-heading4 class="mb-4">Cargo Information</ui-heading4>
                 <div class="space-y-4">
                   <div>
                     <label for="cargoDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -424,6 +445,14 @@ export class DockFormScheduleAppointmentComponent {
 
   private formBuilder = inject(FormBuilder);
   private notificationService = inject(NotificationService);
+
+  // Computed property for dock options
+  get dockOptions() {
+    return this.availableDocks().map(dock => ({ 
+      value: dock.id.toString(), 
+      label: dock.name + ' (' + (dock.type || '') + ')' 
+    }));
+  }
 
   constructor() {
     this.appointmentForm = this.formBuilder.group({

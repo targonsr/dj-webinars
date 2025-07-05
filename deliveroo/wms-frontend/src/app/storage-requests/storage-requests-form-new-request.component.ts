@@ -1,23 +1,25 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, signal } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../notifications/notification.service';
 import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTriangle, Save } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-storage-requests-form-new-request',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LucideAngularModule],
+  imports: [FormsModule, ReactiveFormsModule, LucideAngularModule, DropdownComponent, Heading3Component, Heading4Component],
   template: `
     <!-- New Storage Request Modal -->
     @if (showModal()) {
       <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-dark-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
           <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-700">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white flex items-center">
-              <lucide-icon [img]="PackageIcon" size="20" class="mr-2"></lucide-icon>
-              New Storage Request
-            </h3>
+                    <ui-heading3>
+          <lucide-icon [img]="PackageIcon" size="20"></lucide-icon>
+          New Storage Request
+        </ui-heading3>
             <button (click)="onCancel()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <lucide-icon [img]="XIcon" size="24"></lucide-icon>
             </button>
@@ -27,10 +29,10 @@ import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTrian
             <div class="space-y-8">
               <!-- Customer Information -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="UserIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="UserIcon" size="18"></lucide-icon>
                   Customer Information
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="customerName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -68,10 +70,10 @@ import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTrian
 
               <!-- Storage Period -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="CalendarIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="CalendarIcon" size="18"></lucide-icon>
                   Storage Period
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="requestedEntryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -108,10 +110,10 @@ import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTrian
 
               <!-- Cargo Details -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="PackageIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="PackageIcon" size="18"></lucide-icon>
                   Cargo Details
-                </h4>
+                </ui-heading4>
                 <div class="space-y-4">
                   <div>
                     <label for="cargoDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -179,15 +181,17 @@ import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTrian
                              min="0">
                     </div>
                     <div>
-                      <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Currency
-                      </label>
-                      <select id="currency" formControlName="currency" class="input">
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="GBP">GBP</option>
-                        <option value="CAD">CAD</option>
-                      </select>
+                      <ui-dropdown
+                        label="Select currency"
+                        [options]="[
+                          { value: 'USD', label: 'USD' },
+                          { value: 'EUR', label: 'EUR' },
+                          { value: 'GBP', label: 'GBP' },
+                          { value: 'CAD', label: 'CAD' }
+                        ]"
+                        [value]="requestForm.get('currency')?.value"
+                        (valueChange)="requestForm.get('currency')?.setValue($event); requestForm.get('currency')?.markAsTouched()"
+                      />
                     </div>
                   </div>
                 </div>
@@ -195,10 +199,10 @@ import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTrian
 
               <!-- Special Requirements -->
               <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                  <lucide-icon [img]="AlertTriangleIcon" size="18" class="mr-2"></lucide-icon>
+                <ui-heading4 class="mb-4">
+                  <lucide-icon [img]="AlertTriangleIcon" size="18"></lucide-icon>
                   Special Requirements
-                </h4>
+                </ui-heading4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="space-y-3">
                     <label class="flex items-center">
@@ -233,18 +237,22 @@ import { LucideAngularModule, X, Package, User, Calendar, DollarSign, AlertTrian
                         <label for="hazardousClassification" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Hazardous Classification
                         </label>
-                        <select id="hazardousClassification" formControlName="hazardousClassification" class="input">
-                          <option value="">Select classification</option>
-                          <option value="Class 1">Class 1 - Explosives</option>
-                          <option value="Class 2">Class 2 - Gases</option>
-                          <option value="Class 3">Class 3 - Flammable Liquids</option>
-                          <option value="Class 4">Class 4 - Flammable Solids</option>
-                          <option value="Class 5">Class 5 - Oxidizing Substances</option>
-                          <option value="Class 6">Class 6 - Toxic Substances</option>
-                          <option value="Class 7">Class 7 - Radioactive Materials</option>
-                          <option value="Class 8">Class 8 - Corrosive Substances</option>
-                          <option value="Class 9">Class 9 - Miscellaneous</option>
-                        </select>
+                        <ui-dropdown
+                          label="Select classification"
+                          [options]="[
+                            { value: 'Class 1', label: 'Class 1 - Explosives' },
+                            { value: 'Class 2', label: 'Class 2 - Gases' },
+                            { value: 'Class 3', label: 'Class 3 - Flammable Liquids' },
+                            { value: 'Class 4', label: 'Class 4 - Flammable Solids' },
+                            { value: 'Class 5', label: 'Class 5 - Oxidizing Substances' },
+                            { value: 'Class 6', label: 'Class 6 - Toxic Substances' },
+                            { value: 'Class 7', label: 'Class 7 - Radioactive Materials' },
+                            { value: 'Class 8', label: 'Class 8 - Corrosive Substances' },
+                            { value: 'Class 9', label: 'Class 9 - Miscellaneous' }
+                          ]"
+                          [value]="requestForm.get('hazardousClassification')?.value"
+                          (valueChange)="requestForm.get('hazardousClassification')?.setValue($event); requestForm.get('hazardousClassification')?.markAsTouched()"
+                        />
                       </div>
                     }
                   </div>

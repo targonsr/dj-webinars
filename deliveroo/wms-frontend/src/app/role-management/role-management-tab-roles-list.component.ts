@@ -3,15 +3,16 @@ import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Role } from '../employees/employees.interfaces';
 import { LucideAngularModule, Shield, Search, Edit, Trash2, Eye } from 'lucide-angular';
+import { Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-role-management-tab-roles-list',
   standalone: true,
-  imports: [FormsModule, LucideAngularModule],
+  imports: [FormsModule, LucideAngularModule, Heading4Component, Heading3Component],
   template: `
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">All Roles</h3>
+        <ui-heading3>All Roles</ui-heading3>
         <div class="flex space-x-3">
           <div class="relative">
             <lucide-icon [img]="SearchIcon" size="18" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></lucide-icon>
@@ -33,7 +34,7 @@ import { LucideAngularModule, Shield, Search, Edit, Trash2, Eye } from 'lucide-a
                   <lucide-icon [img]="ShieldIcon" size="20" class="text-primary-600"></lucide-icon>
                 </div>
                 <div>
-                  <h4 class="text-lg font-medium text-gray-900 dark:text-white">{{ role.name }}</h4>
+                  <ui-heading4>{{ role.name }}</ui-heading4>
                   <p class="text-sm text-gray-500 dark:text-gray-400">{{ role.assignedUsers.length }} users assigned</p>
                 </div>
               </div>
@@ -78,7 +79,7 @@ import { LucideAngularModule, Shield, Search, Edit, Trash2, Eye } from 'lucide-a
         } @empty {
           <div class="text-center py-12 md:col-span-2 lg:col-span-3">
             <lucide-icon [img]="ShieldIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No roles found</h3>
+            <ui-heading4 class="mt-2">No roles found</ui-heading4>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search criteria or create a new role.</p>
           </div>
         }

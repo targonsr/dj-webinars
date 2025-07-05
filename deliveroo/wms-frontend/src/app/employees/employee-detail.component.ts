@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EmployeesService } from './employees.service';
 import { Employee } from './employees.interfaces';
 import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Shield, Building, Clock, Edit } from 'lucide-angular';
+import { Heading1Component, Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-employee-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading1Component, Heading3Component, Heading4Component],
   template: `
     @if (employee) {
       <div class="space-y-6">
@@ -19,7 +20,7 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
               <lucide-icon [img]="ArrowLeftIcon" size="20"></lucide-icon>
             </button>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ employee.fullName }}</h1>
+              <ui-heading1>{{ employee.fullName }}</ui-heading1>
               <p class="text-gray-600 dark:text-gray-400">Employee Details</p>
             </div>
             <span [class]="getStatusClass(employee.isActive)"
@@ -39,10 +40,10 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Basic Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="UserIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3 class="mb-4">
+              <lucide-icon [img]="UserIcon" size="20"></lucide-icon>
               Personal Information
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               <div class="flex items-center">
                 <div class="flex-shrink-0 h-16 w-16">
@@ -51,7 +52,7 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
                   </div>
                 </div>
                 <div class="ml-4">
-                  <h4 class="text-lg font-medium text-gray-900 dark:text-white">{{ employee.fullName }}</h4>
+                  <ui-heading4>{{ employee.fullName }}</ui-heading4>
                   <p class="text-sm text-gray-500 dark:text-gray-400">Employee ID: #{{ employee.id }}</p>
                 </div>
               </div>
@@ -79,10 +80,10 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
 
           <!-- Employment Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="CalendarIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3 class="mb-4">
+              <lucide-icon [img]="CalendarIcon" size="20"></lucide-icon>
               Employment Information
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Hire Date</label>
@@ -112,16 +113,16 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
 
         <!-- Roles and Permissions -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-            <lucide-icon [img]="ShieldIcon" size="20" class="mr-2"></lucide-icon>
+          <ui-heading3 class="mb-4">
+            <lucide-icon [img]="ShieldIcon" size="20"></lucide-icon>
             Roles and Permissions
-          </h3>
+          </ui-heading3>
           <div class="space-y-4">
             @for (role of employee.roles; track role.roleName) {
               <div class="p-4 bg-gray-50 dark:bg-dark-700 rounded-lg">
                 <div class="flex items-center justify-between">
                   <div>
-                    <h4 class="text-md font-medium text-gray-900 dark:text-white">{{ role.roleName }}</h4>
+                    <ui-heading4>{{ role.roleName }}</ui-heading4>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                       Assigned on {{ role.assignedDate | date:'MMM d, y' }}
                       @if (role.assignedByName) {
@@ -145,16 +146,16 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
 
         <!-- Warehouse Assignments -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-            <lucide-icon [img]="BuildingIcon" size="20" class="mr-2"></lucide-icon>
+          <ui-heading3 class="mb-4">
+            <lucide-icon [img]="BuildingIcon" size="20"></lucide-icon>
             Warehouse Assignments
-          </h3>
+          </ui-heading3>
           <div class="space-y-4">
             @for (assignment of employee.warehouseAssignments; track assignment.warehouseName) {
               <div class="p-4 bg-gray-50 dark:bg-dark-700 rounded-lg">
                 <div class="flex items-center justify-between">
                   <div>
-                    <h4 class="text-md font-medium text-gray-900 dark:text-white">{{ assignment.warehouseName }}</h4>
+                    <ui-heading4>{{ assignment.warehouseName }}</ui-heading4>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                       Assigned from {{ assignment.assignedFrom | date:'MMM d, y' }}
                       @if (assignment.assignedUntil) {
@@ -179,10 +180,10 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
 
         <!-- Account Details -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-            <lucide-icon [img]="ClockIcon" size="20" class="mr-2"></lucide-icon>
+          <ui-heading3 class="mb-4">
+            <lucide-icon [img]="ClockIcon" size="20"></lucide-icon>
             Account Details
-          </h3>
+          </ui-heading3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Account Created</label>
@@ -199,7 +200,7 @@ import { LucideAngularModule, ArrowLeft, User, Mail, Phone, Calendar, MapPin, Sh
       <div class="flex items-center justify-center h-64">
         <div class="text-center">
           <lucide-icon [img]="UserIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Employee not found</h3>
+          <ui-heading4 class="mt-2">Employee not found</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">The requested employee could not be found.</p>
         </div>
       </div>

@@ -8,17 +8,19 @@ import {
   FinancialReport, 
   AuditTrail 
 } from './reports.model';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading1Component, Heading3Component, Heading4Component, SubtitleComponent } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DropdownComponent, Heading1Component, SubtitleComponent, Heading3Component, Heading4Component],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Reports & Analytics</h1>
-        <p class="text-gray-600 dark:text-gray-400">View warehouse performance reports and analytics</p>
+        <ui-heading1>Reports & Analytics</ui-heading1>
+        <ui-subtitle>View warehouse performance reports and analytics</ui-subtitle>
       </div>
 
       <!-- Report Type Tabs -->
@@ -42,14 +44,19 @@ import {
         @if (activeTab === 'operational') {
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Operational Metrics & KPIs</h3>
+              <ui-heading3>Operational Metrics & KPIs</ui-heading3>
               <div class="flex space-x-3">
-                <select [(ngModel)]="operationalPeriod" (change)="loadOperationalMetrics()" class="input">
-                  <option value="today">Today</option>
-                  <option value="week">This Week</option>
-                  <option value="month">This Month</option>
-                  <option value="quarter">This Quarter</option>
-                </select>
+                <ui-dropdown
+                  label="Period"
+                  [options]="[
+                    { value: 'today', label: 'Today' },
+                    { value: 'week', label: 'This Week' },
+                    { value: 'month', label: 'This Month' },
+                    { value: 'quarter', label: 'This Quarter' }
+                  ]"
+                  [value]="operationalPeriod"
+                  (valueChange)="operationalPeriod = $event; loadOperationalMetrics()"
+                />
                 <button (click)="exportReport('operational')" class="btn btn-secondary">
                   <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -125,14 +132,14 @@ import {
             <!-- Performance Charts -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Daily Throughput Trend</h4>
+                <ui-heading4>Daily Throughput Trend</ui-heading4>
                 <div class="h-64 bg-gray-50 dark:bg-dark-700 rounded-lg flex items-center justify-center">
                   <p class="text-gray-500 dark:text-gray-400">Chart visualization would be here</p>
                 </div>
               </div>
 
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Order Processing Performance</h4>
+                <ui-heading4>Order Processing Performance</ui-heading4>
                 <div class="space-y-4">
                   @for (metric of operationalMetrics?.detailedMetrics; track metric.name) {
                     <div class="flex items-center justify-between">
@@ -155,14 +162,19 @@ import {
         @if (activeTab === 'utilization') {
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Utilization Reports</h3>
+              <ui-heading3>Utilization Reports</ui-heading3>
               <div class="flex space-x-3">
-                <select [(ngModel)]="utilizationPeriod" (change)="loadUtilizationReports()" class="input">
-                  <option value="week">This Week</option>
-                  <option value="month">This Month</option>
-                  <option value="quarter">This Quarter</option>
-                  <option value="year">This Year</option>
-                </select>
+                <ui-dropdown
+                  label="Period"
+                  [options]="[
+                    { value: 'week', label: 'This Week' },
+                    { value: 'month', label: 'This Month' },
+                    { value: 'quarter', label: 'This Quarter' },
+                    { value: 'year', label: 'This Year' }
+                  ]"
+                  [value]="utilizationPeriod"
+                  (valueChange)="utilizationPeriod = $event; loadUtilizationReports()"
+                />
                 <button (click)="exportReport('utilization')" class="btn btn-secondary">
                   <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -176,7 +188,7 @@ import {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <!-- Space Utilization -->
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Space Utilization</h4>
+                <ui-heading4>Space Utilization</ui-heading4>
                 <div class="space-y-4">
                   @for (zone of utilizationReport?.spaceUtilization; track zone.zoneName) {
                     <div class="space-y-2">
@@ -196,7 +208,7 @@ import {
 
               <!-- Equipment Utilization -->
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Equipment Utilization</h4>
+                <ui-heading4>Equipment Utilization</ui-heading4>
                 <div class="space-y-4">
                   @for (equipment of utilizationReport?.equipmentUtilization; track equipment.equipmentType) {
                     <div class="space-y-2">
@@ -219,7 +231,7 @@ import {
 
               <!-- Personnel Utilization -->
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Personnel Utilization</h4>
+                <ui-heading4>Personnel Utilization</ui-heading4>
                 <div class="space-y-4">
                   @for (personnel of utilizationReport?.personnelUtilization; track personnel.role) {
                     <div class="space-y-2">
@@ -243,7 +255,7 @@ import {
 
             <!-- Detailed Utilization Table -->
             <div class="card p-6 mt-6">
-              <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Detailed Utilization Breakdown</h4>
+              <ui-heading4>Detailed Utilization Breakdown</ui-heading4>
               <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
                   <thead class="bg-gray-50 dark:bg-dark-800">
@@ -292,14 +304,19 @@ import {
         @if (activeTab === 'financial') {
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Financial Reports</h3>
+              <ui-heading3>Financial Reports</ui-heading3>
               <div class="flex space-x-3">
-                <select [(ngModel)]="financialPeriod" (change)="loadFinancialReports()" class="input">
-                  <option value="month">This Month</option>
-                  <option value="quarter">This Quarter</option>
-                  <option value="year">This Year</option>
-                  <option value="custom">Custom Range</option>
-                </select>
+                <ui-dropdown
+                  label="Period"
+                  [options]="[
+                    { value: 'month', label: 'This Month' },
+                    { value: 'quarter', label: 'This Quarter' },
+                    { value: 'year', label: 'This Year' },
+                    { value: 'custom', label: 'Custom Range' }
+                  ]"
+                  [value]="financialPeriod"
+                  (valueChange)="financialPeriod = $event; loadFinancialReports()"
+                />
                 <button (click)="exportReport('financial')" class="btn btn-secondary">
                   <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -375,7 +392,7 @@ import {
             <!-- Revenue Breakdown -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Revenue by Service Type</h4>
+                <ui-heading4>Revenue by Service Type</ui-heading4>
                 <div class="space-y-4">
                   @for (service of financialReport?.revenueByService; track service.serviceName) {
                     <div class="flex items-center justify-between">
@@ -393,7 +410,7 @@ import {
               </div>
 
               <div class="card p-6">
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Monthly Billing Summary</h4>
+                <ui-heading4>Monthly Billing Summary</ui-heading4>
                 <div class="overflow-x-auto">
                   <table class="min-w-full">
                     <thead>
@@ -428,15 +445,20 @@ import {
         @if (activeTab === 'audit') {
           <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Audit Trails</h3>
+              <ui-heading3>Audit Trails</ui-heading3>
               <div class="flex space-x-3">
-                <select [(ngModel)]="auditFilter" (change)="loadAuditTrails()" class="input">
-                  <option value="all">All Activities</option>
-                  <option value="user">User Actions</option>
-                  <option value="system">System Events</option>
-                  <option value="security">Security Events</option>
-                  <option value="data">Data Changes</option>
-                </select>
+                <ui-dropdown
+                  label="Filter"
+                  [options]="[
+                    { value: 'all', label: 'All Activities' },
+                    { value: 'user', label: 'User Actions' },
+                    { value: 'system', label: 'System Events' },
+                    { value: 'security', label: 'Security Events' },
+                    { value: 'data', label: 'Data Changes' }
+                  ]"
+                  [value]="auditFilter"
+                  (valueChange)="auditFilter = $event; loadAuditTrails()"
+                />
                 <input type="date" [(ngModel)]="auditDateFrom" (change)="loadAuditTrails()" class="input">
                 <input type="date" [(ngModel)]="auditDateTo" (change)="loadAuditTrails()" class="input">
                 <button (click)="exportReport('audit')" class="btn btn-secondary">

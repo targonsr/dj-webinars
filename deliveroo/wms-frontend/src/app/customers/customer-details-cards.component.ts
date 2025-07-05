@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Customer } from './customers.model';
 import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Calendar } from 'lucide-angular';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-customer-details-cards',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading3Component],
   template: `
     @if (customer()) {
       <div>
@@ -15,10 +16,10 @@ import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Cal
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <!-- Basic Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="BuildingIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3>
+              <lucide-icon [img]="BuildingIcon" size="20"></lucide-icon>
               Company Information
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Company Name</label>
@@ -44,10 +45,10 @@ import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Cal
 
           <!-- Contact Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="UserIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3>
+              <lucide-icon [img]="UserIcon" size="20"></lucide-icon>
               Contact Information
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Contact Person</label>
@@ -76,10 +77,10 @@ import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Cal
 
           <!-- Address Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="MapPinIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3>
+              <lucide-icon [img]="MapPinIcon" size="20"></lucide-icon>
               Address Information
-            </h3>
+            </ui-heading3>
             <div class="space-y-2">
               <p class="text-sm text-gray-900 dark:text-white">{{ customer()?.address?.street }}</p>
               <p class="text-sm text-gray-900 dark:text-white">
@@ -91,10 +92,10 @@ import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Cal
 
           <!-- Tax Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="FileTextIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3>
+              <lucide-icon [img]="FileTextIcon" size="20"></lucide-icon>
               Tax Information
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Tax ID</label>
@@ -133,10 +134,10 @@ import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Cal
 
         <!-- Account Details -->
         <div class="card p-6 mb-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-            <lucide-icon [img]="CalendarIcon" size="20" class="mr-2"></lucide-icon>
+          <ui-heading3>
+            <lucide-icon [img]="CalendarIcon" size="20"></lucide-icon>
             Account Details
-          </h3>
+          </ui-heading3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Customer Since</label>
@@ -157,7 +158,7 @@ import { LucideAngularModule, Building, User, Phone, Mail, MapPin, FileText, Cal
 
         <!-- Quick Actions -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+          <ui-heading3>Quick Actions</ui-heading3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <button routerLink="/billing-payments" 
                     class="flex items-center p-4 border-2 border-dashed border-gray-300 dark:border-dark-600 rounded-lg hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">

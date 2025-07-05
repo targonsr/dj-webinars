@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Dock, DockAppointment } from './dock.model';
 import { DockService } from './dock.service';
+import { Heading1Component, Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-dock-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, Heading1Component, Heading3Component, Heading4Component],
   template: `
     @if (dock) {
       <div class="space-y-6">
@@ -20,7 +21,7 @@ import { DockService } from './dock.service';
               </svg>
             </button>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ dock.name }}</h1>
+              <ui-heading1>{{ dock.name }}</ui-heading1>
               <p class="text-gray-600 dark:text-gray-400 capitalize">{{ dock.type }} dock</p>
             </div>
             <span [class]="getStatusBadgeClass(dock.status)" 
@@ -38,7 +39,7 @@ import { DockService } from './dock.service';
 
         <!-- Current Status Card -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Current Status</h3>
+          <ui-heading3 class="mb-4">Current Status</ui-heading3>
           
           @if (dock.status === 'available') {
             <div class="p-4 bg-success-50 dark:bg-success-900/20 rounded-lg border border-success-200 dark:border-success-800">
@@ -47,7 +48,7 @@ import { DockService } from './dock.service';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <h4 class="text-lg font-medium text-success-800 dark:text-success-200">Available</h4>
+                  <ui-heading4 class="text-success-800 dark:text-success-200">Available</ui-heading4>
                   <p class="text-success-700 dark:text-success-300">This dock is ready for scheduling</p>
                 </div>
               </div>
@@ -61,7 +62,7 @@ import { DockService } from './dock.service';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m0 0V7a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a2 2 0 012-2h0V7" />
                 </svg>
                 <div class="flex-1">
-                  <h4 class="text-lg font-medium text-primary-800 dark:text-primary-200 mb-3">Currently Occupied</h4>
+                  <ui-heading4 class="text-primary-800 dark:text-primary-200 mb-3">Currently Occupied</ui-heading4>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p class="text-sm font-medium text-primary-700 dark:text-primary-300">Truck Information</p>
@@ -92,7 +93,7 @@ import { DockService } from './dock.service';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <h4 class="text-lg font-medium text-warning-800 dark:text-warning-200">Under Maintenance</h4>
+                  <ui-heading4 class="text-warning-800 dark:text-warning-200">Under Maintenance</ui-heading4>
                   <p class="text-warning-700 dark:text-warning-300">This dock is temporarily unavailable for operations</p>
                 </div>
               </div>
@@ -106,7 +107,7 @@ import { DockService } from './dock.service';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 <div>
-                  <h4 class="text-lg font-medium text-secondary-800 dark:text-secondary-200">Reserved</h4>
+                  <ui-heading4 class="text-secondary-800 dark:text-secondary-200">Reserved</ui-heading4>
                   <p class="text-secondary-700 dark:text-secondary-300">This dock is reserved for upcoming appointments</p>
                 </div>
               </div>
@@ -120,7 +121,7 @@ import { DockService } from './dock.service';
           <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Dock not found</h3>
+          <ui-heading4 class="mt-2">Dock not found</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">The requested dock could not be found.</p>
         </div>
       </div>

@@ -5,18 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { EmployeesService } from './employees.service';
 import { Employee } from './employees.interfaces';
 import { LucideAngularModule, Users, Search, Plus, Eye, UserCheck, Mail, Phone, Calendar } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { Heading1Component, SubtitleComponent, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, LucideAngularModule],
+  imports: [CommonModule, RouterLink, FormsModule, LucideAngularModule, DropdownComponent, Heading1Component, SubtitleComponent, Heading4Component],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employees</h1>
-          <p class="text-gray-600 dark:text-gray-400">Manage employee information and access</p>
+          <ui-heading1>Employees</ui-heading1>
+          <ui-subtitle>Manage employee information and access</ui-subtitle>
         </div>
         <button class="btn btn-primary">
           <lucide-icon [img]="PlusIcon" size="18" class="mr-2"></lucide-icon>
@@ -90,12 +92,7 @@ import { LucideAngularModule, Users, Search, Plus, Eye, UserCheck, Mail, Phone, 
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-            <select [(ngModel)]="statusFilter" (change)="applyFilters()" class="input">
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
+            <ui-dropdown label="Status" [options]="statusOptions" [value]="statusFilter" (valueChange)="setStatusFilter($event)" />
           </div>
         </div>
       </div>
@@ -205,7 +202,7 @@ import { LucideAngularModule, Users, Search, Plus, Eye, UserCheck, Mail, Phone, 
         @if (filteredEmployees.length === 0) {
           <div class="text-center py-12">
             <lucide-icon [img]="UsersIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No employees found</h3>
+            <ui-heading4 class="mt-2">No employees found</ui-heading4>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search criteria.</p>
           </div>
         }
@@ -230,6 +227,12 @@ export class EmployeesComponent implements OnInit {
   CalendarIcon = Calendar;
 
   private employeesService = inject(EmployeesService);
+
+  statusOptions = [
+    { value: '', label: 'All Status' },
+    { value: 'active', label: 'Active' },
+    { value: 'inactive', label: 'Inactive' }
+  ];
 
   ngOnInit(): void {
     this.loadEmployees();
@@ -286,4 +289,6 @@ export class EmployeesComponent implements OnInit {
   getStatusClass(isActive: boolean): string {
     return isActive ? 'bg-success-100 text-success-800' : 'bg-gray-100 text-gray-800';
   }
+
+  setStatusFilter(val: string) { this.statusFilter = val; this.applyFilters(); }
 }

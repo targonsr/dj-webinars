@@ -9,6 +9,10 @@ import { CustomersStatsComponent } from './customers-stats.component';
 import { CustomersListingFiltersComponent } from './customers-listing-filters.component';
 import { CustomersListingComponent } from './customers-listing.component';
 import { LucideAngularModule, Plus, X, UserMinus } from 'lucide-angular';
+import { SectionComponent } from '../ui-library/Section.component';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
+import { TextInputComponent } from '../ui-library/TextInput.component';
+import { Heading1Component, Heading3Component, SubtitleComponent } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-customers',
@@ -19,15 +23,21 @@ import { LucideAngularModule, Plus, X, UserMinus } from 'lucide-angular';
     LucideAngularModule,
     CustomersStatsComponent,
     CustomersListingFiltersComponent,
-    CustomersListingComponent
-],
+    CustomersListingComponent,
+    SectionComponent,
+    DropdownComponent,
+    TextInputComponent,
+    Heading1Component,
+    SubtitleComponent, 
+    Heading3Component
+  ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Customers</h1>
-          <p class="text-gray-600 dark:text-gray-400">Manage customer information and contacts</p>
+          <ui-heading1>Customers</ui-heading1>
+          <ui-subtitle>Manage your customers and their details</ui-subtitle>
         </div>
         <button (click)="showAddCustomerModal = true" class="btn btn-primary">
           <lucide-icon [img]="PlusIcon" size="18" class="mr-2"></lucide-icon>
@@ -35,16 +45,22 @@ import { LucideAngularModule, Plus, X, UserMinus } from 'lucide-angular';
         </button>
       </div>
 
-      <!-- Stats Component -->
-      <app-customers-stats [customers]="customers" />
+      <!-- Stats Section -->
+      <ui-section>
+        <app-customers-stats [customers]="customers" />
+      </ui-section>
 
-      <!-- Filters Component -->
-      <app-customers-listing-filters />
+      <!-- Filters Section -->
+      <ui-section>
+        <app-customers-listing-filters />
+      </ui-section>
 
-      <!-- Listing Component -->
-      <app-customers-listing 
-        [customers]="filteredCustomers" 
-        (deactivateCustomer)="deactivateCustomer($event)" />
+      <!-- Listing Section -->
+      <ui-section>
+        <app-customers-listing 
+          [customers]="filteredCustomers" 
+          (deactivateCustomer)="deactivateCustomer($event)" />
+      </ui-section>
     </div>
 
     <!-- Add Customer Modal -->
@@ -52,7 +68,7 @@ import { LucideAngularModule, Plus, X, UserMinus } from 'lucide-angular';
       <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-dark-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
           <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-700">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Add New Customer</h3>
+            <ui-heading3>Add New Customer</ui-heading3>
             <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <lucide-icon [img]="XIcon" size="24"></lucide-icon>
             </button>
@@ -61,242 +77,55 @@ import { LucideAngularModule, Plus, X, UserMinus } from 'lucide-angular';
           <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" class="p-6">
             <div class="space-y-6">
               <!-- Company Information -->
-              <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Company Information</h4>
+              <ui-section>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label for="companyName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Company Name *
-                    </label>
-                    <input type="text" 
-                          id="companyName"
-                          formControlName="companyName"
-                          class="input"
-                          placeholder="Enter company name">
-                    @if (customerForm.get('companyName')?.invalid && customerForm.get('companyName')?.touched) {
-                      <div class="mt-1 text-sm text-error-600">
-                        Company name is required
-                      </div>
-                    }
-                  </div>
-                  <div>
-                    <label for="countryOfOrigin" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Country of Origin *
-                    </label>
-                    <select id="countryOfOrigin" formControlName="countryOfOrigin" class="input">
-                      <option value="">Select country</option>
-                      <option value="USA">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="Mexico">Mexico</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="Germany">Germany</option>
-                      <option value="France">France</option>
-                    </select>
-                    @if (customerForm.get('countryOfOrigin')?.invalid && customerForm.get('countryOfOrigin')?.touched) {
-                      <div class="mt-1 text-sm text-error-600">
-                        Country is required
-                      </div>
-                    }
-                  </div>
+                  <ui-text-input label="Company Name *" [value]="customerForm.get('companyName')?.value" (valueChange)="customerForm.get('companyName')?.setValue($event)" [error]="customerForm.get('companyName')?.invalid && customerForm.get('companyName')?.touched ? 'Company name is required' : ''" placeholder="Enter company name" />
+                  <ui-dropdown label="Country of Origin *" [options]="countryOptions" [value]="customerForm.get('countryOfOrigin')?.value" (valueChange)="customerForm.get('countryOfOrigin')?.setValue($event)" />
                 </div>
-              </div>
+              </ui-section>
 
               <!-- Contact Information -->
-              <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Contact Information</h4>
+              <ui-section>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label for="contactPerson" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Contact Person *
-                    </label>
-                    <input type="text" 
-                          id="contactPerson"
-                          formControlName="contactPerson"
-                          class="input"
-                          placeholder="Enter contact person name">
-                    @if (customerForm.get('contactPerson')?.invalid && customerForm.get('contactPerson')?.touched) {
-                      <div class="mt-1 text-sm text-error-600">
-                        Contact person is required
-                      </div>
-                    }
-                  </div>
-                  <div>
-                    <label for="contactTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Contact Title
-                    </label>
-                    <input type="text" 
-                          id="contactTitle"
-                          formControlName="contactTitle"
-                          class="input"
-                          placeholder="e.g., Operations Manager">
-                  </div>
-                  <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Phone Number *
-                    </label>
-                    <input type="tel" 
-                          id="phone"
-                          formControlName="phone"
-                          class="input"
-                          placeholder="+1-555-0123">
-                    @if (customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched) {
-                      <div class="mt-1 text-sm text-error-600">
-                        Phone number is required
-                      </div>
-                    }
-                  </div>
-                  <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Email Address *
-                    </label>
-                    <input type="email" 
-                          id="email"
-                          formControlName="email"
-                          class="input"
-                          placeholder="contact@company.com">
-                    @if (customerForm.get('email')?.invalid && customerForm.get('email')?.touched) {
-                      <div class="mt-1 text-sm text-error-600">
-                        Valid email is required
-                      </div>
-                    }
-                  </div>
+                  <ui-text-input label="Contact Person *" [value]="customerForm.get('contactPerson')?.value" (valueChange)="customerForm.get('contactPerson')?.setValue($event)" [error]="customerForm.get('contactPerson')?.invalid && customerForm.get('contactPerson')?.touched ? 'Contact person is required' : ''" placeholder="Enter contact person name" />
+                  <ui-text-input label="Contact Title" [value]="customerForm.get('contactTitle')?.value" (valueChange)="customerForm.get('contactTitle')?.setValue($event)" placeholder="e.g., Operations Manager" />
+                  <ui-text-input label="Phone Number *" [value]="customerForm.get('phone')?.value" (valueChange)="customerForm.get('phone')?.setValue($event)" [error]="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched ? 'Phone number is required' : ''" placeholder="+1-555-0123" />
+                  <ui-text-input label="Email Address *" [value]="customerForm.get('email')?.value" (valueChange)="customerForm.get('email')?.setValue($event)" [error]="customerForm.get('email')?.invalid && customerForm.get('email')?.touched ? 'Valid email is required' : ''" placeholder="contact@company.com" type="email" />
                 </div>
-              </div>
+              </ui-section>
 
               <!-- Address Information -->
-              <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Address Information</h4>
+              <ui-section>
                 <div class="space-y-4">
-                  <div>
-                    <label for="street" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Street Address *
-                    </label>
-                    <input type="text" 
-                          id="street"
-                          formControlName="street"
-                          class="input"
-                          placeholder="123 Business Street">
-                    @if (customerForm.get('street')?.invalid && customerForm.get('street')?.touched) {
-                      <div class="mt-1 text-sm text-error-600">
-                        Street address is required
-                      </div>
-                    }
-                  </div>
+                  <ui-text-input label="Street Address *" [value]="customerForm.get('street')?.value" (valueChange)="customerForm.get('street')?.setValue($event)" [error]="customerForm.get('street')?.invalid && customerForm.get('street')?.touched ? 'Street address is required' : ''" placeholder="123 Business Street" />
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        City *
-                      </label>
-                      <input type="text" 
-                            id="city"
-                            formControlName="city"
-                            class="input"
-                            placeholder="City">
-                      @if (customerForm.get('city')?.invalid && customerForm.get('city')?.touched) {
-                        <div class="mt-1 text-sm text-error-600">
-                          City is required
-                        </div>
-                      }
-                    </div>
-                    <div>
-                      <label for="state" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        State/Province *
-                      </label>
-                      <input type="text" 
-                            id="state"
-                            formControlName="state"
-                            class="input"
-                            placeholder="State">
-                      @if (customerForm.get('state')?.invalid && customerForm.get('state')?.touched) {
-                        <div class="mt-1 text-sm text-error-600">
-                          State is required
-                        </div>
-                      }
-                    </div>
-                    <div>
-                      <label for="postalCode" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Postal Code *
-                      </label>
-                      <input type="text" 
-                            id="postalCode"
-                            formControlName="postalCode"
-                            class="input"
-                            placeholder="12345">
-                      @if (customerForm.get('postalCode')?.invalid && customerForm.get('postalCode')?.touched) {
-                        <div class="mt-1 text-sm text-error-600">
-                          Postal code is required
-                        </div>
-                      }
-                    </div>
+                    <ui-text-input label="City *" [value]="customerForm.get('city')?.value" (valueChange)="customerForm.get('city')?.setValue($event)" [error]="customerForm.get('city')?.invalid && customerForm.get('city')?.touched ? 'City is required' : ''" placeholder="City" />
+                    <ui-text-input label="State/Province *" [value]="customerForm.get('state')?.value" (valueChange)="customerForm.get('state')?.setValue($event)" [error]="customerForm.get('state')?.invalid && customerForm.get('state')?.touched ? 'State is required' : ''" placeholder="State" />
+                    <ui-text-input label="Postal Code *" [value]="customerForm.get('postalCode')?.value" (valueChange)="customerForm.get('postalCode')?.setValue($event)" [error]="customerForm.get('postalCode')?.invalid && customerForm.get('postalCode')?.touched ? 'Postal code is required' : ''" placeholder="12345" />
                   </div>
                 </div>
-              </div>
+              </ui-section>
 
               <!-- Tax Information -->
-              <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Tax Information</h4>
+              <ui-section>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label for="taxId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Tax ID
-                    </label>
-                    <input type="text" 
-                          id="taxId"
-                          formControlName="taxId"
-                          class="input"
-                          placeholder="TAX-123-456">
-                  </div>
-                  <div>
-                    <label for="taxNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Tax Number
-                    </label>
-                    <input type="text" 
-                          id="taxNumber"
-                          formControlName="taxNumber"
-                          class="input"
-                          placeholder="12-3456789">
-                  </div>
+                  <ui-text-input label="Tax ID" [value]="customerForm.get('taxId')?.value" (valueChange)="customerForm.get('taxId')?.setValue($event)" placeholder="TAX-123-456" />
+                  <ui-text-input label="Tax Number" [value]="customerForm.get('taxNumber')?.value" (valueChange)="customerForm.get('taxNumber')?.setValue($event)" placeholder="12-3456789" />
                 </div>
-              </div>
+              </ui-section>
 
               <!-- Billing Information -->
-              <div>
-                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Billing Information</h4>
+              <ui-section>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label for="paymentTerms" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Payment Terms
-                    </label>
-                    <select id="paymentTerms" formControlName="paymentTerms" class="input">
-                      <option value="Net 30">Net 30</option>
-                      <option value="Net 60">Net 60</option>
-                      <option value="Net 90">Net 90</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="creditLimit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Credit Limit ($)
-                    </label>
-                    <input type="number" 
-                          id="creditLimit"
-                          formControlName="creditLimit"
-                          class="input"
-                          placeholder="5000">
-                  </div>
+                  <ui-dropdown label="Payment Terms" [options]="paymentTermOptions" [value]="customerForm.get('paymentTerms')?.value" (valueChange)="customerForm.get('paymentTerms')?.setValue($event)" />
+                  <ui-text-input label="Credit Limit ($)" [value]="customerForm.get('creditLimit')?.value" (valueChange)="customerForm.get('creditLimit')?.setValue($event)" type="number" placeholder="5000" />
                 </div>
-              </div>
+              </ui-section>
               
               <!-- Notes -->
-              <div>
-                <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Notes
-                </label>
-                <textarea id="notes" 
-                          formControlName="notes" 
-                          rows="4"
-                          class="input"
-                          placeholder="Any additional notes about the customer..."></textarea>
-              </div>
+              <ui-section>
+                <textarea id="notes" formControlName="notes" rows="4" class="input w-full" placeholder="Any additional notes about the customer..."></textarea>
+              </ui-section>
             </div>
             
             <div class="flex items-center justify-end p-6 border-t border-gray-200 dark:border-dark-700 mt-6">
@@ -331,6 +160,21 @@ export class CustomersComponent implements OnInit {
   PlusIcon = Plus;
   XIcon = X;
   UserMinusIcon = UserMinus;
+
+  countryOptions = [
+    { value: '', label: 'Select country' },
+    { value: 'USA', label: 'United States' },
+    { value: 'Canada', label: 'Canada' },
+    { value: 'Mexico', label: 'Mexico' },
+    { value: 'UK', label: 'United Kingdom' },
+    { value: 'Germany', label: 'Germany' },
+    { value: 'France', label: 'France' }
+  ];
+  paymentTermOptions = [
+    { value: 'Net 30', label: 'Net 30' },
+    { value: 'Net 60', label: 'Net 60' },
+    { value: 'Net 90', label: 'Net 90' }
+  ];
 
   constructor() {
     this.customerForm = this.formBuilder.group({

@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { StorageRequest } from './storage-request.model';
 import { LucideAngularModule, Eye, CheckCircle, XCircle, FileText } from 'lucide-angular';
+import { Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-storage-requests-listing',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading4Component],
   template: `
     <!-- Requests List -->
-    <div class="card overflow-hidden">
+    <div class="overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
           <thead class="bg-gray-50 dark:bg-dark-800">
@@ -113,7 +114,7 @@ import { LucideAngularModule, Eye, CheckCircle, XCircle, FileText } from 'lucide
       @if (requests().length === 0) {
         <div class="text-center py-12">
           <lucide-icon [img]="FileTextIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No storage requests</h3>
+          <ui-heading4 class="mt-2">No storage requests</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {{ hasActiveFilters() ? 'No requests match your current filters.' : 'Get started by creating a new storage request.' }}
           </p>

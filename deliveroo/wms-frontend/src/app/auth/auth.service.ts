@@ -39,6 +39,17 @@ export class AuthService {
     return throwError(() => new Error('Invalid credentials')).pipe(delay(500));
   }
 
+  forgotPassword(email: string): Observable<void> {
+    // Note: In a real app, this would trigger a password reset email flow.
+    // Here, we just simulate the process.
+    const userExists = Object.values(MOCK_USERS).some(user => user.email === email);
+    
+    // To prevent email enumeration attacks, the service should always return a successful response.
+    console.log(`Password reset requested for ${email}. User exists: ${userExists}`);
+    
+    return of(undefined).pipe(delay(1000));
+  }
+
   logout(): void {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');

@@ -8,6 +8,7 @@ import { RoleManagementTabUserAssignmentComponent } from './role-management-tab-
 import { RoleManagementTabPermissionMatrixComponent } from './role-management-tab-permission-matrix.component';
 import { RoleManagementTabAuditLogComponent } from './role-management-tab-audit-log.component';
 import { LucideAngularModule, Shield, Users, Plus, Eye } from 'lucide-angular';
+import { Heading1Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-role-management',
@@ -18,14 +19,15 @@ import { LucideAngularModule, Shield, Users, Plus, Eye } from 'lucide-angular';
     RoleManagementTabRolesListComponent,
     RoleManagementTabUserAssignmentComponent,
     RoleManagementTabPermissionMatrixComponent,
-    RoleManagementTabAuditLogComponent
+    RoleManagementTabAuditLogComponent,
+    Heading1Component
 ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Role Management</h1>
+          <ui-heading1>Role Management</ui-heading1>
           <p class="text-gray-600 dark:text-gray-400">Manage roles, permissions, and user assignments</p>
         </div>
         <button (click)="showCreateRoleModal = true" class="btn btn-primary">

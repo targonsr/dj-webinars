@@ -1,27 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { StorageRequestsFiltersService } from './storage-requests-listing-filters.service';
 import { LucideAngularModule, Search } from 'lucide-angular';
+import { DropdownComponent } from '../ui-library/Dropdown.component';
 
 @Component({
   selector: 'app-storage-requests-listing-filters',
   standalone: true,
-  imports: [FormsModule, LucideAngularModule],
+  imports: [FormsModule, LucideAngularModule, DropdownComponent],
   template: `
     <!-- Filters -->
-    <div class="card p-4">
+    <div>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-          <select [value]="filtersService.status()" 
-                  (change)="filtersService.setStatus($any($event.target).value)"
-                  class="input">
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="accepted">Accepted</option>
-            <option value="rejected">Rejected</option>
-          </select>
+          <ui-dropdown label="Status" [options]="statusOptions" [value]="filtersService.status()" (valueChange)="filtersService.setStatus($event)" />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
@@ -69,4 +62,11 @@ export class StorageRequestsListingFiltersComponent {
   SearchIcon = Search;
 
   public filtersService = inject(StorageRequestsFiltersService);
+
+  statusOptions = [
+    { value: '', label: 'All Status' },
+    { value: 'pending', label: 'Pending' },
+    { value: 'accepted', label: 'Accepted' },
+    { value: 'rejected', label: 'Rejected' }
+  ];
 }

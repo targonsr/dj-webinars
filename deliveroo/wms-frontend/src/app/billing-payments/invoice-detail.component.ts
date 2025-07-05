@@ -5,11 +5,12 @@ import { BillingService } from './billing.service';
 import { Invoice, InvoiceItem } from './billing.model';
 import { LucideAngularModule, ArrowLeft, FileText, Calendar, DollarSign, User, Download, Send, Edit } from 'lucide-angular';
 import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
+import { Heading1Component, Heading2Component, Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-invoice-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading1Component, Heading2Component, Heading3Component, Heading4Component],
   template: `
     @if (invoice) {
       <div class="space-y-6">
@@ -20,7 +21,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
               <lucide-icon [img]="ArrowLeftIcon" size="20"></lucide-icon>
             </button>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ invoice.invoiceNumber }}</h1>
+              <ui-heading1>{{ invoice.invoiceNumber }}</ui-heading1>
               <p class="text-gray-600 dark:text-gray-400">Invoice Details</p>
             </div>
             <span [class]="getStatusClass(invoice.status)" 
@@ -49,7 +50,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
           <!-- Invoice Header -->
           <div class="flex justify-between items-start mb-8">
             <div>
-              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">INVOICE</h2>
+              <ui-heading2 class="mb-2">INVOICE</ui-heading2>
               <div class="space-y-1">
                 <p class="text-sm text-gray-600 dark:text-gray-400">Invoice Number: <span class="font-medium text-gray-900 dark:text-white">{{ invoice.invoiceNumber }}</span></p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">Issue Date: <span class="font-medium text-gray-900 dark:text-white">{{ invoice.issueDate | date:'MMM d, y' }}</span></p>
@@ -65,7 +66,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
           <!-- Bill To Section -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div>
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">From:</h3>
+              <ui-heading3 class="mb-3">From:</ui-heading3>
               <div class="space-y-1">
                 <p class="font-medium text-gray-900 dark:text-white">Warehouse Management System</p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">123 Industrial Blvd</p>
@@ -75,7 +76,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
               </div>
             </div>
             <div>
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Bill To:</h3>
+              <ui-heading3 class="mb-3">Bill To:</ui-heading3>
               <div class="space-y-1">
                 <a [routerLink]="['/customers', invoice.customerId]" 
                    class="font-medium text-primary-600 hover:text-primary-500">
@@ -91,7 +92,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
 
           <!-- Invoice Items -->
           <div class="mb-8">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Invoice Items</h3>
+            <ui-heading3 class="mb-4">Invoice Items</ui-heading3>
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
                 <thead class="bg-gray-50 dark:bg-dark-800">
@@ -148,14 +149,14 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
 
           <!-- Payment Information -->
           <div class="mt-8 pt-8 border-t border-gray-200 dark:border-dark-600">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Payment Information</h3>
+            <ui-heading3 class="mb-4">Payment Information</ui-heading3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Terms</h4>
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Terms</p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">Net 30 days</p>
               </div>
               <div>
-                <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Methods</h4>
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Methods</p>
                 <div class="text-sm text-gray-600 dark:text-gray-400">
                   <p>Bank Transfer: Account #123-456-789</p>
                   <p>Check: Payable to "WMS Inc."</p>
@@ -166,7 +167,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
 
           <!-- Notes -->
           <div class="mt-8 pt-8 border-t border-gray-200 dark:border-dark-600">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Notes</h3>
+            <ui-heading3 class="mb-4">Notes</ui-heading3>
             <p class="text-sm text-gray-600 dark:text-gray-400">
               Thank you for your business! Please remit payment within 30 days of the invoice date. 
               For any questions regarding this invoice, please contact our billing department at billing{{'@'}}wms.com.
@@ -178,7 +179,7 @@ import { MOCK_INVOICE_ITEMS } from '../mock/invoice-items.mock';
       <div class="flex items-center justify-center h-64">
         <div class="text-center">
           <lucide-icon [img]="FileTextIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Invoice not found</h3>
+          <ui-heading4 class="mt-2">Invoice not found</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">The requested invoice could not be found.</p>
         </div>
       </div>

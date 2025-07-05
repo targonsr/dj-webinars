@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Dock } from './dock.model';
 import { LucideAngularModule, CheckCircle, Package, AlertTriangle, Lock } from 'lucide-angular';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-dock-listing',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading3Component],
   template: `
     <!-- Dock Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -23,7 +24,7 @@ import { LucideAngularModule, CheckCircle, Package, AlertTriangle, Lock } from '
                 <lucide-icon [img]="getDockIcon(dock.status)" size="24" class="text-current"></lucide-icon>
               </div>
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ dock.name }}</h3>
+                <ui-heading3>{{ dock.name }}</ui-heading3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">{{ dock.type }} dock</p>
               </div>
             </div>

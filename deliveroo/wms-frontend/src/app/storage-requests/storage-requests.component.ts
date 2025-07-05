@@ -9,6 +9,8 @@ import { StorageRequestsListingComponent } from './storage-requests-listing.comp
 import { StorageRequestsFormNewRequestComponent } from './storage-requests-form-new-request.component';
 import { LucideAngularModule, Plus } from 'lucide-angular';
 import { StorageRequestService } from './storage-requests.service';
+import { SectionComponent } from '../ui-library/Section.component';
+import { Heading1Component, SubtitleComponent } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-storage-requests',
@@ -17,15 +19,18 @@ import { StorageRequestService } from './storage-requests.service';
     LucideAngularModule,
     StorageRequestsListingFiltersComponent,
     StorageRequestsListingComponent,
-    StorageRequestsFormNewRequestComponent
-],
+    StorageRequestsFormNewRequestComponent,
+    SectionComponent,
+    Heading1Component,
+    SubtitleComponent
+  ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Storage Requests</h1>
-          <p class="text-gray-600 dark:text-gray-400">Manage storage requests and reservations</p>
+          <ui-heading1>Storage Requests</ui-heading1>
+          <ui-subtitle>Manage and approve storage requests</ui-subtitle>
         </div>
         <button (click)="showNewRequestModal.set(true)" 
                 class="btn btn-primary">
@@ -35,15 +40,19 @@ import { StorageRequestService } from './storage-requests.service';
       </div>
 
       <!-- Filters Component -->
-      <app-storage-requests-listing-filters />
+      <ui-section>
+        <app-storage-requests-listing-filters />
+      </ui-section>
 
       <!-- Listing Component -->
-      <app-storage-requests-listing 
-        [requests]="filtersService.filteredRequests()"
-        [canApprove]="canApprove()"
-        [hasActiveFilters]="filtersService.hasActiveFilters()"
-        (approveRequest)="approveRequest($event)"
-        (rejectRequest)="rejectRequest($event)" />
+      <ui-section>
+        <app-storage-requests-listing 
+          [requests]="filtersService.filteredRequests()"
+          [canApprove]="canApprove()"
+          [hasActiveFilters]="filtersService.hasActiveFilters()"
+          (approveRequest)="approveRequest($event)"
+          (rejectRequest)="rejectRequest($event)" />
+      </ui-section>
 
       <!-- New Request Modal -->
       <app-storage-requests-form-new-request

@@ -4,14 +4,15 @@ import { InventoryItem } from '../inventory/inventory.model';
 import { LucideAngularModule, MapPin } from 'lucide-angular';
 import { CargoLocationHistory } from './cargo.model';
 import { MOCK_CARGO_LOCATION_HISTORY } from '../mock/cargo-location-history.mock';
+import { Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-cargo-detail-location-history',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, Heading4Component],
   template: `
     <div class="p-6">
-      <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Location History</h4>
+      <ui-heading4 class="mb-4">Location History</ui-heading4>
       <div class="space-y-4">
         @for (location of mockLocationHistory; track location.location) {
           <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-700 rounded-lg">

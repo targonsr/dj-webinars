@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { InventoryItem } from '../inventory/inventory.model';
 import { LucideAngularModule, Eye, Edit, Package } from 'lucide-angular';
+import { Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-cargo-listing',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading4Component],
   template: `
     <!-- Cargo Table -->
-    <div class="card overflow-hidden">
+    <div class="overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
           <thead class="bg-gray-50 dark:bg-dark-800">
@@ -99,7 +100,7 @@ import { LucideAngularModule, Eye, Edit, Package } from 'lucide-angular';
       @if (items().length === 0) {
         <div class="text-center py-12">
           <lucide-icon [img]="PackageIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No cargo items found</h3>
+          <ui-heading4 class="mt-2">No cargo items found</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search criteria.</p>
         </div>
       }

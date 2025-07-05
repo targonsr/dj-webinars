@@ -4,6 +4,7 @@ import { WarehouseOperationsZoneManagementComponent } from './warehouse-operatio
 import { WarehouseOperationsDockSchedulingComponent } from './warehouse-operations-dock-scheduling.component';
 import { WarehouseOperationsTaskAssignmentComponent } from './warehouse-operations-task-assignment.component';
 import { LucideAngularModule, Cog, MapPin, Calendar, Users } from 'lucide-angular';
+import { Heading1Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-warehouse-operations',
@@ -12,13 +13,14 @@ import { LucideAngularModule, Cog, MapPin, Calendar, Users } from 'lucide-angula
     LucideAngularModule,
     WarehouseOperationsZoneManagementComponent,
     WarehouseOperationsDockSchedulingComponent,
-    WarehouseOperationsTaskAssignmentComponent
+    WarehouseOperationsTaskAssignmentComponent,
+    Heading1Component
 ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Warehouse Operations</h1>
+        <ui-heading1>Warehouse Operations</ui-heading1>
         <p class="text-gray-600 dark:text-gray-400">Configure and monitor warehouse zones, dock scheduling, and task assignments</p>
       </div>
 

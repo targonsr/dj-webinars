@@ -6,16 +6,17 @@ import { AuthService } from '../auth/auth.service';
 import { DashboardStats, Task } from './dashboard.model';
 import { UserProfile } from '../user-management/user.model';
 import { StorageRequestsFiltersService } from '../storage-requests/storage-requests-listing-filters.service';
+import { Heading1Component, Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, Heading1Component, Heading3Component],
   template: `
     <div class="space-y-6">
       <!-- Welcome Section -->
       <div class="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg p-6 text-white">
-        <h1 class="text-2xl font-bold mb-2">Welcome back, {{ currentUser?.name }}!</h1>
+        <ui-heading1>Welcome back, {{ currentUser?.name }}!</ui-heading1>
         <p class="text-primary-100">{{ currentUser?.role?.[0]?.roleName || 'N/A' }} • {{ currentUser?.warehouseAssignments?.[0]?.warehouseName || 'N/A' }}</p>
       </div>
 
@@ -92,7 +93,7 @@ import { StorageRequestsFiltersService } from '../storage-requests/storage-reque
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Today's Activity -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Today's Activity</h3>
+          <ui-heading3>Today's Activity</ui-heading3>
           <div class="space-y-4">
             <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
               <div class="flex items-center">
@@ -135,7 +136,7 @@ import { StorageRequestsFiltersService } from '../storage-requests/storage-reque
         <!-- My Tasks -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white">My Tasks</h3>
+            <ui-heading3>My Tasks</ui-heading3>
             <a routerLink="/tasks" class="text-sm text-primary-600 hover:text-primary-500">View all</a>
           </div>
           <div class="space-y-3">
@@ -173,7 +174,7 @@ import { StorageRequestsFiltersService } from '../storage-requests/storage-reque
 
       <!-- Quick Actions -->
       <div class="card p-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+        <ui-heading3>Quick Actions</ui-heading3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <a routerLink="/storage-requests/new" 
              class="flex items-center p-4 border-2 border-dashed border-gray-300 dark:border-dark-600 rounded-lg hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">

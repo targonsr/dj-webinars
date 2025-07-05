@@ -4,15 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Calendar, Truck, Clock, Plus, Eye, Edit } from 'lucide-angular';
 import { DockAppointment } from './warehouse-operations.model';
 import { WarehouseOperationsService } from './warehouse-operations.service';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-warehouse-operations-dock-scheduling',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, Heading3Component],
   template: `
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Dock Scheduling</h3>
+        <ui-heading3>Dock Scheduling</ui-heading3>
         <button class="btn btn-primary">
           <lucide-icon [img]="PlusIcon" size="18" class="mr-2"></lucide-icon>
           Schedule Appointment

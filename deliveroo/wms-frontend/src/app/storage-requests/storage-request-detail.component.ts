@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StorageRequest } from './storage-request.model';
 import { LucideAngularModule, ArrowLeft, Package, User, Calendar, MapPin, DollarSign, FileText, CheckCircle, XCircle, Clock } from 'lucide-angular';
 import { StorageRequestService } from './storage-requests.service';
+import { Heading1Component, SubtitleComponent, Heading3Component, Heading4Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-storage-request-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, Heading1Component, SubtitleComponent, Heading3Component, Heading4Component],
   template: `
     @if (storageRequest) {
       <div class="space-y-6">
@@ -19,8 +20,8 @@ import { StorageRequestService } from './storage-requests.service';
               <lucide-icon [img]="ArrowLeftIcon" size="20"></lucide-icon>
             </button>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Storage Request #{{ storageRequest.id }}</h1>
-              <p class="text-gray-600 dark:text-gray-400">Request Details</p>
+              <ui-heading1>Storage Request #{{ storageRequest.id }}</ui-heading1>
+              <ui-subtitle>Request Details</ui-subtitle>
             </div>
             <span [class]="getStatusClass(storageRequest.status)"
               class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium">
@@ -52,10 +53,10 @@ import { StorageRequestService } from './storage-requests.service';
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Customer Information -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="UserIcon" size="20" class="mr-2"></lucide-icon>
-              Customer Information
-            </h3>
+                    <ui-heading3 class="mb-4">
+          <lucide-icon [img]="UserIcon" size="20"></lucide-icon>
+          Customer Information
+        </ui-heading3>
             <div class="space-y-4">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
@@ -76,10 +77,10 @@ import { StorageRequestService } from './storage-requests.service';
           </div>
           <!-- Request Timeline -->
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="CalendarIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3 class="mb-4">
+              <lucide-icon [img]="CalendarIcon" size="20"></lucide-icon>
               Request Timeline
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Requested Entry Date</label>
@@ -102,10 +103,10 @@ import { StorageRequestService } from './storage-requests.service';
         </div>
         <!-- Cargo Details -->
         <div class="card p-6">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-            <lucide-icon [img]="PackageIcon" size="20" class="mr-2"></lucide-icon>
+          <ui-heading3 class="mb-4">
+            <lucide-icon [img]="PackageIcon" size="20"></lucide-icon>
             Cargo Details
-          </h3>
+          </ui-heading3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="space-y-4">
               <div>
@@ -184,10 +185,10 @@ import { StorageRequestService } from './storage-requests.service';
         <!-- Decision Information -->
         @if (storageRequest.status !== 'pending') {
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="getDecisionIcon()" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3 class="mb-4">
+              <lucide-icon [img]="getDecisionIcon()" size="20"></lucide-icon>
               Decision Information
-            </h3>
+            </ui-heading3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Decision</label>
@@ -214,10 +215,10 @@ import { StorageRequestService } from './storage-requests.service';
         <!-- Reservations -->
         @if (storageRequest.reservations.length > 0) {
           <div class="card p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <lucide-icon [img]="MapPinIcon" size="20" class="mr-2"></lucide-icon>
+            <ui-heading3 class="mb-4">
+              <lucide-icon [img]="MapPinIcon" size="20"></lucide-icon>
               Storage Reservations
-            </h3>
+            </ui-heading3>
             <div class="space-y-4">
               @for (reservation of storageRequest.reservations; track reservation) {
                 <div
@@ -259,7 +260,7 @@ import { StorageRequestService } from './storage-requests.service';
       <div class="flex items-center justify-center h-64">
         <div class="text-center">
           <lucide-icon [img]="FileTextIcon" size="48" class="mx-auto text-gray-400 mb-4"></lucide-icon>
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Storage request not found</h3>
+          <ui-heading4 class="mt-2">Storage request not found</ui-heading4>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">The requested storage request could not be found.</p>
         </div>
       </div>

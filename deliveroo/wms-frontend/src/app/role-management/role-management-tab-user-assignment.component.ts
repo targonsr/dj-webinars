@@ -2,15 +2,16 @@ import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Employee } from '../employees/employees.interfaces';
 import { LucideAngularModule, UserPlus, UserMinus } from 'lucide-angular';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-role-management-tab-user-assignment',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, Heading3Component],
   template: `
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">User Role Assignments</h3>
+        <ui-heading3>User Role Assignments</ui-heading3>
         <button (click)="onShowAssignRoleModal()" class="btn btn-primary">
           <lucide-icon [img]="UserPlusIcon" size="18" class="mr-2"></lucide-icon>
           Assign Role

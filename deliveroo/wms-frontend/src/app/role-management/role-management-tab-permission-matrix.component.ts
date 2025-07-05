@@ -2,14 +2,15 @@ import { Component, input, output } from '@angular/core';
 
 import { Role, Permission } from '../employees/employees.interfaces';
 import { LucideAngularModule } from 'lucide-angular';
+import { Heading3Component } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-role-management-tab-permission-matrix',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, Heading3Component],
   template: `
     <div class="p-6">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6">Permission Matrix</h3>
+              <ui-heading3 class="mb-6">Permission Matrix</ui-heading3>
       
       <div class="overflow-x-auto">
         <table class="min-w-full border border-gray-200 dark:border-dark-700">

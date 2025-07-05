@@ -9,6 +9,8 @@ import { CargoListingFiltersComponent } from './cargo-listing-filters.component'
 import { CargoListingComponent } from './cargo-listing.component';
 import { CargoService } from './cargo.service';
 import { WarehouseService } from '../warehouse/warehouse.service';
+import { SectionComponent } from '../ui-library/Section.component';
+import { Heading1Component, SubtitleComponent } from '../ui-library/Typography/Typography.component';
 
 @Component({
   selector: 'app-cargo-management',
@@ -17,15 +19,18 @@ import { WarehouseService } from '../warehouse/warehouse.service';
     LucideAngularModule,
     CargoManagementStatsComponent,
     CargoListingFiltersComponent,
-    CargoListingComponent
-],
+    CargoListingComponent,
+    SectionComponent,
+    Heading1Component,
+    SubtitleComponent
+  ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Cargo Management</h1>
-          <p class="text-gray-600 dark:text-gray-400">Track and manage warehouse cargo</p>
+          <ui-heading1>Cargo Management</ui-heading1>
+          <ui-subtitle>Track and manage warehouse cargo</ui-subtitle>
         </div>
         <div class="flex space-x-3">
           <button (click)="showAdjustmentModal = true" class="btn btn-secondary">
@@ -43,14 +48,18 @@ import { WarehouseService } from '../warehouse/warehouse.service';
       <app-cargo-management-stats [overview]="overview" />
 
       <!-- Filters Component -->
-      <app-cargo-listing-filters 
-        [categories]="categories"
-        [zones]="zones" />
-
+      <ui-section>
+         <app-cargo-listing-filters 
+         [categories]="categories"
+         [zones]="zones" />
+      </ui-section>
+      
       <!-- Listing Component -->
-      <app-cargo-listing 
-        [items]="filteredItems"
-        (adjustItem)="adjustItem($event)" />
+      <ui-section>
+        <app-cargo-listing 
+          [items]="filteredItems"
+          (adjustItem)="adjustItem($event)" />
+      </ui-section>
     </div>
   `
 })
