@@ -1,8 +1,8 @@
-import { Meta, StoryFn } from '@storybook/vue3'
+import type { Meta, StoryFn } from '@storybook/vue3'
 import Pagination from './Pagination.vue'
 
 export default {
-  title: 'UI Library/Datatable/Pagination',
+  title: 'UI Library/Pagination',
   component: Pagination,
   argTypes: {
     pagination: { control: 'object', description: 'Pagination data object' },
