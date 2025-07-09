@@ -2,7 +2,7 @@ import { Injectable, signal, WritableSignal, computed } from '@angular/core';
 import { of, throwError, Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AuthResponse, LoginCredentials } from './auth.model';
-import { UserProfile } from '../user-management/user.model';
+import { UserProfile, UserRole } from '../features/user-management/user.model';
 import { MOCK_USERS } from '../mock/users.mock';
 
 @Injectable({
@@ -60,7 +60,7 @@ export class AuthService {
 
   hasRole(roleName: string): boolean {
     const user = this.currentUser();
-    return user?.role.some(role => role.roleName === roleName) || false;
+    return user?.role.some((role) => role.roleName === roleName) || false;
   }
 
   hasPermission(resource: string, action: string): boolean {

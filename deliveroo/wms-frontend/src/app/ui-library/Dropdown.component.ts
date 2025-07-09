@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
       <select 
         [value]="value()" 
         (change)="onSelectionChange($event)"
-        class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 cursor-pointer hover:border-gray-400 dark:hover:border-gray-500">
+        class="w-full px-3 py-2 h-10 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 cursor-pointer hover:border-gray-400 dark:hover:border-gray-500">
         @for (option of options(); track option.value) {
           <option [value]="option.value" class="py-2">
             {{ option.label }}

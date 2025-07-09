@@ -162,16 +162,16 @@ import { Heading3Component } from './ui-library/Typography/Typography.component'
               }
             </a>
 
-            <a routerLink="/customers" 
-               [class.active]="isRouteActive('/customers')"
+            <a routerLink="/contractors"
+               [class.active]="isRouteActive('/contractors')"
                class="sidebar-nav-item group"
                [class.justify-center]="sidebarCollapsed">
               <lucide-icon [img]="UsersIcon" size="20" class="flex-shrink-0"></lucide-icon>
               @if (!sidebarCollapsed) {
-                <span class="ml-3">Customers</span>
+                <span class="ml-3">Contractors</span>
               }
               @if (sidebarCollapsed) {
-                <div class="tooltip">Customers</div>
+                <div class="tooltip">Contractors</div>
               }
             </a>
 
