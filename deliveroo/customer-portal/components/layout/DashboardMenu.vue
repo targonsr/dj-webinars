@@ -20,7 +20,10 @@
               </TransitionChild>
               <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4">
                 <div class="flex h-16 shrink-0 items-center">
-                  <AppLogo />
+                  <NuxtLink to="/dashboard" class="flex items-center gap-2">
+                    <AppLogo size="h-8" />
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">Customer Portal</span>
+                  </NuxtLink>
                 </div>
                 <nav class="flex flex-1 flex-col">
                   <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -58,12 +61,10 @@
     ]">
       <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 pb-4">
         <div class="flex h-16 shrink-0 items-center justify-center">
-          <div v-if="!collapsed">
-            <AppLogo />
-          </div>
-          <div v-else class="w-8 h-8 bg-success-600 rounded-lg flex items-center justify-center">
-            <TruckIcon class="w-5 h-5 text-white" />
-          </div>
+          <NuxtLink to="/dashboard" class="flex items-center gap-x-2">
+            <AppLogo size="h-8" />
+            <span v-if="!collapsed" class="text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Customer Portal</span>
+          </NuxtLink>
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">

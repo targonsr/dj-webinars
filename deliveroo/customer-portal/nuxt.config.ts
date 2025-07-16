@@ -4,7 +4,19 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@pinia/nuxt', '@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/storybook'],
+  modules: [
+    '@nuxt/ui',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    '@artmizu/nuxt-prometheus',
+    'nuxt3-winston-log',
+    '@nuxtjs/storybook',
+  ],
+
+  nuxt3WinstonLog: {
+    maxSize: "1024m",
+    maxFiles: "14d",
+  },
   
   // Component auto-import configuration
   components: [

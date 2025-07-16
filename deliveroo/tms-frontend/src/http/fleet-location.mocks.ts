@@ -1,24 +1,22 @@
-import { randomCoordinateCentralEurope } from "./fleet-coordinates.mocks";
-import { mockTrucks } from "./vehicles.mocks";
-import { Truck } from "./vehicles.model";
+import { sampleVehicles } from "../model/vehicles/vehicles.mocks";
+import { Vehicle } from "../model/vehicles/vehicle.types";
 
 export type FleetLocation = {
-  truckId: Truck['id'];
+  truckId: string;
   coordinates: {
     latitude: number;
     longitude: number;
   }
-  truck: Truck;
+  truck: Vehicle;
 }
 
-export const mockFleetLocation: FleetLocation[] = mockTrucks.map(truck => {
-  const coords = randomCoordinateCentralEurope();
+export const mockFleetLocation: FleetLocation[] = sampleVehicles.map(vehicle => {
   return {
-    truckId: truck.id,
+    truckId: vehicle.id,
     coordinates: {
-      latitude: coords.latitude,
-      longitude: coords.longitude,
+      latitude: vehicle.currentLocation?.lat ?? 0,
+      longitude: vehicle.currentLocation?.lng ?? 0,
     },
-    truck: truck,
+    truck: vehicle,
   }
 });

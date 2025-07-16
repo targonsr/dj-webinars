@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Truck } from 'lucide-react';
 import {
@@ -20,13 +19,13 @@ import { Button } from '@/components/ui/button';
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: '📊' },
   { title: 'Transportation Orders', url: '/orders', icon: '📦' },
-  { title: 'Fleet Management', url: '/trucks', icon: '🚛' },
-  { title: 'Urgent', url: '/urgent', icon: '🚨' },
   { title: 'Shipments', url: '/shipments', icon: '🚚' },
+  { title: 'Route Planner', url: '/routes', icon: '🗺️' },
+  { title: 'Fleet', url: '/vehicles', icon: '🚛' },
   { title: 'Drivers', url: '/drivers', icon: '👨‍💼' },
-  { title: 'Expenses', url: '/expenses', icon: '💷' },
   { title: 'Payments', url: '/payments', icon: '💳' },
-  { title: 'Vehicle Fleet', url: '/vehicle-fleet', icon: '🗺️' },
+  { title: 'Expenses', url: '/expenses', icon: '💷' },
+  { title: 'Documents', url: '/documents', icon: '📄' },
   { title: 'Transit Incidents', url: '/incidents', icon: '⚠️' },
   { title: 'Customer Claims', url: '/claims', icon: '📋' },
 ];
@@ -35,6 +34,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const isCollapsed = state === 'collapsed';
 
   const handleLogout = () => {
@@ -46,8 +46,14 @@ export function AppSidebar() {
     navigate('/dashboard');
   };
 
-  const getNavClass = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-blue-100 text-blue-900 font-medium" : "hover:bg-gray-100";
+  const getNavClass = (path: string) => {
+    const { pathname } = location;
+    const isActive =
+      path === '/dashboard' ? pathname === path : pathname.startsWith(path);
+    return isActive
+      ? 'bg-slate-100 text-slate-900 font-medium'
+      : 'hover:bg-gray-100';
+  };
 
   return (
     <Sidebar className={isCollapsed ? "w-16" : "w-64"} collapsible="icon">
@@ -87,7 +93,7 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink to={item.url} end className={getNavClass}>
+                    <NavLink to={item.url} className={getNavClass(item.url)}>
                       <span className="text-lg mr-3">{item.icon}</span>
                       {!isCollapsed && <span>{item.title}</span>}
                     </NavLink>

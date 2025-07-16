@@ -7,15 +7,25 @@ import { ArrowLeft, MapPin, Clock } from 'lucide-react';
 import { useShipmentDetailsQuery } from '@/http/shipments.queries';
 import StaticMapPlaceholder from '../../components/StaticMapPlaceholder';
 import { FleetMap } from '../vehicles/FleetMap';
-import { randomCoordinateCentralEurope } from '@/http/fleet-coordinates.mocks';
+import { vehicles } from '@/model/vehicles/vehicles.mocks';
+import { sampleShipments } from '@/model/shipments/shipments.mocks';
 import { generateShipmentRoutePDF } from '@/lib/shipmentRoutePdfGenerator'
+import { useDriversQuery } from '@/http/drivers.queries';
+import { Link } from 'react-router-dom';
 
 const ShipmentTracking = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: shipment, isLoading } = useShipmentDetailsQuery(id || '');
+  const { data: drivers = [] } = useDriversQuery();
 
-  const { latitude, longitude } = randomCoordinateCentralEurope();
+  const currentShipment = sampleShipments.find(s => s.id === id);
+  const vehicleId = currentShipment?.route.vehicle.id;
+  const vehicle = vehicles.find(v => v.id === vehicleId);
+
+  const latitude = vehicle?.currentLocation?.lat ?? 52.2297; // Default to Warsaw
+  const longitude = vehicle?.currentLocation?.lng ?? 21.0122;
+  const driver = drivers.find(d => d.name === shipment?.driver);
 
   const trackingEvents = [
     {
@@ -86,7 +96,13 @@ const ShipmentTracking = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Driver</p>
-              <p className="font-medium">{shipment.driver}</p>
+              {driver ? (
+                <Link to={`/drivers/${driver.id}/details`} className="font-medium text-blue-600 hover:underline">
+                  {shipment.driver}
+                </Link>
+              ) : (
+                <p className="font-medium">{shipment.driver}</p>
+              )}
             </div>
             <div>
               <p className="text-sm text-gray-600">From</p>

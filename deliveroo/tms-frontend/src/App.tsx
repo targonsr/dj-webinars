@@ -9,18 +9,20 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Layout from "@/components/layout/Layout";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
+import { RoutePlanner } from '@/pages/route-planner/RoutePlanner';
 import Orders from "@/pages/orders/Orders";
 import OrderDetails from "@/pages/orders/OrderDetails";
 import NewOrderForm from "@/pages/orders/NewOrderForm";
 import IncidentReportForm from "@/pages/Incident-new";
 import CustomerClaimForm from "@/pages/Claim-new";
-import Shipments from "@/pages/shipments/Shipments";
 import ShipmentTracking from "@/pages/shipments/ShipmentTracking";
-import Drivers from "@/pages/drivers/Drivers";
-import DriverDetails from "@/pages/drivers/DriverDetails";
-import Trucks from "@/pages/vehicles/Trucks";
+import { DriversPage } from "@/pages/DriversPage";
+import { DriverDetailsPage } from "@/pages/DriverDetailsPage";
+import { DriverCalendarPage } from "@/pages/DriverCalendarPage";
+import { VehicleMaintenancePage } from "@/pages/VehicleMaintenancePage";
+import { DocumentsPage } from "@/pages/DocumentsPage";
 import Payments from "@/pages/Payments";
-import TrackFleet from "@/pages/vehicles/TruckFleet";
+import Vehicles from "@/pages/Vehicles";
 import Incidents from "@/pages/Incidents";
 import Claims from "@/pages/Claims";
 import Expenses from "@/pages/Expenses";
@@ -55,6 +57,13 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/routes" element={
+              <ProtectedRoute>
+                <Layout>
+                  <RoutePlanner />
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/orders" element={
               <ProtectedRoute>
                 <Layout>
@@ -76,13 +85,6 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
-            <Route path="/shipments" element={
-              <ProtectedRoute>
-                <Layout>
-                  <Shipments />
-                </Layout>
-              </ProtectedRoute>
-            } />
             <Route path="/shipments/:id/track" element={
               <ProtectedRoute>
                 <Layout>
@@ -90,24 +92,45 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <Layout>
+                  <DocumentsPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/drivers" element={
               <ProtectedRoute>
                 <Layout>
-                  <Drivers />
+                  <DriversPage />
                 </Layout>
               </ProtectedRoute>
             } />
-            <Route path="/drivers/:id" element={
+            <Route path="/drivers/:id/details" element={
               <ProtectedRoute>
                 <Layout>
-                  <DriverDetails />
+                  <DriverDetailsPage />
                 </Layout>
               </ProtectedRoute>
             } />
-            <Route path="/trucks" element={
+            <Route path="/drivers/:id/calendar" element={
               <ProtectedRoute>
                 <Layout>
-                  <Trucks />
+                  <DriverCalendarPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/vehicles" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Vehicles />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/vehicles/:id/maintenance" element={
+              <ProtectedRoute>
+                <Layout>
+                  <VehicleMaintenancePage />
                 </Layout>
               </ProtectedRoute>
             } />
@@ -143,13 +166,6 @@ const App = () => (
               <ProtectedRoute>
                 <Layout>
                   <Payments />
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/vehicle-fleet" element={
-              <ProtectedRoute>
-                <Layout>
-                  <TrackFleet />
                 </Layout>
               </ProtectedRoute>
             } />

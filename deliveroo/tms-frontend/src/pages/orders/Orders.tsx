@@ -8,13 +8,12 @@ import {
   IncomingRequestsTab,
   InTransitTab,
   DeliveredTab,
-  PaymentsTab,
+  ShipmentsTab,
 } from './transportation-orders';
 import {
   mockIncomingRequests,
   mockInTransitOrders,
   mockDeliveredOrders,
-  mockPayments,
 } from '@/http/orders.mocks';
 
 const Orders = () => {
@@ -55,17 +54,6 @@ const Orders = () => {
     canceled: orders.filter(order => order.status.toLowerCase() === 'canceled'),
   };
 
-  const getPaymentStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'paid': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'overdue': return 'bg-red-100 text-red-800';
-      case 'partially paid': return 'bg-orange-100 text-orange-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   if (isLoading) {
     return <div className="flex items-center justify-center h-64">Loading orders...</div>;
   }
@@ -91,7 +79,7 @@ const Orders = () => {
           <TabsTrigger value="incoming">📩 Incoming Requests</TabsTrigger>
           <TabsTrigger value="transit">🚚 In Transit</TabsTrigger>
           <TabsTrigger value="delivered">📦 Delivered</TabsTrigger>
-          <TabsTrigger value="payments">💵 Payments</TabsTrigger>
+          <TabsTrigger value="shipments">🚚 Shipments</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -115,11 +103,8 @@ const Orders = () => {
           <DeliveredTab deliveredOrders={mockDeliveredOrders} />
         </TabsContent>
 
-        <TabsContent value="payments" className="space-y-6">
-          <PaymentsTab
-            paymentsData={mockPayments}
-            getPaymentStatusColor={getPaymentStatusColor}
-          />
+        <TabsContent value="shipments" className="space-y-6">
+          <ShipmentsTab />
         </TabsContent>
       </Tabs>
     </div>
