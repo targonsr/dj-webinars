@@ -4,8 +4,8 @@ let currentDomain = null;
 let startTime = null;
 let isActive = false;
 
-let isBlocking = true;
-let blockedWebsites = [];
+// let isBlocking = true;
+// let blockedWebsites = [];
 
 // Initialize when extension starts
 chrome.runtime.onStartup.addListener(initializeExtension);
@@ -14,6 +14,7 @@ chrome.runtime.onInstalled.addListener(initializeExtension);
 function initializeExtension() {
     console.log('Developer Distractor Destroyer initialized');
     loadSettingsFromStorage();
+    console.log('initialize')
 
     // Initialize storage
     chrome.storage.local.get(['timeData', 'currentSessionTime', 'gotchaStats'], function(result) {
@@ -29,13 +30,10 @@ function initializeExtension() {
     });
 
     // Start tracking current tab
-    startContinuousTracking();
-    setInterval(monitorIfBlocked, 3000);
-}
-
-function startContinuousTracking() {
-    console.log('Continuous time tracking started.');
-    setInterval(trackActiveTab, 1000);
+    // startContinuousTracking();
+    // setInterval(monitorIfBlocked, 3000);
+    chrome.alarms.create('timeTracker', { periodInMinutes: 1 / 60 }); // 1 second
+    chrome.alarms.create('blocker', { periodInMinutes: 3 / 60 }); // 3 seconds
 }
 
 function trackActiveTab() {
@@ -85,96 +83,120 @@ function updateTime(domain) {
 }
 
 function loadSettingsFromStorage() {
+    console.log('loadSettingsFromStorage')
     chrome.storage.local.get(['isBlocking', 'blockedWebsites'], (result) => {
-        isBlocking = result.isBlocking === undefined ? true : result.isBlocking;
-        blockedWebsites = result.blockedWebsites || [];
+        if (result.isBlocking === undefined) {
+            chrome.storage.local.set({ isBlocking: true });
+        }
+        if (result.blockedWebsites === undefined) {
+            chrome.storage.local.set({ blockedWebsites: [] });
+        }
         updateIconBadge();
     });
 }
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
+    console.log('storage changed')
     if (changes.isBlocking) {
-        isBlocking = changes.isBlocking.newValue;
+        // isBlocking = changes.isBlocking.newValue;
         updateIconBadge();
     }
-    if (changes.blockedWebsites) {
-        blockedWebsites = changes.blockedWebsites.newValue || [];
-    }
+    // if (changes.blockedWebsites) {
+    //     blockedWebsites = changes.blockedWebsites.newValue || [];
+    // }
 });
 
 function updateIconBadge() {
-    if (isBlocking) {
-        chrome.action.setBadgeText({ text: 'ON' });
-        chrome.action.setBadgeBackgroundColor({ color: '#d93025' }); // Red
-    } else {
-        chrome.action.setBadgeText({ text: '' });
-    }
+    chrome.storage.local.get('isBlocking', (result) => {
+        const isBlocking = result.isBlocking === undefined ? true : result.isBlocking;
+        if (isBlocking) {
+            chrome.action.setBadgeText({ text: 'ON' });
+            chrome.action.setBadgeBackgroundColor({ color: '#d93025' }); // Red
+        } else {
+            chrome.action.setBadgeText({ text: '' });
+        }
+    });
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (!isBlocking || !changeInfo.url) {
+    console.log('tabs onUpdated', { changeInfo, tab })
+
+    if (!changeInfo.url) {
         return;
     }
 
-    const url = new URL(changeInfo.url);
-    const domain = url.hostname;
+    chrome.storage.local.get(['isBlocking', 'blockedWebsites'], (result) => {
+        const isBlocking = result.isBlocking === undefined ? true : result.isBlocking;
+        const blockedWebsites = result.blockedWebsites || [];
 
-    const isBlocked = blockedWebsites.some(blockedSite => {
-        if (blockedSite.startsWith('*.')) {
-            return domain.endsWith(blockedSite.substring(2));
+        if (!isBlocking) {
+            return;
         }
-        return domain === blockedSite;
-    });
 
-    if (isBlocked) {
-        chrome.tabs.update(tabId, { url: chrome.runtime.getURL('blocked.html') });
-        
-        chrome.storage.local.get('gotchaStats', (result) => {
-            const stats = result.gotchaStats || {};
-            stats[domain] = (stats[domain] || 0) + 1;
-            chrome.storage.local.set({ gotchaStats: stats });
+        const url = new URL(changeInfo.url);
+        const domain = url.hostname;
+
+        const isBlocked = blockedWebsites.some(blockedSite => {
+            if (blockedSite.startsWith('*.')) {
+                return domain.endsWith(blockedSite.substring(2));
+            }
+            return domain === blockedSite;
         });
-    }
+
+        if (isBlocked) {
+            chrome.tabs.update(tabId, { url: chrome.runtime.getURL('blocked.html') });
+            
+            chrome.storage.local.get('gotchaStats', (result) => {
+                const stats = result.gotchaStats || {};
+                stats[domain] = (stats[domain] || 0) + 1;
+                chrome.storage.local.set({ gotchaStats: stats });
+            });
+        }
+    });
 });
 
 function monitorIfBlocked() {
-    if (!isBlocking) {
-        return;
-    }
-
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (!tabs || tabs.length === 0 || !tabs[0].url) {
+    chrome.storage.local.get(['isBlocking', 'blockedWebsites'], (result) => {
+        const isBlocking = result.isBlocking === undefined ? true : result.isBlocking;
+        const blockedWebsites = result.blockedWebsites || [];
+        if (!isBlocking) {
             return;
         }
 
-        const tab = tabs[0];
-        const blockedPageUrl = chrome.runtime.getURL('blocked.html');
-        if (tab.url.startsWith(blockedPageUrl)) {
-            return;
-        }
-
-        try {
-            const url = new URL(tab.url);
-            const domain = url.hostname;
-
-            const isBlocked = blockedWebsites.some(blockedSite => {
-                if (blockedSite.startsWith('*.')) {
-                    return domain.endsWith(blockedSite.substring(2));
-                }
-                return domain === blockedSite;
-            });
-
-            if (isBlocked) {
-                chrome.tabs.update(tab.id, { url: blockedPageUrl });
-                chrome.storage.local.get('gotchaStats', (result) => {
-                    const stats = result.gotchaStats || {};
-                    stats[domain] = (stats[domain] || 0) + 1;
-                    chrome.storage.local.set({ gotchaStats: stats });
-                });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (!tabs || tabs.length === 0 || !tabs[0].url) {
+                return;
             }
-        } catch (error) {
-            // Ignore invalid URLs
-        }
+
+            const tab = tabs[0];
+            const blockedPageUrl = chrome.runtime.getURL('blocked.html');
+            if (tab.url.startsWith(blockedPageUrl)) {
+                return;
+            }
+
+            try {
+                const url = new URL(tab.url);
+                const domain = url.hostname;
+
+                const isBlocked = blockedWebsites.some(blockedSite => {
+                    if (blockedSite.startsWith('*.')) {
+                        return domain.endsWith(blockedSite.substring(2));
+                    }
+                    return domain === blockedSite;
+                });
+
+                if (isBlocked) {
+                    chrome.tabs.update(tab.id, { url: blockedPageUrl });
+                    chrome.storage.local.get('gotchaStats', (result) => {
+                        const stats = result.gotchaStats || {};
+                        stats[domain] = (stats[domain] || 0) + 1;
+                        chrome.storage.local.set({ gotchaStats: stats });
+                    });
+                }
+            } catch (error) {
+                // Ignore invalid URLs
+            }
+        });
     });
 }
 
@@ -210,6 +232,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             }
         });
         return true;
+    }
+});
+
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === 'timeTracker') {
+        trackActiveTab();
+    } else if (alarm.name === 'blocker') {
+        monitorIfBlocked();
     }
 });
 

@@ -62,6 +62,20 @@ function displayStats() {
         });
     }
 
+    function removeStatEntry(statType, siteToRemove) {
+        chrome.storage.local.get([statType], (result) => {
+            const stats = result[statType];
+            if (stats && stats[siteToRemove]) {
+                delete stats[siteToRemove];
+                let dataToSet = {};
+                dataToSet[statType] = stats;
+                chrome.storage.local.set(dataToSet, () => {
+                    updateStats();
+                });
+            }
+        });
+    }
+
     function createStatItem(site, value, chart, listElement) {
         const statItem = document.createElement('div');
         statItem.className = 'stat-item';
@@ -77,11 +91,29 @@ function displayStats() {
         const siteText = document.createElement('span');
         siteText.textContent = site;
 
+        const valueContainer = document.createElement('div');
+        valueContainer.className = 'value-container';
+
         const valueText = document.createElement('span');
         valueText.textContent = value;
 
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'delete-stat-btn';
+        deleteBtn.textContent = '❌';
+
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const statType = listElement.id === 'statsList' ? 'timeData' : 'gotchaStats';
+            if (confirm(`Are you sure you want to delete stats for "${site}"?`)) {
+                removeStatEntry(statType, site);
+            }
+        });
+
+        valueContainer.appendChild(valueText);
+        valueContainer.appendChild(deleteBtn);
+
         statItem.appendChild(siteText);
-        statItem.appendChild(valueText);
+        statItem.appendChild(valueContainer);
 
         statItem.addEventListener('click', () => {
             if (!chart) return;

@@ -34,8 +34,8 @@
         }
 
         .header-icon {
-            height: 80px;
-            width: 80px;
+            height: 120px;
+            width: 120px;
             margin-bottom: 20px;
             animation: pulse 2s infinite;
         }
@@ -48,46 +48,37 @@
         }
 
         h2 {
-            font-size: 24px;
+            font-size: 30px;
             margin: 0 0 30px 0;
             font-weight: 400;
             opacity: 0.9;
         }
 
-        .message {
+        #quote-container {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 30px;
+            margin-top: 30px;
+        }
+
+        .quote {
+            font-size: 22px;
+            font-style: italic;
+            line-height: 1.5;
+            margin: 20px auto;
+            max-width: 90%;
+        }
+        
+        .author {
             font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        .tips {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: left;
-        }
-
-        .tips h3 {
-            margin: 0 0 15px 0;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .tip-item {
-            margin: 12px 0;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tip-item:last-child {
-            border-bottom: none;
+            font-weight: bold;
+            text-align: right;
+            width: 80%;
+            margin: 15px auto 0 auto;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
 
@@ -100,34 +91,11 @@
     <div id="blockedContainer" class="container">
         <img src="icon.png" alt="icon" class="header-icon" />
         <h1>Site Blocked</h1>
-        <h2>Stay Focused & Productive</h2>
+        <h2>Stay focused & productive <br /> - or consider taking a break.</h2>
 
-        <div class="message">
-            This website has been blocked to help you maintain focus and productivity. 
-            Use this time to work on your important tasks!
-        </div>
-
-        <div class="quote">
-            "The key is not to prioritize what's on your schedule, but to schedule your priorities."
-        </div>
-
-        <div class="tips">
-            <h3>💡 Productivity Tips</h3>
-            <div class="tip-item">
-                <strong>🎯 Focus on one task at a time</strong> - Multitasking reduces productivity by up to 40%
-            </div>
-            <div class="tip-item">
-                <strong>⏰ Use the Pomodoro Technique</strong> - Work for 25 minutes, then take a 5-minute break
-            </div>
-            <div class="tip-item">
-                <strong>📝 Make a to-do list</strong> - Write down 3 most important tasks for today
-            </div>
-            <div class="tip-item">
-                <strong>🧘 Take deep breaths</strong> - A few minutes of mindfulness can boost your focus
-            </div>
-            <div class="tip-item">
-                <strong>🚶 Take a short walk</strong> - Physical activity can improve mental clarity
-            </div>
+        <div id="quote-container">
+            <div id="quote" class="quote"></div>
+            <div id="author" class="author"></div>
         </div>
     </div>
 
