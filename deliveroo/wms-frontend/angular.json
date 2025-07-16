@@ -28,7 +28,8 @@
           },
           "options": {
             "assets": [
-              "src/favicon.png"
+              "src/favicon.png",
+              "src/assets"
             ],
             "index": "src/index.html",
             "browser": "src/main.ts",

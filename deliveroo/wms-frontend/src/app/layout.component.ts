@@ -23,34 +23,26 @@ import { Heading3Component } from './ui-library/Typography/Typography.component'
            [class.w-16]="sidebarCollapsed">
         <!-- Logo -->
         <div class="flex items-center h-16 px-4 border-b border-gray-200 dark:border-dark-700">
-          @if(sidebarCollapsed) {
-            <div class="flex-1"></div>
-          }
-          <a routerLink="/dashboard" class="flex items-center hover:opacity-80 transition-opacity">
-            <div class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </div>
+          <a routerLink="/dashboard" class="flex items-center flex-shrink-0">
+            <img src="assets/deliveroo-logo.png" alt="Deliveroo Logo" class="h-8" />
             @if (!sidebarCollapsed) {
-              <span class="ml-2 text-lg font-semibold text-gray-900 dark:text-white">WMS</span>
+              <span class="ml-3 text-lg font-semibold text-gray-800 dark:text-gray-200">Deliveroo</span>
             }
           </a>
-          <div class="flex-1"></div>
-          <button (click)="toggleSidebar()"
-                  class="p-1 ml-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-            @if (sidebarCollapsed) {
-              <lucide-icon [img]="SquareChevronRightIcon" size="20"></lucide-icon>
-            } @else {
-              <lucide-icon [img]="SquareChevronLeftIcon" size="20"></lucide-icon>
-            }
-          </button>
+          <div class="flex-1 flex justify-end">
+            <button (click)="toggleSidebar()"
+                    class="ml-6 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+              @if (sidebarCollapsed) {
+                <lucide-icon [img]="SquareChevronRightIcon" size="20"></lucide-icon>
+              } @else {
+                <lucide-icon [img]="SquareChevronLeftIcon" size="20"></lucide-icon>
+              }
+            </button>
+          </div>
         </div>
-
         <!-- Navigation -->
-        <nav class="mt-5 px-2">
-          <div class="space-y-1">
-            <a routerLink="/dashboard" 
+        <nav class="flex-1 space-y-2 p-4">
+          <a routerLink="/dashboard" 
                [class.active]="isRouteActive('/dashboard')"
                class="sidebar-nav-item group"
                [class.justify-center]="sidebarCollapsed">
@@ -224,9 +216,8 @@ import { Heading3Component } from './ui-library/Typography/Typography.component'
                 <div class="tooltip">Settings</div>
               }
             </a>
-          </div>
-        </nav>
-      </div>
+          </nav>
+        </div>
 
       <!-- Main Content -->
       <div class="transition-all duration-300 ease-in-out"
