@@ -22,9 +22,10 @@ import { Heading3Component } from './ui-library/Typography/Typography.component'
            [class.w-64]="!sidebarCollapsed"
            [class.w-16]="sidebarCollapsed">
         <!-- Logo -->
-        <div class="flex items-center h-16 px-4 border-b border-gray-200 dark:border-dark-700"
-             [class.justify-center]="sidebarCollapsed"
-             [class.justify-between]="!sidebarCollapsed">
+        <div class="flex items-center h-16 px-4 border-b border-gray-200 dark:border-dark-700">
+          @if(sidebarCollapsed) {
+            <div class="flex-1"></div>
+          }
           <a routerLink="/dashboard" class="flex items-center hover:opacity-80 transition-opacity">
             <div class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
               <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,23 +36,16 @@ import { Heading3Component } from './ui-library/Typography/Typography.component'
               <span class="ml-2 text-lg font-semibold text-gray-900 dark:text-white">WMS</span>
             }
           </a>
-          @if (!sidebarCollapsed) {
-            <button (click)="toggleSidebar()"
-                    class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-              <lucide-icon [img]="SquareChevronLeftIcon" size="20"></lucide-icon>
-            </button>
-          }
-        </div>
-
-        <!-- Collapse button when sidebar is collapsed -->
-        @if (sidebarCollapsed) {
-          <div class="flex justify-center mt-4">
-            <button (click)="toggleSidebar()"
-                    class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+          <div class="flex-1"></div>
+          <button (click)="toggleSidebar()"
+                  class="p-1 ml-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+            @if (sidebarCollapsed) {
               <lucide-icon [img]="SquareChevronRightIcon" size="20"></lucide-icon>
-            </button>
-          </div>
-        }
+            } @else {
+              <lucide-icon [img]="SquareChevronLeftIcon" size="20"></lucide-icon>
+            }
+          </button>
+        </div>
 
         <!-- Navigation -->
         <nav class="mt-5 px-2">
