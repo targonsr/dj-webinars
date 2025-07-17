@@ -101,3 +101,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+.notification-panel-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.notification-panel-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms, transform 200ms;
+}
+.notification-panel-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.notification-panel-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 200ms, transform 200ms;
+}

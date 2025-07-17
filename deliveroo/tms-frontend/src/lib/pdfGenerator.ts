@@ -1,7 +1,82 @@
 import jsPDF from 'jspdf'
+import { format } from 'date-fns';
 
-interface TransportationRequest { [key: string]: any }
-interface WarehousingRequest { [key: string]: any }
+interface Address {
+  street: string;
+  city: string;
+  country: string;
+}
+
+interface Location {
+  address: Address;
+  contactPerson: string;
+  contactPhone: string;
+}
+
+interface Cargo {
+  description: string;
+  weight: number;
+  packaging: string;
+  quantity: number;
+  unitType: string;
+  value?: number;
+  fragile?: boolean;
+  cargoType?: string;
+}
+
+interface ProgressUpdate {
+  status: string;
+  location?: string;
+  description: string;
+  timestamp: Date;
+}
+
+interface TransportationRequest {
+  requestNumber: string;
+  status: string;
+  serviceType: string;
+  priority: string;
+  trackingNumber?: string;
+  pickupLocation: Location;
+  deliveryLocation: Location;
+  cargo: Cargo;
+  requiresInsurance?: boolean;
+  estimatedCost?: number;
+  finalCost?: number;
+  currency: string;
+  progressUpdates: ProgressUpdate[];
+}
+
+interface WarehousingRequest {
+  requestNumber: string;
+  status: string;
+  storageType: string;
+  priority: string;
+  storageLocation?: string;
+  estimatedVolume: number;
+  estimatedWeight: number;
+  estimatedStorageDuration: {
+    value: number;
+    unit: string;
+  };
+  securityLevel: string;
+  requiresTemperatureControl?: boolean;
+  requiresHumidityControl?: boolean;
+  requiresSpecialHandling?: boolean;
+  cargo: Cargo;
+  handlingServices: string[];
+  valueAddedServices: string[];
+  estimatedCost?: number;
+  finalCost?: number;
+  billingType: string;
+  currency: string;
+  progressUpdates: ProgressUpdate[];
+}
+
+const currencyFormatter = new Intl.NumberFormat('pl-PL', {
+  style: 'currency',
+  currency: 'PLN',
+});
 
 export class PDFGenerator {
   private static LOGO_URL = '/deliveroo-pdf-logo.png'
@@ -172,7 +247,7 @@ export class PDFGenerator {
     yPos = this.addField(doc, 'Packaging', this.formatServiceType(data.cargo.packaging), 110, yPos - 10)
     yPos = this.addField(doc, 'Quantity', `${data.cargo.quantity} ${data.cargo.unitType}`, 20, yPos)
     if (data.cargo.value) {
-      yPos = this.addField(doc, 'Value', `€${data.cargo.value.toLocaleString()}`, 110, yPos - 10)
+      yPos = this.addField(doc, 'Value', currencyFormatter.format(data.cargo.value), 110, yPos - 10)
     }
     
     const specialHandling = []
@@ -192,12 +267,12 @@ export class PDFGenerator {
     // Pricing Information Section
     yPos = this.addSection(doc, 'Pricing Information', yPos)
     if (data.estimatedCost) {
-      yPos = this.addField(doc, 'Estimated Cost', `€${data.estimatedCost.toLocaleString()}`, 20, yPos)
+      yPos = this.addField(doc, 'Estimated Cost', currencyFormatter.format(data.estimatedCost), 20, yPos)
     } else {
       yPos = this.addField(doc, 'Estimated Cost', 'Pending quote', 20, yPos)
     }
     if (data.finalCost) {
-      yPos = this.addField(doc, 'Final Cost', `€${data.finalCost.toLocaleString()}`, 110, yPos - 10)
+      yPos = this.addField(doc, 'Final Cost', currencyFormatter.format(data.finalCost), 110, yPos - 10)
     } else {
       yPos = this.addField(doc, 'Final Cost', 'Not finalized', 110, yPos - 10)
     }
@@ -274,11 +349,11 @@ export class PDFGenerator {
     // Cargo Information Section
     yPos = this.addSection(doc, 'Cargo Information', yPos)
     yPos = this.addField(doc, 'Description', data.cargo.description, 20, yPos, 170)
-    yPos = this.addField(doc, 'Cargo Type', this.formatServiceType(data.cargo.cargoType), 20, yPos)
+    if(data.cargo.cargoType) yPos = this.addField(doc, 'Cargo Type', this.formatServiceType(data.cargo.cargoType), 20, yPos);
     yPos = this.addField(doc, 'Packaging', this.formatServiceType(data.cargo.packaging), 110, yPos - 10)
     yPos = this.addField(doc, 'Quantity', `${data.cargo.quantity} ${data.cargo.unitType}`, 20, yPos)
     if (data.cargo.value) {
-      yPos = this.addField(doc, 'Value', `€${data.cargo.value.toLocaleString()}`, 110, yPos - 10)
+      yPos = this.addField(doc, 'Value', currencyFormatter.format(data.cargo.value), 110, yPos - 10)
     }
     yPos += 5
     
@@ -301,12 +376,12 @@ export class PDFGenerator {
     // Pricing Information Section
     yPos = this.addSection(doc, 'Pricing Information', yPos)
     if (data.estimatedCost) {
-      yPos = this.addField(doc, 'Estimated Cost', `€${data.estimatedCost.toLocaleString()}`, 20, yPos)
+      yPos = this.addField(doc, 'Estimated Cost', currencyFormatter.format(data.estimatedCost), 20, yPos)
     } else {
       yPos = this.addField(doc, 'Estimated Cost', 'Pending quote', 20, yPos)
     }
     if (data.finalCost) {
-      yPos = this.addField(doc, 'Final Cost', `€${data.finalCost.toLocaleString()}`, 110, yPos - 10)
+      yPos = this.addField(doc, 'Final Cost', currencyFormatter.format(data.finalCost), 110, yPos - 10)
     } else {
       yPos = this.addField(doc, 'Final Cost', 'Not finalized', 110, yPos - 10)
     }

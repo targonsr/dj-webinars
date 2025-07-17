@@ -8,16 +8,22 @@ import {
 import { formatDateTime, formatDate } from '../../utils/dateUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { VehicleCombobox } from './VehicleCombobox';
+import { Button } from '../ui/button';
+import Currency from '@/components/common/Currency';
 
 interface VehicleMaintenanceProps {
-  vehicle: Vehicle;
+  data: Vehicle | Vehicle[];
   onBack: () => void;
 }
 
 type TabId = 'overview' | 'overdue' | 'scheduled' | 'record';
 
-export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle, onBack }) => {
-  const [activeTab, setActiveTab] = useState<TabId>('overview');
+export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ data, onBack }) => {
+  const isAllVehiclesMode = Array.isArray(data);
+  const vehicle = isAllVehiclesMode ? undefined : data;
+  const vehicles = isAllVehiclesMode ? data : [data];
+
+  const [activeTab, setActiveTab] = useState<TabId>(isAllVehiclesMode ? 'overdue' : 'overview');
   const [showAddTask, setShowAddTask] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'brief'>('brief');
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'overdue' | 'completed'>('all');
@@ -43,32 +49,29 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
     return icons[type];
   };
 
-  const allMaintenanceItems = [
-    ...vehicle.maintenanceHistory,
-    ...vehicle.maintenanceTasks,
-  ].sort((a, b) => {
-    const dateA = new Date('date' in a ? a.date : a.dueDate).getTime();
-    const dateB = new Date('date' in b ? b.date : b.dueDate).getTime();
-    return dateB - dateA;
-  });
+  const allMaintenanceItems = (isAllVehiclesMode ? data.flatMap(v => [...v.maintenanceHistory, ...v.maintenanceTasks]) : [...vehicle!.maintenanceHistory, ...vehicle!.maintenanceTasks])
+    .sort((a, b) => {
+      const dateA = new Date('date' in a ? a.date : a.dueDate).getTime();
+      const dateB = new Date('date' in b ? b.date : b.dueDate).getTime();
+      return dateB - dateA;
+    });
 
-  const filteredTasks = vehicle.maintenanceTasks.filter(task => {
-    if (filterStatus === 'all') return true;
-    return task.status === filterStatus;
-  });
+  const allTasks = isAllVehiclesMode ? data.flatMap(v => v.maintenanceTasks) : vehicle!.maintenanceTasks;
 
-  const upcomingTasks = vehicle.maintenanceTasks.filter(task => 
+  const upcomingTasks = allTasks.filter(task => 
     task.status === 'pending' && new Date(task.dueDate) <= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   );
 
-  const overdueTasks = vehicle.maintenanceTasks.filter(task => 
+  const overdueTasks = allTasks.filter(task => 
     task.status === 'pending' && new Date(task.dueDate) < new Date()
   );
 
-  const totalMaintenanceCost = vehicle.maintenanceHistory.reduce((sum, record) => sum + record.cost, 0);
-  const avgCostPerService = totalMaintenanceCost / vehicle.maintenanceHistory.length || 0;
+  const totalMaintenanceCost = (isAllVehiclesMode ? data.flatMap(v => v.maintenanceHistory) : vehicle!.maintenanceHistory).reduce((sum, record) => sum + record.cost, 0);
+  const totalHistoryCount = (isAllVehiclesMode ? data.flatMap(v => v.maintenanceHistory) : vehicle!.maintenanceHistory).length;
+  const avgCostPerService = totalMaintenanceCost / totalHistoryCount || 0;
 
   const renderOverview = () => (
+    !isAllVehiclesMode && vehicle ? (
     <div className="space-y-6">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -93,7 +96,7 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
             <DollarSign className="w-5 h-5 text-green-500" />
             <span className="text-sm font-medium text-gray-600">Total Cost (YTD)</span>
           </div>
-          <p className="text-2xl font-bold text-green-600">€{totalMaintenanceCost.toLocaleString()}</p>
+          <Currency value={totalMaintenanceCost} className="text-2xl font-bold text-green-600" />
         </div>
         
         <div className="bg-white p-4 rounded-lg border">
@@ -101,7 +104,7 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
             <TrendingUp className="w-5 h-5 text-blue-500" />
             <span className="text-sm font-medium text-gray-600">Avg Cost/Service</span>
           </div>
-          <p className="text-2xl font-bold text-blue-600">€{Math.round(avgCostPerService).toLocaleString()}</p>
+          <Currency value={avgCostPerService} className="text-2xl font-bold text-blue-600" />
         </div>
       </div>
 
@@ -137,6 +140,86 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
       <div className="bg-white rounded-lg border">
         <div className="p-4 border-b flex justify-between items-center">
           <h3 className="font-semibold text-gray-900">All Maintenance Items</h3>
+          {!isAllVehiclesMode && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode('brief')}
+                className={`p-1 rounded ${viewMode === 'brief' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+              >
+                <Rows className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-1 rounded ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+              >
+                <List className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="divide-y">
+          {allMaintenanceItems.length > 0 ? (
+            allMaintenanceItems.map(item => (
+              viewMode === 'list' ? (
+                <MaintenanceItem item={item} key={item.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceTasks.some(t => t.id === item.id) || v.maintenanceHistory.some(h => h.id === item.id)) : vehicle} />
+              ) : (
+                <BriefMaintenanceItem item={item} key={item.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceTasks.some(t => t.id === item.id) || v.maintenanceHistory.some(h => h.id === item.id)) : vehicle} />
+              )
+            ))
+          ) : (
+            <p className="p-4 text-center text-gray-500">No maintenance items found.</p>
+          )}
+        </div>
+      </div>
+    </div>
+    ) : null
+  );
+
+  const renderHistory = () => {
+    const historyItems = isAllVehiclesMode ? data.flatMap(v => v.maintenanceHistory) : vehicle!.maintenanceHistory;
+    return (
+      <div className="bg-white rounded-lg border">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h3 className="font-semibold text-gray-900">Complete Maintenance History</h3>
+          {!isAllVehiclesMode && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode('brief')}
+                className={`p-1 rounded ${viewMode === 'brief' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+              >
+                <Rows className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-1 rounded ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+              >
+                <List className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="divide-y">
+          {historyItems.length > 0 ? (
+            historyItems.map(record => (
+              viewMode === 'list' ? (
+                <MaintenanceItem item={record} key={record.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceHistory.some(h => h.id === record.id)) : vehicle} />
+              ) : (
+                <BriefMaintenanceItem item={record} key={record.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceHistory.some(h => h.id === record.id)) : vehicle} />
+              )
+            ))
+          ) : (
+            <p className="p-4 text-center text-gray-500">No maintenance history found.</p>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderAlerts = () => (
+    <div className="bg-white rounded-lg border">
+      <div className="p-4 border-b flex justify-between items-center">
+        <h3 className="font-semibold text-gray-900">Overdue Maintenance Tasks</h3>
+        {!isAllVehiclesMode && (
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('brief')}
@@ -151,57 +234,64 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
               <List className="w-5 h-5" />
             </button>
           </div>
-        </div>
-        <div className="divide-y">
-          {allMaintenanceItems.map(item => (
-            viewMode === 'list' ? (
-              <MaintenanceItem item={item} key={item.id} />
-            ) : (
-              <BriefMaintenanceItem item={item} key={item.id} />
-            )
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderHistory = () => (
-    <div className="bg-white rounded-lg border">
-      <div className="p-4 border-b">
-        <h3 className="font-semibold text-gray-900">Complete Maintenance History</h3>
+        )}
       </div>
       <div className="divide-y">
-        {vehicle.maintenanceHistory.map(record => (
-          <MaintenanceItem item={record} key={record.id} />
-        ))}
+        {overdueTasks.length > 0 ? (
+          overdueTasks.map(task => (
+            viewMode === 'list' ? (
+              <MaintenanceItem item={task} key={task.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceTasks.some(t => t.id === task.id)) : vehicle} />
+            ) : (
+              <BriefMaintenanceItem item={task} key={task.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceTasks.some(t => t.id === task.id)) : vehicle} />
+            )
+          ))
+        ) : (
+          <p className="p-4 text-center text-gray-500">No overdue maintenance tasks.</p>
+        )}
       </div>
     </div>
   );
 
-  const renderAlerts = () => (
-    <div className="space-y-4">
-      <h3 className="font-semibold text-gray-900">Overdue Maintenance Tasks</h3>
-      <div className="grid grid-cols-1 gap-4">
-        {overdueTasks.map(task => (
-          <MaintenanceItem item={task} key={task.id} />
-        ))}
+  const renderScheduled = () => {
+    const scheduledTasks = allTasks.filter(t => t.status === 'pending');
+    return (
+      <div className="bg-white rounded-lg border">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h3 className="font-semibold text-gray-900">Scheduled Maintenance Tasks</h3>
+          {!isAllVehiclesMode && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode('brief')}
+                className={`p-1 rounded ${viewMode === 'brief' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+              >
+                <Rows className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-1 rounded ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+              >
+                <List className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+        </div>
+        
+        <div className="divide-y">
+          {scheduledTasks.length > 0 ? (
+            scheduledTasks.map(task => (
+              viewMode === 'list' ? (
+                <MaintenanceItem item={task} key={task.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceTasks.some(t => t.id === task.id)) : vehicle} />
+              ) : (
+                <BriefMaintenanceItem item={task} key={task.id} vehicle={isAllVehiclesMode ? vehicles.find(v => v.maintenanceTasks.some(t => t.id === task.id)) : vehicle} />
+              )
+            ))
+          ) : (
+            <p className="p-4 text-center text-gray-500">No scheduled maintenance tasks.</p>
+          )}
+        </div>
       </div>
-    </div>
-  );
-
-  const renderScheduled = () => (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-gray-900">Scheduled Maintenance Tasks</h3>
-      </div>
-      
-      <div className="grid grid-cols-1 gap-4">
-        {filteredTasks.map(task => (
-          <MaintenanceItem item={task} key={task.id} />
-        ))}
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderAddTaskForm = () => (
     <div className="bg-white rounded-lg border p-4 mb-6">
@@ -224,7 +314,7 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
         />
         <input
           type="number"
-          placeholder="Estimated cost (€)"
+          placeholder="Estimated cost"
           className="border border-gray-300 rounded-lg px-3 py-2"
         />
       </div>
@@ -244,13 +334,14 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
 
   interface MaintenanceItemProps {
     item: MaintenanceRecord | MaintenanceTask;
+    vehicle?: Vehicle;
   }
   
-  const MaintenanceItem: React.FC<MaintenanceItemProps> = ({ item }) => {
+  const MaintenanceItem: React.FC<MaintenanceItemProps> = ({ item, vehicle }) => {
     const isTask = 'dueDate' in item;
   
     return (
-      <div className="bg-white rounded-lg border p-4">
+      <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <TooltipProvider>
@@ -272,7 +363,10 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
             </TooltipProvider>
             <div>
               <h4 className="font-medium text-gray-900">{item.description}</h4>
-              {!isTask && <p className="text-sm text-gray-500 capitalize">{(item as MaintenanceRecord).type} maintenance</p>}
+              <div className="flex items-center gap-2">
+                {!isTask && <p className="text-sm text-gray-500 capitalize">{(item as MaintenanceRecord).type} maintenance</p>}
+                {isAllVehiclesMode && vehicle && <p className="text-sm text-blue-500">{vehicle.plateNumber}</p>}
+              </div>
             </div>
           </div>
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(item.status)}`}>
@@ -291,7 +385,7 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
           </div>
           <div>
             <span className="text-gray-500">{isTask ? "Est. Cost" : "Cost"}:</span>
-            <p className="font-medium text-green-600">€{(isTask ? (item as MaintenanceTask).estimatedCost : (item as MaintenanceRecord).cost).toLocaleString()}</p>
+            <Currency value={isTask ? (item as MaintenanceTask).estimatedCost : (item as MaintenanceRecord).cost} className="font-medium text-green-600" />
           </div>
           <div>
             <span className="text-gray-500">{isTask ? "Est. Duration" : "Mileage"}:</span>
@@ -326,7 +420,7 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
     );
   };
 
-  const BriefMaintenanceItem: React.FC<MaintenanceItemProps> = ({ item }) => {
+  const BriefMaintenanceItem: React.FC<MaintenanceItemProps> = ({ item, vehicle }) => {
     const isTask = 'dueDate' in item;
     return (
       <div className="p-3 flex justify-between items-center">
@@ -350,10 +444,11 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
           </TooltipProvider>
           <div>
             <h4 className="font-medium text-gray-900">{item.description}</h4>
-            <div className="text-sm text-gray-500">
-              {isTask ? `Due: ${formatDate(new Date((item as MaintenanceTask).dueDate))}` : `Date: ${formatDate(new Date((item as MaintenanceRecord).date))}`}
-              {' • '}
-              Cost: €{(isTask ? (item as MaintenanceTask).estimatedCost : (item as MaintenanceRecord).cost).toLocaleString()}
+            <div className="text-sm text-gray-500 flex items-center gap-2">
+              <span>{isTask ? `Due: ${formatDate(new Date((item as MaintenanceTask).dueDate))}` : `Date: ${formatDate(new Date((item as MaintenanceRecord).date))}`}</span>
+              <span>{' • '}</span>
+              <span>Cost: <Currency value={isTask ? (item as MaintenanceTask).estimatedCost : (item as MaintenanceRecord).cost} /></span>
+              {isAllVehiclesMode && vehicle && <span className="text-sm text-blue-500">{' • '}{vehicle.plateNumber}</span>}
             </div>
           </div>
         </div>
@@ -372,52 +467,66 @@ export const VehicleMaintenance: React.FC<VehicleMaintenanceProps> = ({ vehicle,
           className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Vehicle Details ({vehicle.plateNumber})
+          {isAllVehiclesMode ? 'Back to Dashboard' : `Back to Vehicle Details (${vehicle!.plateNumber})`}
         </button>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Vehicle Maintenance - {vehicle.plateNumber}
+                {isAllVehiclesMode ? 'All Vehicle Maintenance' : `Vehicle Maintenance - ${vehicle!.plateNumber}`}
               </h2>
-              <div className="flex items-center gap-2">
-                <p className="text-gray-600">
-                  {vehicle.make} {vehicle.model} ({vehicle.year}) • {vehicle.mileage.toLocaleString()} km
-                </p>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  vehicle.status === 'available' ? 'bg-green-100 text-green-800' :
-                  vehicle.status === 'maintenance' ? 'bg-orange-100 text-orange-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {vehicle.status.toUpperCase()}
-                </span>
-              </div>
+              {!isAllVehiclesMode && vehicle && (
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-600">
+                    {vehicle.make} {vehicle.model} ({vehicle.year}) • {vehicle.mileage.toLocaleString()} km
+                  </p>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    vehicle.status === 'available' ? 'bg-green-100 text-green-800' :
+                    vehicle.status === 'maintenance' ? 'bg-orange-100 text-orange-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {vehicle.status.toUpperCase()}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <VehicleCombobox currentVehicleId={vehicle.id} />
-            <button
-              onClick={() => setShowAddTask(prev => !prev)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              {showAddTask ? 'Cancel' : 'Add Task'}
-            </button>
+            <VehicleCombobox currentVehicleId={vehicle?.id} />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    onClick={() => setShowAddTask(prev => !prev)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    disabled={isAllVehiclesMode}
+                  >
+                    <Plus className="w-4 h-4" />
+                    {showAddTask ? 'Cancel' : 'Add Task'}
+                  </Button>
+                </TooltipTrigger>
+                {isAllVehiclesMode && (
+                  <TooltipContent>
+                    <p>Select a specific vehicle to add a task.</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </div>
 
       {/* Add Task Form */}
-      {showAddTask && renderAddTaskForm()}
+      {!isAllVehiclesMode && showAddTask && renderAddTaskForm()}
 
       {/* Tab Navigation */}
       <div className="border-b border-gray-200 mb-6">
         <nav className="flex space-x-8">
           {[
-            { id: 'overview', label: 'Overview', icon: TrendingUp },
+            ...(!isAllVehiclesMode ? [{ id: 'overview', label: 'Overview', icon: TrendingUp }] : []),
             { id: 'overdue', label: 'Overdue', icon: AlertTriangle },
             { id: 'scheduled', label: 'Scheduled', icon: Calendar },
-            { id: 'record', label: 'Maintenance Record', icon: FileText }
+            ...(!isAllVehiclesMode ? [{ id: 'record', label: 'Maintenance Record', icon: FileText }] : []),
           ].map(({ id, label, icon: Icon }) => (
             <button
               key={id}

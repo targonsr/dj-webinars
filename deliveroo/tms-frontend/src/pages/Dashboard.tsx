@@ -24,10 +24,10 @@ const Dashboard = () => {
   };
 
   const quickActions = [
-    { icon: '➕', title: 'New Order', onClick: () => navigate('/orders') },
-    { icon: '🗺️', title: 'Track Fleet', onClick: () => navigate('/vehicle-fleet') },
+    { icon: '➕', title: 'New Order', onClick: () => navigate('/orders/new') },
+    { icon: '🗺️', title: 'Track Fleet', onClick: () => navigate('/vehicles/fleet') },
     { icon: '📄', title: 'View Invoices', onClick: () => navigate('/payments') },
-    { icon: '✉️', title: 'Contact Us', onClick: () => navigate('/profile') },
+    { icon: '⚠️', title: 'Report Incident', onClick: () => navigate('/incidents/new') },
   ];
 
   if (ordersLoading || kpisLoading || kpiWidgetsLoading) {

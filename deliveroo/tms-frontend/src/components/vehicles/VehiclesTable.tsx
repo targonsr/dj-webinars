@@ -69,7 +69,7 @@ export const VehiclesTable: React.FC<VehiclesTableProps> = ({ vehicles }) => {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to={`/vehicles/${vehicle.id}/maintenance`} className="w-full">
+                          <Link to={`/maintenance/${vehicle.id}`} className="w-full">
                             Maintenance
                           </Link>
                         </DropdownMenuItem>

@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
+    '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@artmizu/nuxt-prometheus',
@@ -33,6 +34,9 @@ export default defineNuxtConfig({
       pathPrefix: true,
     }
   ],
+  colorMode: {
+    classSuffix: ''
+  },
   // Top-level transpile configuration for Nuxt 3
   build: {
     transpile: ['@jridgewell/sourcemap-codec', 'magic-string']

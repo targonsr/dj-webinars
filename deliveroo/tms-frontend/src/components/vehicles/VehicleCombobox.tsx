@@ -19,16 +19,20 @@ import { vehicles as allVehicles } from '@/model/vehicles/vehicles.mocks';
 import { Vehicle } from '@/model/vehicles/vehicle.types';
 
 interface VehicleComboboxProps {
-  currentVehicleId: string;
+  currentVehicleId?: string;
 }
 
 export const VehicleCombobox: React.FC<VehicleComboboxProps> = ({ currentVehicleId }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSelectVehicle = (vehicle: Vehicle) => {
+  const handleSelectVehicle = (vehicle?: Vehicle) => {
     setOpen(false);
-    navigate(`/vehicles/${vehicle.id}/maintenance`);
+    if (vehicle) {
+      navigate(`/maintenance/${vehicle.id}`);
+    } else {
+      navigate('/maintenance');
+    }
   };
 
   const currentVehicle = allVehicles.find(v => v.id === currentVehicleId);
@@ -52,6 +56,12 @@ export const VehicleCombobox: React.FC<VehicleComboboxProps> = ({ currentVehicle
           <CommandList>
             <CommandEmpty>No vehicle found.</CommandEmpty>
             <CommandGroup>
+              <CommandItem onSelect={() => handleSelectVehicle()}>
+                <Check
+                  className={`mr-2 h-4 w-4 ${!currentVehicleId ? 'opacity-100' : 'opacity-0'}`}
+                />
+                All Vehicles
+              </CommandItem>
               {allVehicles.map((vehicle) => (
                 <CommandItem
                   key={vehicle.id}

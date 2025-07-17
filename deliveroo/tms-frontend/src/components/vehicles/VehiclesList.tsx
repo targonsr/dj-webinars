@@ -17,7 +17,7 @@ export const VehiclesList: React.FC<VehiclesListProps> = ({ vehicles }) => {
     } else if (view === 'routes') {
       navigate(`/routes?context=vehicle-routes&entityId=${vehicle.id}`);
     } else {
-      navigate(`/vehicles/${vehicle.id}/maintenance`);
+      navigate(`/maintenance/${vehicle.id}`);
     }
   };
 

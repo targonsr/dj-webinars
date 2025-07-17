@@ -51,7 +51,7 @@ export interface VehicleDocument {
 
 export interface MaintenanceRecord {
   id: string;
-  date: Date;
+  date: string;
   type: 'routine' | 'repair' | 'inspection' | 'emergency';
   description: string;
   cost: number;
@@ -66,6 +66,7 @@ export interface MaintenanceRecord {
 export interface MaintenanceTask {
   id: string;
   description: string;
+  priority: 'urgent' | 'high' | 'medium' | 'low';
   status: 'pending' | 'overdue' | 'completed' | 'in-progress';
   type: 'routine' | 'repair' | 'inspection' | 'emergency';
   dueDate: string;

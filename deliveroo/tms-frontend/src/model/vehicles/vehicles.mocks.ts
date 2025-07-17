@@ -96,25 +96,25 @@ export const vehicles: Vehicle[] = [
     maintenanceTasks: [
       {
         id: 'task-001-1',
-        description: 'Wymiana filtra powietrza',
-        dueDate: '2024-11-30T00:00:00.000Z',
-        estimatedCost: 340,
-        estimatedDuration: 1,
-        status: 'pending',
-        type: 'routine',
-        assignedTo: 'Marek Kowalczyk',
-        notes: 'Wymiana zgodnie z przebiegiem'
-      },
-      {
-        id: 'task-001-2',
-        description: 'Rotacja i kontrola opon',
-        dueDate: '2025-01-15T00:00:00.000Z',
-        estimatedCost: 480,
+        description: 'Wymiana oleju silnikowego',
+        dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 500,
         estimatedDuration: 2,
         status: 'pending',
         type: 'routine',
+        assignedTo: 'Marek Kowalczyk',
+        notes: 'Standardowa wymiana co 15 000 km'
+      },
+      {
+        id: 'task-001-2',
+        description: 'Kontrola układu hamulcowego',
+        dueDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 300,
+        estimatedDuration: 1,
+        status: 'overdue',
+        type: 'inspection',
         assignedTo: 'Anna Nowak',
-        notes: 'Regularna konserwacja opon'
+        notes: 'Pilna kontrola po zgłoszeniu kierowcy'
       }
     ]
   },
@@ -197,29 +197,43 @@ export const vehicles: Vehicle[] = [
         technician: 'Erik Larsson',
         status: 'completed',
         notes: 'Wymiana sprzęgła skrzyni, test OK'
+      },
+      {
+        id: 'maint-002-3',
+        date: '2024-06-10T00:00:00.000Z',
+        type: 'emergency',
+        description: 'Naprawa układu pneumatycznego',
+        cost: 3500,
+        mileage: 175000,
+        duration: 6,
+        serviceProvider: 'Serwis Mobilny 24h',
+        technician: 'Janusz Szybki',
+        status: 'completed',
+        notes: 'Nagła awaria na autostradzie A1'
       }
     ],
     maintenanceTasks: [
       {
         id: 'task-002-1',
-        description: 'Wymiana filtra kabinowego',
-        dueDate: '2024-11-25T00:00:00.000Z',
-        estimatedCost: 180,
-        estimatedDuration: 0.5,
+        description: 'Wymiana opon na zimowe',
+        dueDate: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 2000,
+        estimatedDuration: 4,
         status: 'pending',
         type: 'routine',
-        assignedTo: 'Erik Larsson'
+        assignedTo: 'Serwis Oponiarski "Gumex"',
+        notes: 'Komplet opon zimowych Michelin'
       },
       {
         id: 'task-002-2',
-        description: 'Kontrola systemu AdBlue',
-        dueDate: '2025-01-10T00:00:00.000Z',
-        estimatedCost: 600,
-        estimatedDuration: 2,
-        status: 'pending',
-        type: 'routine',
-        assignedTo: 'Erik Larsson',
-        notes: 'Regularna konserwacja systemu AdBlue'
+        description: 'Naprawa oświetlenia naczepy',
+        dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 400,
+        estimatedDuration: 1.5,
+        status: 'overdue',
+        type: 'repair',
+        assignedTo: 'Elektryk zakładowy',
+        notes: 'Spalona lewa lampa stopu'
       }
     ]
   },
@@ -428,6 +442,28 @@ export const vehicles: Vehicle[] = [
         type: 'routine',
         assignedTo: 'Dr. Bezpieczeństwo Chemiczne',
         notes: 'Wymagana roczna certyfikacja bezpieczeństwa'
+      },
+      {
+        id: 'task-004-2',
+        description: 'Kontrola systemu gaśniczego',
+        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 600,
+        estimatedDuration: 2,
+        status: 'pending',
+        type: 'inspection',
+        assignedTo: 'Straż Pożarna - Dział Prewencji',
+        notes: 'Coroczna kontrola sprzętu gaśniczego'
+      },
+      {
+        id: 'task-004-3',
+        description: 'Wymiana uszczelek w zaworach',
+        dueDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 1200,
+        estimatedDuration: 4,
+        status: 'overdue',
+        type: 'repair',
+        assignedTo: 'Serwis Specjalistyczny "Chem-Tech"',
+        notes: 'Wykryto drobne nieszczelności'
       }
     ]
   },
@@ -494,14 +530,13 @@ export const vehicles: Vehicle[] = [
     maintenanceTasks: [
       {
         id: 'task-005-1',
-        description: 'Kontrola mechanizmu podnoszenia kontenerów',
-        dueDate: '2024-11-15T00:00:00.000Z',
-        estimatedCost: 800,
-        estimatedDuration: 2,
+        description: 'Smarowanie mechanizmu podnoszenia',
+        dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 300,
+        estimatedDuration: 1,
         status: 'pending',
         type: 'routine',
-        assignedTo: 'Jan van der Berg',
-        notes: 'Roczna kontrola bezpieczeństwa obsługi kontenerów'
+        assignedTo: 'Jan van der Berg'
       }
     ]
   },
@@ -607,6 +642,17 @@ export const vehicles: Vehicle[] = [
         type: 'inspection',
         assignedTo: 'Inspektor Bezpieczeństwa',
         notes: 'Wymagane przed powrotem do eksploatacji'
+      },
+      {
+        id: 'task-006-3',
+        description: 'Testy drogowe po naprawie silnika',
+        dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+        estimatedCost: 1000,
+        estimatedDuration: 8,
+        status: 'in-progress',
+        type: 'inspection',
+        assignedTo: 'Marco Rossi',
+        notes: 'Sprawdzenie osiągów i zużycia paliwa'
       }
     ]
   },

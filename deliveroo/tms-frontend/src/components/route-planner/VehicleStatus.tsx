@@ -71,7 +71,7 @@ export const VehicleStatus: React.FC<VehicleStatusProps> = ({ vehicle }) => {
             onClick={handleLocationClick}
             className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
           >
-            {vehicle.currentLocation.address}
+            {vehicle.currentLocation?.address || 'Location not available'}
             <ExternalLink className="w-3 h-3" />
           </button>
         </div>

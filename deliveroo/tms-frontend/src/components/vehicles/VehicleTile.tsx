@@ -10,6 +10,7 @@ import { formatDateTime } from '../../utils/dateUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { Link } from 'react-router-dom';
 import { useDriversList } from '../../hooks/queries';
+import Currency from '@/components/common/Currency';
 
 interface VehicleTileProps {
   vehicle: Vehicle;
@@ -191,9 +192,13 @@ export const VehicleTile: React.FC<VehicleTileProps> = ({ vehicle, onVehicleSele
               {vehicle.ownership.type.toUpperCase()}
             </span>
             {vehicle.ownership.monthlyPayment && (
-              <span className="text-sm font-medium text-gray-900">
-                €{vehicle.ownership.monthlyPayment.toLocaleString()}/mo
-              </span>
+              <div className="flex items-center">
+                <span className="text-gray-500">Monthly Cost:</span>
+                <div className="ml-2 font-semibold">
+                  <Currency value={vehicle.ownership.monthlyPayment} />
+                  /mo
+                </div>
+              </div>
             )}
           </div>
 

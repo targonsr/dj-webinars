@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Bell, Truck, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,13 +12,10 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { data: notifications = [] } = useNotificationsQuery();
+  const notificationsButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleNotificationsToggle = () => {
     setIsNotificationsOpen(!isNotificationsOpen);
-  };
-
-  const handleLogoClick = () => {
-    navigate('/dashboard');
   };
 
   const handleLogout = () => {
@@ -34,14 +31,16 @@ const Header: React.FC = () => {
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 relative">
       <div className="flex items-center space-x-4">
         <SidebarTrigger className="text-gray-600 hover:text-gray-900" />
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={handleLogoClick}>
-          <Truck className="h-6 w-6 text-blue-600" />
-          <h1 className="text-xl font-semibold text-gray-900">Staff Dashboard</h1>
-        </div>
       </div>
       
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="sm" className="relative" onClick={handleNotificationsToggle}>
+        <Button
+          ref={notificationsButtonRef}
+          variant="ghost"
+          size="sm"
+          className="relative"
+          onClick={handleNotificationsToggle}
+        >
           <Bell className="h-5 w-5 text-gray-600" />
           {notifications.length > 0 && (
             <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
@@ -72,9 +71,10 @@ const Header: React.FC = () => {
         </Button>
       </div>
 
-      <NotificationsPanel 
-        isOpen={isNotificationsOpen} 
-        onClose={() => setIsNotificationsOpen(false)} 
+      <NotificationsPanel
+        isOpen={isNotificationsOpen}
+        onClose={() => setIsNotificationsOpen(false)}
+        triggerRef={notificationsButtonRef}
       />
     </header>
   );

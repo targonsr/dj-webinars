@@ -12,7 +12,7 @@
               :key="link.name"
               :to="link.href"
               @click="handleNavClick(link)"
-              class="text-base font-medium text-gray-600 dark:text-gray-300 hover:text-success-600 dark:hover:text-success-400 transition-colors cursor-pointer"
+              class="text-base font-medium text-gray-300 hover:text-success-600 dark:hover:text-success-400 transition-colors cursor-pointer"
             >
               {{ link.name }}
             </NuxtLink>
@@ -38,7 +38,7 @@
           :key="link.name"
           :to="link.href"
           @click="handleNavClick(link)"
-          class="text-base font-medium text-gray-600 dark:text-gray-300 hover:text-success-600 dark:hover:text-success-400 transition-colors cursor-pointer"
+          class="text-base font-medium text-gray-900 dark:text-gray-300 hover:text-success-600 dark:hover:text-success-400 transition-colors cursor-pointer"
         >
           {{ link.name }}
         </NuxtLink>

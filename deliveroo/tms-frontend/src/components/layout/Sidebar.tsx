@@ -22,6 +22,7 @@ const menuItems = [
   { title: 'Shipments', url: '/shipments', icon: '🚚' },
   { title: 'Route Planner', url: '/routes', icon: '🗺️' },
   { title: 'Fleet', url: '/vehicles', icon: '🚛' },
+  { title: 'Maintenance', url: '/maintenance', icon: '🔧' },
   { title: 'Drivers', url: '/drivers', icon: '👨‍💼' },
   { title: 'Payments', url: '/payments', icon: '💳' },
   { title: 'Expenses', url: '/expenses', icon: '💷' },
@@ -56,12 +57,21 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className={isCollapsed ? "w-16" : "w-64"} collapsible="icon">
-      <div className="p-4 border-b">
+    <Sidebar className={isCollapsed ? "w-20" : "w-64"} collapsible="icon">
+      <div className="h-16 p-3 border-b">
         <div className="flex items-center space-x-3 cursor-pointer" onClick={handleLogoClick}>
-          <Truck className="h-6 w-6 text-blue-600" />
+          <span
+            className="
+              ml-1
+              h-10 w-10 flex items-center justify-center rounded-lg
+              bg-gray-800
+              transition-colors
+            "
+          >
+            <img src="/deliveroo-logo.png" alt="Deliveroo Logo" className="h-8 w-8" />
+          </span>
           {!isCollapsed && (
-            <div className="text-2xl font-bold text-blue-900">
+            <div className="text-2xl font-bold">
               Deliveroo
             </div>
           )}
@@ -87,12 +97,11 @@ export function AppSidebar() {
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild label={item.title}>
                     <NavLink to={item.url} className={getNavClass(item.url)}>
                       <span className="text-lg mr-3">{item.icon}</span>
                       {!isCollapsed && <span>{item.title}</span>}

@@ -40,55 +40,64 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-900 mb-2">Deliveroo</h1>
-          <p className="text-blue-600">Staff Portal</p>
+    <div className="relative min-h-screen overflow-hidden">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-50"
+      >
+        <source src="/deliveroo-background.mp4" type="video/mp4" />
+      </video>
+      <div className="relative z-10 flex min-h-screen items-center justify-center bg-black/20 p-4">
+        <div className="w-full max-w-xl">
+          <Card className="shadow-2xl rounded-2xl border-white/20 bg-white/10 backdrop-blur-lg">
+            <CardHeader className="text-center">
+              <div className="text-center">
+                <img src="/deliveroo-logo.png" alt="Deliveroo Logo" className="w-48 mx-auto" />
+              </div>
+              <CardTitle className="text-3xl font-semibold text-white">Transportation Management System</CardTitle>
+              <CardDescription className="pt-2 text-gray-300">
+                Sign in to access your logistics dashboard
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="Email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="h-12 rounded-lg border-white/30 bg-white/20 text-white placeholder:text-gray-300"
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="h-12 rounded-lg border-white/30 bg-white/20 text-white placeholder:text-gray-300"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="h-12 w-full rounded-lg bg-blue-600 text-lg hover:bg-blue-700"
+                  disabled={isLogging}
+                >
+                  {isLogging ? 'Signing in...' : 'Sign In'}
+                </Button>
+              </form>
+              <div className="mt-6 text-center text-sm text-gray-300">
+                <p>Demo: Use any email and password to login</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        <Card className="shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-semibold">Welcome Back</CardTitle>
-            <CardDescription>
-              Sign in to access your logistics dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Input
-                  type="email"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="h-12"
-                />
-              </div>
-              <div>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="h-12"
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full h-12 bg-blue-600 hover:bg-blue-700"
-                disabled={isLogging}
-              >
-                {isLogging ? 'Signing in...' : 'Sign In'}
-              </Button>
-            </form>
-            <div className="mt-6 text-center text-sm text-red-600">
-              <p>Demo: Use any email and password to login</p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
