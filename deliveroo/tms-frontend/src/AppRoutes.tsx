@@ -41,10 +41,10 @@ export const AppRoutes = () => {
             <Route element={<ProtectedLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/routes" element={<RoutePlanner />} />
+                <Route path="/routes/:id" element={<RoutePlanner />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/orders/new" element={<NewOrderForm />} />
                 <Route path="/orders/:id" element={<OrderDetails />} />
-                <Route path="/shipments/:id/track" element={<ShipmentTracking />} />
                 <Route path="/documents" element={<DocumentsPage />} />
                 <Route path="/drivers" element={<DriversPage />} />
                 <Route path="/drivers/:id/details" element={<DriverDetailsPage />} />

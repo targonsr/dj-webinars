@@ -13,6 +13,11 @@ export type UIShipment = {
     origin: string;
     destination: string;
     eta: string;
+    elapsedTime?: string;
+    distanceCovered?: string;
+    totalDistance?: string;
+    delay?: boolean;
+    estimatedDelay?: string | null;
 };
 
 
@@ -48,6 +53,11 @@ export async function getShipments(filters?: { driver?: string; status?: string;
         origin: s.route.points[0]?.name || 'N/A',
         destination: s.route.points[s.route.points.length - 1]?.name || 'N/A',
         eta: s.route.estimatedCompletion.toLocaleString(),
+        elapsedTime: "3h 15m",
+        distanceCovered: "150km",
+        totalDistance: "300km",
+        delay: false,
+        estimatedDelay: null
       }));
 
       // Apply filters to mock data
@@ -102,6 +112,11 @@ export async function getShipmentDetails(id: string): Promise<UIShipment | undef
         origin: shipment.route.points[0]?.name || 'N/A',
         destination: shipment.route.points[shipment.route.points.length - 1]?.name || 'N/A',
         eta: shipment.route.estimatedCompletion.toLocaleString(),
+        elapsedTime: "3h 15m",
+        distanceCovered: "150km",
+        totalDistance: "300km",
+        delay: false,
+        estimatedDelay: null
       };
     }
     throw error;

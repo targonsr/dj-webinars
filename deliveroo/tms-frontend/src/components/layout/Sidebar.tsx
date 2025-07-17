@@ -19,14 +19,12 @@ import { Button } from '@/components/ui/button';
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: '📊' },
   { title: 'Transportation Orders', url: '/orders', icon: '📦' },
-  { title: 'Shipments', url: '/shipments', icon: '🚚' },
-  { title: 'Route Planner', url: '/routes', icon: '🗺️' },
-  { title: 'Fleet', url: '/vehicles', icon: '🚛' },
-  { title: 'Maintenance', url: '/maintenance', icon: '🔧' },
-  { title: 'Drivers', url: '/drivers', icon: '👨‍💼' },
+  { title: 'Route Planner', url: '/routes', icon: '🚚' },
+  { title: 'Orders', url: '/orders', icon: '📦' },
+  { title: 'Documents', url: '/documents', icon: '📄' },
+  { title: 'Drivers', url: '/drivers', icon: '👨‍✈️' },
   { title: 'Payments', url: '/payments', icon: '💳' },
   { title: 'Expenses', url: '/expenses', icon: '💷' },
-  { title: 'Documents', url: '/documents', icon: '📄' },
   { title: 'Transit Incidents', url: '/incidents', icon: '⚠️' },
   { title: 'Customer Claims', url: '/claims', icon: '📋' },
 ];

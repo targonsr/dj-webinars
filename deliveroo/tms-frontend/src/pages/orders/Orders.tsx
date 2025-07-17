@@ -6,13 +6,11 @@ import { useOrdersQuery } from '@/http/orders.queries';
 import {
   OverviewTab,
   IncomingRequestsTab,
-  InTransitTab,
   DeliveredTab,
-  ShipmentsTab,
+  InTransitTab,
 } from './transportation-orders';
 import {
   mockIncomingRequests,
-  mockInTransitOrders,
   mockDeliveredOrders,
 } from '@/http/orders.mocks';
 
@@ -74,12 +72,11 @@ const Orders = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">📄 Order Transportation Overview</TabsTrigger>
           <TabsTrigger value="incoming">📩 Incoming Requests</TabsTrigger>
-          <TabsTrigger value="transit">🚚 In Transit</TabsTrigger>
+          <TabsTrigger value="in-transit">🚚 In Transit</TabsTrigger>
           <TabsTrigger value="delivered">📦 Delivered</TabsTrigger>
-          <TabsTrigger value="shipments">🚚 Shipments</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -95,16 +92,12 @@ const Orders = () => {
           <IncomingRequestsTab incomingRequests={mockIncomingRequests} />
         </TabsContent>
 
-        <TabsContent value="transit" className="space-y-6">
-          <InTransitTab inTransitOrders={mockInTransitOrders} />
-        </TabsContent>
-
         <TabsContent value="delivered" className="space-y-6">
           <DeliveredTab deliveredOrders={mockDeliveredOrders} />
         </TabsContent>
 
-        <TabsContent value="shipments" className="space-y-6">
-          <ShipmentsTab />
+        <TabsContent value="in-transit" className="space-y-6">
+          <InTransitTab />
         </TabsContent>
       </Tabs>
     </div>

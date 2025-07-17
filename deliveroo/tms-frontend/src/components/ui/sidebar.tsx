@@ -498,14 +498,28 @@ SidebarMenu.displayName = "SidebarMenu"
 
 const SidebarMenuItem = React.forwardRef<
   HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => {
+  React.ComponentProps<"li"> & {
+    asChild?: boolean
+    isActive?: boolean
+  }
+>(({ asChild, isActive, className, children, ...props }, ref) => {
+  const Comp = asChild ? Slot : "li"
   return (
-    <li
+    <Comp
       ref={ref}
-      className={cn("text-sidebar-foreground/80", className)}
+      data-active={isActive}
+      className={cn(
+        "relative flex h-10 cursor-pointer list-none items-center justify-start rounded-md px-3 text-sm font-medium text-sidebar-foreground/70 outline-none transition-colors duration-100",
+        "hover:bg-sidebar-muted hover:text-sidebar-foreground",
+        "focus-visible:bg-sidebar-muted focus-visible:text-sidebar-foreground focus-visible:ring-1 focus-visible:ring-ring",
+        "data-[active=true]:bg-sidebar-muted data-[active=true]:text-sidebar-foreground",
+        "disabled:pointer-events-none disabled:opacity-50",
+        className
+      )}
       {...props}
-    />
+    >
+      {children}
+    </Comp>
   )
 })
 SidebarMenuItem.displayName = "SidebarMenuItem"
