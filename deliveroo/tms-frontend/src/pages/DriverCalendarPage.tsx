@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DriverCalendar } from '../components/drivers/DriverCalendar';
-import { LoadingPage, ErrorMessage } from '../components/common';
+import { DriverCalendar } from './drivers/DriverCalendar';
+import { LoadingPage, ErrorMessage } from '../components';
 import { useDriverDetails } from '../hooks/queries';
 
 export const DriverCalendarPage: React.FC = () => {

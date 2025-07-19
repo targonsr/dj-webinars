@@ -5,11 +5,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, MapPin, Clock } from 'lucide-react';
 import { useShipmentDetailsQuery } from '@/http/shipments.queries';
-import StaticMapPlaceholder from '../../components/StaticMapPlaceholder';
 import { FleetMap } from '../vehicles/FleetMap';
 import { vehicles } from '@/model/vehicles/vehicles.mocks';
 import { sampleShipments } from '@/model/shipments/shipments.mocks';
-import { generateShipmentRoutePDF } from '@/lib/shipmentRoutePdfGenerator'
+import { generateShipmentRoutePDF } from '@/lib/pdf/shipmentRoutePdfGenerator'
 import { useDriversQuery } from '@/http/drivers.queries';
 import { Link } from 'react-router-dom';
 

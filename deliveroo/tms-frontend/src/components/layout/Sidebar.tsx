@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/auth/AuthContext';
 import { Truck } from 'lucide-react';
 import {
   Sidebar,
@@ -13,18 +13,20 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 
 const menuItems = [
   { title: 'Dashboard', url: '/dashboard', icon: '📊' },
   { title: 'Transportation Orders', url: '/orders', icon: '📦' },
-  { title: 'Route Planner', url: '/routes', icon: '🚚' },
-  { title: 'Orders', url: '/orders', icon: '📦' },
-  { title: 'Documents', url: '/documents', icon: '📄' },
+  { title: 'Route Planner', url: '/routes', icon: '🗺️' },
   { title: 'Drivers', url: '/drivers', icon: '👨‍✈️' },
+  { title: 'Fleet', url: '/vehicles', icon: '🚚' },
+  { title: 'Documents', url: '/documents', icon: '📄' },
+  { title: 'Maintenance', url: '/maintenance', icon: '🔧' },
   { title: 'Payments', url: '/payments', icon: '💳' },
   { title: 'Expenses', url: '/expenses', icon: '💷' },
+  { title: 'Urgent', url: '/urgent', icon: '🚨' },
   { title: 'Transit Incidents', url: '/incidents', icon: '⚠️' },
   { title: 'Customer Claims', url: '/claims', icon: '📋' },
 ];
@@ -81,6 +83,7 @@ export function AppSidebar() {
         <div className="p-4 border-b">
           <div className="flex items-center space-x-3">
             <Avatar className="h-10 w-10">
+              <AvatarImage src={`https://i.pravatar.cc/150?u=${user?.email}`} alt={user?.name} />
               <AvatarFallback className="bg-blue-600 text-white">
                 {user?.name?.charAt(0) || 'U'}
               </AvatarFallback>

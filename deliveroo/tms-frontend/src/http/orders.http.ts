@@ -1,7 +1,7 @@
 import { Order } from './orders.model';
 import { mockOrders } from './orders.mocks';
 import { API_BASE_URL } from './http.config';
-import { getAuthHeaders } from '../contexts/session.token';
+import { getAuthHeaders } from '../auth/session.token';
 import { delay, MOCK_MODE } from './mock.http';
 
 /**

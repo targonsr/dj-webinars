@@ -1,4 +1,4 @@
-import { getAuthHeaders } from "@/contexts/session.token";
+import { getAuthHeaders } from "@/auth/session.token";
 import { API_BASE_URL } from "./http.config";
 import { KPIs } from "./kpis.model";
 import { delay, MOCK_MODE } from "./mock.http";

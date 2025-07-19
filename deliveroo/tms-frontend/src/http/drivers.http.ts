@@ -1,7 +1,7 @@
 import { Driver } from '../model/drivers/driver.types';
 import { sampleDrivers } from '../model/drivers/drivers.mocks';
 import { API_BASE_URL } from './http.config';
-import { getAuthHeaders } from '../contexts/session.token';
+import { getAuthHeaders } from '../auth/session.token';
 import { delay, MOCK_MODE } from './mock.http';
 import { getShipments } from './shipments.http';
 import { UIShipment } from './shipments.http';

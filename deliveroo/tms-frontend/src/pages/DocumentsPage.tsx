@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { DocumentsList } from '../components/documents/DocumentsList';
-import { LoadingPage, ErrorMessage } from '../components/common';
+import { DocumentsList } from './documents/DocumentsList';
+import { LoadingPage, ErrorMessage } from '../components';
 import { useDocumentsList, useDocumentEntitiesList } from '../hooks/queries';
 import { Document } from '../model/documents';
 

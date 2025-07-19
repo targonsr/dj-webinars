@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { usePaymentsQuery } from '@/http/payments.queries';
-import { generateReceiptPDF } from '@/lib/receiptPdfGenerator'
+import { generateReceiptPDF } from '@/lib/pdf/receiptPdfGenerator'
 
 const Payments = () => {
   const { data: payments = [], isLoading } = usePaymentsQuery();

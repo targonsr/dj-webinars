@@ -3,7 +3,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Layout from "@/components/layout/Layout";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
-import { RoutePlanner } from '@/pages/route-planner/RoutePlanner';
+import { RoutePlanner } from '@/pages/RoutePlanner';
 import Orders from "@/pages/orders/Orders";
 import OrderDetails from "@/pages/orders/OrderDetails";
 import NewOrderForm from "@/pages/orders/NewOrderForm";
@@ -16,7 +16,7 @@ import { DriverCalendarPage } from "@/pages/DriverCalendarPage";
 import { MaintenancePage } from "@/pages/MaintenancePage";
 import { DocumentsPage } from "@/pages/DocumentsPage";
 import Payments from "@/pages/Payments";
-import Vehicles from "@/pages/Vehicles";
+import VehiclesPage from "@/pages/VehiclesPage";
 import Incidents from "@/pages/Incidents";
 import Claims from "@/pages/Claims";
 import Expenses from "@/pages/Expenses";
@@ -49,7 +49,7 @@ export const AppRoutes = () => {
                 <Route path="/drivers" element={<DriversPage />} />
                 <Route path="/drivers/:id/details" element={<DriverDetailsPage />} />
                 <Route path="/drivers/:id/calendar" element={<DriverCalendarPage />} />
-                <Route path="/vehicles" element={<Vehicles />} />
+                <Route path="/vehicles" element={<VehiclesPage />} />
                 <Route path="/maintenance" element={<MaintenancePage />} />
                 <Route path="/maintenance/:id" element={<MaintenancePage />} />
                 <Route path="/claims/new" element={<CustomerClaimForm />} />

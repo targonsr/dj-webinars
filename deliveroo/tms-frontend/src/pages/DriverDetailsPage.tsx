@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DriverDetails } from '../components/drivers/DriverDetails';
-import { LoadingPage, ErrorMessage } from '../components/common';
+import { DriverDetails } from './drivers';
+import { LoadingPage, ErrorMessage } from '../components';
 import { useDriverDetails } from '../hooks/queries';
 
 export const DriverDetailsPage: React.FC = () => {
@@ -45,5 +45,5 @@ export const DriverDetailsPage: React.FC = () => {
     );
   }
 
-  return <DriverDetails driver={driver} onBack={handleBack} />;
+  return <DriverDetails />;
 };

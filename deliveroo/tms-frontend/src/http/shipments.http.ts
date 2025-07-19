@@ -1,7 +1,7 @@
 import { Shipment as LogisticsShipment } from '../model/shipments/logistics.types';
 import { sampleShipments } from '../model/shipments/shipments.mocks';
 import { API_BASE_URL } from './http.config';
-import { getAuthHeaders } from '../contexts/session.token';
+import { getAuthHeaders } from '../auth/session.token';
 import { delay, MOCK_MODE } from './mock.http';
 
 // A temporary type that reflects the flattened structure expected by the UI

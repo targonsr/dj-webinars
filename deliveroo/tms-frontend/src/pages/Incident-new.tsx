@@ -13,7 +13,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar as CalendarIcon, HelpCircle, Check, Upload } from 'lucide-react';
 import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/tailwind/utils';
 
 // Types and interfaces
 interface IncidentFormData {

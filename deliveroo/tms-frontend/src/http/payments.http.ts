@@ -1,7 +1,7 @@
 import { Payment } from './payments.model';
 import { mockPayments } from './payments.mocks';
 import { API_BASE_URL } from './http.config';
-import { getAuthHeaders } from '../contexts/session.token';
+import { getAuthHeaders } from '../auth/session.token';
 import { delay, MOCK_MODE } from './mock.http';
 
 /**

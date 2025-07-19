@@ -1,6 +1,6 @@
 import React from 'react';
-import { DriversList } from '../components/drivers/DriversList';
-import { LoadingPage, ErrorMessage } from '../components/common';
+import { DriversList } from './drivers';
+import { LoadingPage, ErrorMessage } from '../components';
 import { useDriversList } from '../hooks/queries';
 
 export const DriversPage: React.FC = () => {

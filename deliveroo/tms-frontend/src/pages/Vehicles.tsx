@@ -1,14 +1,11 @@
 
 import React, { useState } from 'react';
 import { Button } from '../components/ui/button';
-import LiveFleetMap from './vehicles/LiveFleetMap';
 import { useVehiclesList } from '../hooks/queries';
-import { VehiclesList } from '../components/vehicles/VehiclesList';
-import { LoadingPage, ErrorMessage } from '../components/common';
+import { LoadingPage, ErrorMessage } from '../components';
 import { Vehicle } from '../model/vehicles';
-import { VehicleFilters } from '../components/vehicles/VehicleFilters';
-import { VehiclesTable } from '../components/vehicles/VehiclesTable';
 import { LayoutGrid, List } from 'lucide-react';
+import { VehicleFilters, VehiclesList, VehiclesTable, LiveFleetMap } from './vehicles';
 
 const Vehicles = () => {
   const { data: vehicles = [], isLoading, error, refetch } = useVehiclesList();

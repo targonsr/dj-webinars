@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { vehicles as allVehicles } from '@/model/vehicles/vehicles.mocks';
-import { VehicleMaintenance } from '@/components/vehicles/VehicleMaintenance';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { VehicleMaintenance } from '@/pages/vehicles/VehicleMaintenance';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Vehicle } from '@/model/vehicles/vehicle.types';
 
 export const MaintenancePage = () => {

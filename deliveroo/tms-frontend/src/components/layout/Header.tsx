@@ -3,7 +3,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Bell, Truck, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/auth/AuthContext';
 import NotificationsPanel from '@/components/NotificationsPanel';
 import { useNotificationsQuery } from '@/http/notifications.queries';
 

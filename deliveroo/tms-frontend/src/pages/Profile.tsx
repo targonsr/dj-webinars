@@ -4,8 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useAuth } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/auth/AuthContext';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -22,6 +22,7 @@ const Profile = () => {
         <Card>
           <CardHeader className="text-center">
             <Avatar className="h-24 w-24 mx-auto">
+              <AvatarImage src={`https://i.pravatar.cc/150?u=${user?.email}`} alt={user?.name} />
               <AvatarFallback className="bg-blue-600 text-white text-2xl">
                 {user?.name?.charAt(0) || 'U'}
               </AvatarFallback>
